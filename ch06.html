@@ -154,65 +154,62 @@ mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
 @media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.isq .bar{width:46px}.exam-badge{font-size:.66rem}}
 </style>
 <style>
-/* ===== DARK MINIMAL THEME OVERRIDE ===== */
-:root{--d-bg:#0f1729;--d-surf:#1b2436;--d-surf2:#222d42;--d-line:#2e3a51;--d-ink:#dbe2ec;--d-muted:#8a96a8;--d-acc:#6ea8e6;--d-amber:#c9a36b}
-body{background:var(--d-bg);color:var(--d-ink)}
-#prog{background:var(--d-acc)}
-header{background:#0d1626}
+/* ===== LIGHT MINIMAL THEME OVERRIDE ===== */
+:root{--l-acc:#2563eb;--l-acc2:#1d4ed8;--l-warm:#b45309;--l-ink:#1e2733;--l-muted:#55606e;--l-line:#e1e6ec;--l-soft:#f1f4f8}
+body{background:#f4f6f9;color:var(--l-ink)}
+#prog{background:var(--l-acc)}
+header{background:#172033}
 header::after{display:none}
-header .tag{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:var(--d-muted)}
-header h1 small,header p{color:var(--d-muted)}
-nav.toc{background:var(--d-surf);border-color:var(--d-line);box-shadow:none}
-nav.toc h2{color:var(--d-muted)}
-nav.toc a{color:var(--d-ink)}
-nav.toc a:hover{background:var(--d-surf2);color:var(--d-acc)}
-nav.toc a b{background:var(--d-acc);color:#0d1626}
-.sec-head{border-bottom-color:var(--d-line)}
-.sec-head .num{background:var(--d-acc);color:#0d1626}
-.sec-head h2{color:var(--d-ink)}
-.sec-head h2 span{color:var(--d-muted)}
-.card{background:var(--d-surf);border-color:var(--d-line);box-shadow:none}
-.card h3{color:var(--d-ink)}
-.card h3 .en,.term{color:var(--d-acc)}
-.card h4{color:#c4cdda}
-.zh,p.lead{color:var(--d-muted)}
-ul.facts li::before{color:var(--d-acc)}
-.box{background:var(--d-surf2);border-left-color:var(--d-acc)}
-.box.exam,.box.metaphor{border-left-color:var(--d-amber)}
-.box .t{color:var(--d-ink)}
-.box.formula .eq{color:#9fd0b0}
-th{background:#27344b;color:var(--d-ink);border-color:var(--d-line)}
-td{color:var(--d-ink);border-color:var(--d-line);background:var(--d-surf)}
-tr:nth-child(even) td{background:var(--d-surf2)}
-td .hl{color:var(--d-amber)}
-mark{background:rgba(201,163,107,.16);color:#e3cda0}
-.pill{background:var(--d-surf2);color:var(--d-acc)}
-.exam-badge,.exam-badge.hot,.exam-badge.warm{background:var(--d-amber);color:#1a1207;box-shadow:none}
-.exam-hero{background:var(--d-surf);border:1px solid var(--d-line);box-shadow:none}
-.exam-hero h2{color:var(--d-ink)}
-.exam-hero p{color:var(--d-muted)}
-.freq-item{background:var(--d-surf2);border-color:var(--d-line)}
-.freq-item .name a{color:var(--d-ink)}
-.freq-item .stars{color:var(--d-amber)}
-.freq-item .desc{color:var(--d-muted)}
-.kcard{background:var(--d-surf2);border-color:var(--d-line)}
-.kcard .en{color:var(--d-acc)}
-.kcard .zh{color:var(--d-muted)}
-.quiz{background:var(--d-surf);border:1px solid var(--d-line)}
-.examq{background:var(--d-surf2);border-color:var(--d-line)}
-.examq .qline{color:var(--d-ink)}
-.examq .src{background:var(--d-amber);color:#1a1207}
-.examq summary{color:var(--d-acc)}
-.examq .ans{background:#172a22;border-left-color:#4f9d77;color:var(--d-ink)}
-.steps li{background:var(--d-surf2);border-color:var(--d-line)}
-.steps li::before{background:var(--d-acc);color:#0d1626}
-.svgbox{background:#eef1f5;border-color:#cdd5e0;box-shadow:none}
-.svgbox .cap,.diagram .cap{color:var(--d-muted)}
-.homebtn{background:var(--d-surf);color:var(--d-acc);border-color:var(--d-line)}
-.homebtn:hover{background:var(--d-acc);color:#0d1626}
-.backtop{background:var(--d-acc);color:#0d1626}
-.bitcalc,.code{background:#0b1322;border:1px solid var(--d-line)}
-footer{background:#0b1220}
+header .tag{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.22);color:#cbd5e1}
+header h1 small,header p{color:#cbd5e1}
+nav.toc{background:#fff;border-color:var(--l-line)}
+nav.toc h2{color:var(--l-muted)}
+nav.toc a{color:var(--l-ink)}
+nav.toc a:hover{background:var(--l-soft);color:var(--l-acc2)}
+nav.toc a b,.sec-head .num,.steps li::before{background:var(--l-acc)!important;color:#fff!important}
+.sec-head{border-bottom-color:var(--l-line)}
+.sec-head h2{color:var(--l-ink)}
+.sec-head h2 span{color:var(--l-muted)}
+.card{background:#fff;border-color:var(--l-line)}
+.card h3{color:var(--l-ink)}
+.card h3 .en,.term,.kcard .en,.examq summary{color:var(--l-acc2)}
+.card h4{color:#334155}
+.zh,p.lead{color:var(--l-muted)}
+ul.facts li::before{color:var(--l-acc)}
+.box{background:var(--l-soft);border-left-color:var(--l-acc)}
+.box.q,.box.note{background:var(--l-soft);border-left-color:var(--l-acc)}
+.box.exam,.box.metaphor{background:#fbf3e8;border-left-color:var(--l-warm)}
+.box.formula{background:#eef6f1;border-left-color:#0f766e}
+.box.formula .eq{color:#0f766e}
+.box .t{color:var(--l-ink)}
+th{background:#1e293b;color:#fff;border-color:var(--l-line)}
+td{color:var(--l-ink);border-color:var(--l-line)}
+tr:nth-child(even) td{background:#f5f7fa}
+td .hl{color:var(--l-warm)}
+mark{background:#fff1cf;color:#7a4f00}
+.pill{background:#e8eef9;color:var(--l-acc2)}
+.exam-badge,.exam-badge.hot,.exam-badge.warm{background:var(--l-warm);color:#fff;box-shadow:none}
+.exam-hero{background:#fbf3e8;border:1px solid #eddcc4;box-shadow:none}
+.exam-hero h2{color:#5c3d12}
+.exam-hero p{color:#7a5a2e}
+.freq-item{background:#fff;border-color:#eddcc4}
+.freq-item .name a{color:var(--l-ink)}
+.freq-item .stars{color:var(--l-warm)}
+.freq-item .desc{color:#6b5a3e}
+.kcard{background:var(--l-soft);border-color:var(--l-line)}
+.kcard .zh{color:var(--l-muted)}
+.quiz{background:#1e293b}
+.examq{background:#f7f9fc;border-color:var(--l-line)}
+.examq .qline{color:var(--l-ink)}
+.examq .src{background:var(--l-warm);color:#fff}
+.examq .ans{background:#eef6f0;border-left-color:#0f766e;color:var(--l-ink)}
+.steps li{background:var(--l-soft);border-color:var(--l-line)}
+.svgbox{background:#fff;border-color:var(--l-line)}
+.svgbox .cap,.diagram .cap{color:var(--l-muted)}
+.homebtn{background:#fff;color:var(--l-acc2);border-color:var(--l-line)}
+.homebtn:hover{background:var(--l-acc);color:#fff}
+.backtop{background:var(--l-acc);color:#fff}
+footer{background:#172033}
 </style>
 </head>
 <body>
