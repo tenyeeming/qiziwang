@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch6 無線 LAN 知識點詳解 | Wireless LANs</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+  --brand:#2563eb; --brand2:#7c3aed; --accent:#0891b2; --good:#16a34a; --warn:#dc2626;
+  --amber:#d97706; --line:#e2e8f0; --soft:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  color:var(--ink);background:#f8fafc;line-height:1.75;-webkit-font-smoothing:antialiased}
+/* progress bar */
+#prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:999;
+  background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+/* header */
+header{background:linear-gradient(135deg,#0f172a,#1e293b 60%,#312e81);color:#fff;
+  padding:70px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,rgba(37,99,235,.35),transparent 45%),
+             radial-gradient(circle at 80% 30%,rgba(124,58,237,.35),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:5px 16px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.5rem;font-weight:800;margin-bottom:10px;line-height:1.25}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:8px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:680px;margin:14px auto 0;font-size:1rem}
+/* layout */
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:16px;
+  margin:-30px auto 40px;max-width:940px;padding:22px 26px;box-shadow:0 12px 30px rgba(15,23,42,.08);position:relative;z-index:5}
+nav.toc h2{font-size:.9rem;color:var(--muted);letter-spacing:2px;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+nav.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);
+  padding:9px 12px;border-radius:10px;font-size:.95rem;transition:.2s}
+nav.toc a:hover{background:var(--soft);color:var(--brand);transform:translateX(3px)}
+nav.toc a b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:.8rem;flex:none}
+section{margin-bottom:54px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.sec-head .num{font-size:1rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:1.6rem;font-weight:800}
+.sec-head h2 span{display:block;font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.card h3{font-size:1.18rem;color:#0f172a;margin-bottom:10px;display:flex;align-items:center;gap:9px}
+.card h3 .en{color:var(--brand);font-weight:700}
+.card h4{font-size:1rem;margin:14px 0 6px;color:#334155}
+p.lead{margin:8px 0}
+.term{color:var(--brand);font-weight:700}
+.zh{color:var(--muted)}
+ul.facts{list-style:none;margin:10px 0}
+ul.facts li{position:relative;padding:5px 0 5px 26px}
+ul.facts li::before{content:"▸";position:absolute;left:6px;color:var(--brand);font-weight:700}
+/* callouts */
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.box.metaphor{background:#fef9c3;border-color:#eab308}
+.box.q{background:#ede9fe;border-color:#7c3aed}
+.box.exam{background:#fee2e2;border-color:#dc2626}
+.box.note{background:#e0f2fe;border-color:#0891b2}
+.box.formula{background:#ecfdf5;border-color:#16a34a}
+.formula .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.25rem;font-weight:700;
+  text-align:center;padding:8px;color:#065f46}
+/* tables */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem;overflow:hidden;border-radius:10px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#1e293b;color:#fff;font-weight:600}
+tr:nth-child(even) td{background:#f8fafc}
+td .hl{color:var(--warn);font-weight:700}
+/* diagrams */
+.diagram{background:#0f172a;border-radius:14px;padding:26px 20px;margin:16px 0;color:#e2e8f0;text-align:center}
+.diagram .cap{color:#94a3b8;font-size:.85rem;margin-top:14px}
+/* inverse square */
+.isq{display:flex;justify-content:center;align-items:flex-end;gap:8px;height:170px}
+.isq .bar{width:62px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#38bdf8,#2563eb);
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;color:#fff;font-weight:700;padding-bottom:6px;position:relative}
+.isq .bar span{position:absolute;top:-22px;color:#7dd3fc;font-size:.8rem;white-space:nowrap}
+.isq .bar small{font-size:.72rem;color:#bae6fd;font-weight:400}
+/* channel band */
+.band{position:relative;height:120px;background:#1e293b;border-radius:10px;margin:10px 0}
+.ch{position:absolute;bottom:24px;height:60px;border-radius:8px 8px 0 0;opacity:.85;
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:.85rem}
+.band .axis{position:absolute;bottom:0;left:0;right:0;height:24px;border-top:2px solid #475569;color:#94a3b8;font-size:.72rem}
+.band .axis b{position:absolute;transform:translateX(-50%);top:4px}
+/* flow */
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.flow .node{background:#1e293b;color:#fff;border-radius:10px;padding:10px 14px;font-size:.85rem;text-align:center;min-width:90px}
+.flow .node b{display:block;color:#7dd3fc}
+.flow .arr{color:var(--brand);font-size:1.4rem;font-weight:700}
+/* quiz */
+.quiz{background:linear-gradient(135deg,#1e293b,#312e81);color:#fff;border-radius:16px;padding:26px;margin:18px 0}
+.quiz h3{color:#fff}
+.qitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin:14px 0}
+.qitem .qq{font-weight:600;margin-bottom:10px}
+.qitem button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.08);color:#e2e8f0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px 14px;margin:6px 0;cursor:pointer;
+  font-size:.92rem;transition:.15s;font-family:inherit}
+.qitem button:hover{background:rgba(255,255,255,.16)}
+.qitem button.right{background:#16a34a;border-color:#16a34a;color:#fff}
+.qitem button.wrong{background:#dc2626;border-color:#dc2626;color:#fff}
+.qitem .exp{display:none;margin-top:10px;padding:10px 14px;background:rgba(125,211,252,.12);
+  border-radius:9px;font-size:.9rem;border-left:3px solid #38bdf8}
+.qitem .exp.show{display:block}
+/* misc */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:12px 0}
+.kcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard .en{font-weight:700;color:var(--brand);font-size:.95rem}
+.kcard .zh{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+.backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand);color:#fff;border:none;font-size:1.3rem;cursor:pointer;display:none;
+  box-shadow:0 8px 20px rgba(37,99,235,.4);z-index:50}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.9rem;margin-top:40px}
+footer b{color:#e2e8f0}
+mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;margin:2px}
+/* exam frequency badge */
+.exam-badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700;margin-left:8px;vertical-align:middle;
+  box-shadow:0 2px 6px rgba(220,38,38,.35);white-space:nowrap}
+.exam-badge.hot{background:linear-gradient(135deg,#dc2626,#ea580c)}
+.exam-badge.warm{background:#d97706}
+/* exam overview */
+.exam-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626 60%,#ea580c);color:#fff;
+  border-radius:18px;padding:26px 28px;margin:0 auto 36px;max-width:940px;box-shadow:0 16px 40px rgba(220,38,38,.25)}
+.exam-hero h2{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.exam-hero p{color:#fee2e2;font-size:.92rem;margin-bottom:16px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.freq-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px 15px}
+.freq-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.freq-item .name{font-weight:700;font-size:.95rem}
+.freq-item .stars{font-size:.8rem;letter-spacing:1px;color:#fde68a;flex:none}
+.freq-item .desc{color:#fecaca;font-size:.8rem;line-height:1.5}
+.freq-item a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.5)}
+/* svg diagram wrapper (light) */
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.05);text-align:center}
+.svgbox svg{max-width:100%;height:auto}
+.svgbox .cap{color:var(--muted);font-size:.85rem;margin-top:10px}
+/* exam Q&A reveal */
+.examq{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:14px 16px;margin:12px 0}
+.examq .qline{font-weight:600;color:#92400e;display:flex;gap:8px;align-items:flex-start}
+.examq .src{display:inline-block;background:#92400e;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.examq details{margin-top:8px}
+.examq summary{cursor:pointer;color:#b45309;font-weight:600;font-size:.88rem;user-select:none}
+.examq .ans{margin-top:8px;padding:10px 12px;background:#ecfdf5;border-left:4px solid #16a34a;border-radius:8px;font-size:.9rem}
+@media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.isq .bar{width:46px}.exam-badge{font-size:.66rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="wrap">
+    <div class="tag">CHAPTER 6 · WIRELESS LANs</div>
+    <h1>第 6 章　無線區域網路 知識點詳解
+      <small>Wireless LANs — Radio Propagation, Bands, Spread Spectrum, 802.11 Operation &amp; Standards</small></h1>
+    <p>依課本投影片（Panko, <i>Business Data Networks and Security</i>, 10e）逐頁整理。中英對照、含公式推導、CSS 圖解與互動測驗。</p>
+  </div>
+</header>
+
+<nav class="toc container">
+  <h2>目錄 · CONTENTS</h2>
+  <ol>
+    <li><a href="#s1"><b>1</b>導論 Introduction</a></li>
+    <li><a href="#s2"><b>2</b>無線傳播 Radio Propagation</a></li>
+    <li><a href="#s3"><b>3</b>頻段與頻寬 Bands &amp; Bandwidth</a></li>
+    <li><a href="#s4"><b>4</b>展頻傳輸 Spread Spectrum</a></li>
+    <li><a href="#s5"><b>5</b>802.11 運作 WLAN Operation</a></li>
+    <li><a href="#s6"><b>6</b>傳輸標準 Transmission Standards</a></li>
+    <li><a href="#s7"><b>7</b>無線網狀網路 Mesh</a></li>
+    <li><a href="#cram"><b>⚡</b>考前60秒速記 Cram</a></li>
+    <li><a href="#quiz"><b>★</b>互動測驗 Quiz</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ============ EXAM FREQUENCY OVERVIEW ============ -->
+<div class="exam-hero">
+  <h2>🔥 Ch6 考古題出題頻率（五份期末卷統計：109-1 / 2020 / 卷三 / 2023 / 2025）</h2>
+  <p>★ 數量＝考過次數。<b>反平方律、CSMA/CA、2.4G vs 5G、五大傳播問題</b> 是必考鐵板（五卷幾乎都出），務必背熟。🆕 標記為 2023/2025 新卷新增考點。點分類可跳到對應段落。</p>
+  <div class="freq-grid">
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s2">反平方律衰減</a></span><span class="stars">★★★</span></div>
+      <div class="desc">3 份卷都考填充：80mW@2→8、@3→12、@10→40，答案<b>全是 5mW</b>。距離×4→÷16。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s5">CSMA/CA + ACK</a></span><span class="stars">★★★</span></div>
+      <div class="desc">考 CS／CA／ACK 各是什麼、CA 如何避免碰撞（隨機退避）。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">2.4 GHz vs 5 GHz</a></span><span class="stars">★★★</span></div>
+      <div class="desc">各自主要優點、誰非重疊通道多、誰傳播較差。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s2">五大傳播問題</a></span><span class="stars">★★</span></div>
+      <div class="desc">Multipath 是什麼、哪兩個隨頻率惡化、WLAN 最嚴重是哪個。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s4">展頻 Spread Spectrum</a></span><span class="stars">★★</span></div>
+      <div class="desc">填充：頻寬遠寬於訊號所需的傳輸＝？降低多路徑干擾。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s5">RTS/CTS 隱藏節點</a></span><span class="stars">★★</span></div>
+      <div class="desc">填充：可解決 hidden node 的選用 MAC 機制＝？</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">1, 6, 11 通道</a></span><span class="stars">★★</span></div>
+      <div class="desc">填充：802.11g 三個非重疊通道＝？</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">Shannon／黃金頻段</a></span><span class="stars">★</span></div>
+      <div class="desc">加倍頻寬→加倍速度；500MHz–10GHz 為何是 golden zone。</div></div>
+  </div>
+</div>
+
+<!-- ============ NEW EXAMS 2023/2025 ============ -->
+<section id="new">
+  <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
+  <div class="card">
+    <h3>🔁 <span class="en">Repeated (新卷又考一次)</span>　這些舊卷考過、新卷再考</h3>
+    <ul class="facts">
+      <li><b>反平方律</b>：2025 考 40mW@2m→<mark>8m=2.5mW</mark>；2023 考 80mW@5m→<mark>20m=5mW</mark>。公式 S₂=S₁(r₁/r₂)²，距離×4→功率÷16。</li>
+      <li><b>2.4G vs 5G</b>：2025 直接問「哪個頻寬多」→ <mark>5 GHz</mark>。</li>
+      <li><b>五大傳播問題</b>：2025/2023 都考「最嚴重＝Multipath」「隨頻率惡化的兩個＝Dead zones + Absorptive attenuation」。</li>
+      <li><b>CSMA/CA + ACK</b>：2025 問 CA 如何避免碰撞（隨機退避）＋ RTS/CTS 如何運作；2023 問 CS 是什麼。</li>
+      <li><b>展頻 Spread Spectrum</b>：2023 名詞解釋再考一次。</li>
+    </ul>
+    <div class="box exam"><div class="t">📊 升級為「五卷必考」</div>
+      反平方律、五大傳播問題、CSMA、2.4G/5G 在五份卷中幾乎卷卷出現 → <b>Ch6 投報率最高的四個考點</b>。</div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">Service Band vs Channels</span>　新增名詞解釋（2023 B1）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <ul class="facts">
+      <li><span class="term">Service Band（服務頻帶）</span>：一段<b>特定的頻率範圍</b>，例如 2.4 GHz 帶（2.400–2.485 GHz）。</li>
+      <li><span class="term">Channel（通道）</span>：在某個 band <b>內再細分</b>的特定頻率範圍，例如 2.4 GHz 帶裡的 1、6、11 通道。</li>
+      <li>白話：band 是「整條馬路」，channel 是「馬路上劃分的車道」。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2023 B1】Explain Service Band and Channels / Spread Spectrum Transmission.<span class="src">2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Service Band</b>＝特定頻率範圍（如 2.4GHz 帶）；<b>Channel</b>＝band 內再細分的頻率範圍（如 1/6/11）。<b>Spread Spectrum</b>＝把訊號散佈到比所需更寬的頻寬，提高抗干擾（尤降低多路徑干擾）；2.4/5GHz 法規要求使用。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 INTRODUCTION ============ -->
+<section id="s1">
+  <div class="sec-head"><div class="num">1</div><h2>導論<span>Introduction — 無線 LAN 的定位與生態</span></h2></div>
+
+  <div class="card">
+    <h3>📡 <span class="en">Where do WLANs fit?</span>　無線 LAN 在哪一層？</h3>
+    <ul class="facts">
+      <li><span class="term">Ethernet 802.3 LANs</span> 與 <span class="term">Wireless LANs（802.11）</span> 都只運作在 <mark>Layer 1（physical 實體層）與 Layer 2（data link 資料連結層）</mark>。</li>
+      <li>這兩層的標準幾乎全部來自 <span class="term">OSI</span>（不是 TCP/IP）。所以 802.11 屬於 OSI 標準。</li>
+      <li>802.11 由 <span class="term">IEEE 802 Committee</span> 底下的 <span class="term">802.11 Working Group</span> 制定，是當今主流 WLAN 技術。</li>
+    </ul>
+    <div class="box note"><div class="t">🧠 記憶點</div>
+      LAN 的世界（有線 802.3 + 無線 802.11）＝<b>第 1、2 層</b>；上到第 3、4 層（IP、TCP）才換成 IETF 的 TCP/IP 標準（那是 Ch8 的事）。</div>
+  </div>
+
+  <div class="card">
+    <h3>🤝 <span class="en">Wi-Fi Alliance</span>　Wi-Fi 聯盟</h3>
+    <ul class="facts">
+      <li>是 802.11 設備製造商的 <span class="zh">產業協會（industry association）</span>。</li>
+      <li>802.11 標準有非常多選項（options），Wi-Fi Alliance 從中挑出子集合做成 <span class="term">profiles（設定檔）</span>，並做 <span class="term">interoperability testing（互通性測試）</span>。</li>
+      <li>只有通過測試的產品才能標示 <span class="term">Wi-Fi logo</span>。</li>
+      <li>⚠️ Wi-Fi Alliance 自己開發的兩個標準變成「資安惡夢（security nightmares）」：<span class="hl">WPA</span> 與 <span class="hl">WPS</span>（這部分細節在 Ch7）。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔌 <span class="en">Access Point &amp; Distribution System</span>　存取點與分送系統</h3>
+    <p class="lead">無線用戶端（wireless client）要用伺服器與上網，必須透過 <span class="term">wireless access point（AP，存取點）</span> 連到 <span class="zh">有線的 Ethernet LAN</span>。</p>
+    <div class="diagram">
+      <div class="flow">
+        <div class="node"><b>Wireless Host</b>無線主機</div>
+        <div class="arr">〜〜▸</div>
+        <div class="node"><b>Access Point</b>存取點</div>
+        <div class="arr">▸</div>
+        <div class="node"><b>Ethernet Switches</b>交換器</div>
+        <div class="arr">▸</div>
+        <div class="node"><b>Server / Router</b>伺服器/路由器</div>
+      </div>
+      <div class="cap">有線的 Ethernet 網路稱為 <b style="color:#7dd3fc">Distribution System (DS) 分送系統</b></div>
+    </div>
+    <div class="box note"><div class="t">💡 為什麼需要連到有線 LAN？</div>
+      因為伺服器、上網用的 Internet access router 都在有線 LAN 上；AP 只是把無線主機「接進」這個有線世界。</div>
+  </div>
+</section>
+
+<!-- ============ 2 PROPAGATION ============ -->
+<section id="s2">
+  <div class="sec-head"><div class="num">2</div><h2>無線訊號傳播<span>Radio Signal Propagation — 五大傳播問題</span></h2></div>
+
+  <div class="card">
+    <h3>🌐 <span class="en">Frequencies &amp; Antennas</span>　頻率與天線</h3>
+    <ul class="facts">
+      <li>典型資料 LAN 使用頻率：<mark>500 MHz ～ 10 GHz</mark>（這也是「商用行動服務的黃金頻段 golden zone」）。</li>
+      <li>光纖傳輸用「波長 wavelength」衡量；無線則用「頻率 frequency」。</li>
+      <li>📱 手機用 <span class="term">omnidirectional antenna（全向性天線）</span>：因為手機會被任意擺放、訊號可能從任何方向來，需要各方向都能收發。</li>
+      <li>📡 <span class="term">dish antenna（碟形/指向性天線）</span>：聚焦於單一方向，距離更遠，用於固定點對點。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B4】The golden zone for commercial mobile services is 500MHz–10GHz. Why is it "golden"?<span class="src">考古</span></span></div>
+      <details><summary>▶ 看完整解答（這題要會「兩面論述」）</summary>
+        <div class="ans"><b>頻率太低</b> → 可用頻寬太少，速度受限；<b>頻率太高</b> → 傳播問題嚴重（吸收衰減、死區、多路徑都隨頻率惡化，且趨近需視線傳播）。<br>
+        500 MHz–10 GHz 同時兼顧 <b>足夠頻寬（高速）</b> 與 <b>可接受的傳播特性</b>，最適合商用行動／資料服務，故稱黃金頻段。</div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📉 <span class="en">① Inverse Square Law Attenuation</span>　反平方律衰減<span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
+    <p class="lead">無線訊號以「球面」向外擴散，固定能量攤在越來越大的球面表面積上（表面積 ∝ r²），所以強度與距離平方成反比 <span class="zh">（falls as 1/r²）</span>。</p>
+    <div class="box formula"><div class="t">📐 公式 Formula</div>
+      <div class="eq">S₂ = S₁ × ( r₁ / r₂ )²</div>
+      <p style="text-align:center;font-size:.9rem">距離變 N 倍 → 強度只剩 <b>1/N²</b>。距離加倍 → 只剩 <b>¼</b>；距離 ×4 → 只剩 <b>1/16</b>。</p>
+    </div>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 230" role="img" aria-label="反平方律球面擴散示意圖">
+        <defs>
+          <radialGradient id="src" cx="0%" cy="50%" r="100%">
+            <stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#f59e0b"/>
+          </radialGradient>
+        </defs>
+        <!-- expanding arcs -->
+        <path d="M60 30 A 100 100 0 0 1 60 200" fill="none" stroke="#2563eb" stroke-width="3" opacity=".9"/>
+        <path d="M60 12 A 200 200 0 0 1 60 218" fill="none" stroke="#7c3aed" stroke-width="2.5" opacity=".55"/>
+        <path d="M60 -8 A 320 320 0 0 1 60 238" fill="none" stroke="#0891b2" stroke-width="2" opacity=".35"/>
+        <!-- source -->
+        <circle cx="60" cy="115" r="16" fill="url(#src)" stroke="#b45309" stroke-width="2"/>
+        <text x="60" y="119" font-size="12" text-anchor="middle" fill="#7c2d12" font-weight="700">AP</text>
+        <!-- distance labels -->
+        <line x1="60" y1="115" x2="540" y2="115" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+        <g font-family="sans-serif">
+          <circle cx="160" cy="115" r="5" fill="#2563eb"/><text x="160" y="138" font-size="12" text-anchor="middle" fill="#1e293b">r = 2m</text><text x="160" y="98" font-size="13" text-anchor="middle" fill="#2563eb" font-weight="700">80 mW</text>
+          <circle cx="320" cy="115" r="5" fill="#7c3aed"/><text x="320" y="138" font-size="12" text-anchor="middle" fill="#1e293b">r = 4m</text><text x="320" y="98" font-size="13" text-anchor="middle" fill="#7c3aed" font-weight="700">20 mW</text>
+          <circle cx="500" cy="115" r="5" fill="#0891b2"/><text x="500" y="138" font-size="12" text-anchor="middle" fill="#1e293b">r = 8m</text><text x="500" y="98" font-size="13" text-anchor="middle" fill="#0891b2" font-weight="700">5 mW</text>
+        </g>
+        <text x="320" y="200" font-size="13" text-anchor="middle" fill="#64748b">同樣能量攤在越大的球面 → 距離 ×2 強度 ÷4，距離 ×4 強度 ÷16</text>
+      </svg>
+      <div class="cap">反平方律：球面波前面積隨 r² 增大，故功率密度 ∝ 1/r²</div>
+    </div>
+    <h4>📝 三份考卷的考法（數字換湯不換藥，答案都是 5 mW）</h4>
+    <table>
+      <tr><th>考卷</th><th>題目</th><th>計算</th><th>答案</th></tr>
+      <tr><td>109-1 卷一</td><td>80 mW @2 m，求 @8 m</td><td>80 × (2/8)² = 80 × 1/16</td><td><span class="hl">5 mW</span></td></tr>
+      <tr><td>2020 卷二</td><td>80 mW @3 m，求 @12 m</td><td>80 × (3/12)² = 80 × 1/16</td><td><span class="hl">5 mW</span></td></tr>
+      <tr><td>卷三</td><td>80 mW @10 m，求 @40 m</td><td>80 × (10/40)² = 80 × 1/16</td><td><span class="hl">5 mW</span></td></tr>
+      <tr><td>課本例題</td><td>9 mW @10 m，求 @30 m</td><td>9 × (10/30)² = 9 × 1/9</td><td><span class="hl">1 mW</span></td></tr>
+    </table>
+    <div class="box exam"><div class="t">🎯 解題 SOP（30 秒答完）</div>
+      ① 算距離比 r₁/r₂ → ② 平方 → ③ 乘原功率。看到「距離變 4 倍」直接除 16。三份考卷都用「4 倍距離」，所以答案恆為原功率 ÷16。</div>
+  </div>
+
+  <div class="card">
+    <h3>💨 <span class="en">② Absorptive Attenuation</span>　吸收衰減</h3>
+    <ul class="facts">
+      <li>訊號能量被 <span class="zh">空氣與水（air and water）</span> 吸收而變弱。</li>
+      <li>⚠️ 衰減有「兩種」：<b>反平方律衰減</b> 與 <b>吸收衰減</b>（注意這跟「死區 shadow zones」不同）。</li>
+      <li>吸收衰減 <mark>隨頻率升高而變嚴重</mark>。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🚧 <span class="en">③ Shadow Zones (Dead Spots)</span>　死區 / 陰影區</h3>
+    <ul class="facts">
+      <li>因為路徑上有 <span class="zh">障礙物（obstacles）</span> 擋住，訊號無法穿透而到不了的地方。</li>
+      <li>又稱 <span class="term">dead spots</span>，且 <mark>隨頻率升高而變嚴重</mark>。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>〰️ <span class="en">④ Multipath Interference</span>　多路徑干擾<span class="exam-badge hot">🔥 WLAN 最嚴重 · 考過2次</span></h3>
+    <ul class="facts">
+      <li><span class="zh">直接波（direct signal）</span> 與 <span class="zh">反射波（reflected signal，碰到牆面/金屬反彈）</span> 走不同路徑、<b>不同時間</b>到達接收端而互相干擾。</li>
+      <li>若兩波 <span class="term">out of phase（反相，相位差 180°）</span>，波峰對波谷會互相抵消 → 收到「沒有訊號（dead spot）」。</li>
+      <li>🔥 <mark>在 WLAN 頻段是「最嚴重」的傳播問題（most serious at WLAN frequencies）</mark> → 這也是為何法規要求用展頻。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 250" role="img" aria-label="多路徑干擾示意圖">
+        <!-- transmitter / receiver -->
+        <rect x="20" y="105" width="60" height="40" rx="6" fill="#1e293b"/><text x="50" y="130" font-size="12" fill="#7dd3fc" text-anchor="middle">TX</text>
+        <rect x="560" y="105" width="60" height="40" rx="6" fill="#1e293b"/><text x="590" y="130" font-size="12" fill="#86efac" text-anchor="middle">RX</text>
+        <!-- wall -->
+        <rect x="300" y="0" width="40" height="55" fill="#94a3b8"/><text x="320" y="72" font-size="11" fill="#64748b" text-anchor="middle">牆面</text>
+        <!-- direct path -->
+        <line x1="80" y1="125" x2="560" y2="125" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="300" y="118" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">直接波 direct（同相）</text>
+        <!-- reflected path -->
+        <polyline points="80,125 320,55 560,125" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <text x="200" y="78" font-size="12" fill="#dc2626" font-weight="700">反射波 reflected（較長、延遲）</text>
+        <!-- combined result waves -->
+        <g transform="translate(360,175)">
+          <text x="-20" y="0" font-size="11" fill="#64748b">合成：反相相消</text>
+          <path d="M120 0 q10 -18 20 0 t20 0 t20 0 t20 0" fill="none" stroke="#16a34a" stroke-width="2"/>
+          <path d="M120 0 q10 18 20 0 t20 0 t20 0 t20 0" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3 3"/>
+          <text x="245" y="4" font-size="20" fill="#dc2626">→ ≈0</text>
+        </g>
+      </svg>
+      <div class="cap">直接波與反射波相位相反時互相抵消 → 接收端出現死點</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚡ <span class="en">⑤ Electromagnetic Interference (EMI)</span>　電磁干擾</h3>
+    <p class="lead">來自其他裝置、<mark>相同頻率</mark> 的「不想要的功率（unwanted power at the same frequency）」。</p>
+    <div class="box exam"><div class="t">🎯 考點整理：五大傳播問題<span class="exam-badge warm">考過2次</span></div>
+      <b>EMI、Dead/Shadow zones、Inverse square law、Absorptive attenuation、Multipath interference</b><br>
+      ・隨「頻率升高」變嚴重的「兩個」：<span class="hl">Shadow zones</span> 與 <span class="hl">Absorptive attenuation</span><br>
+      ・WLAN 頻段「最嚴重」：<span class="hl">Multipath interference</span><br>
+      ・兩種「衰減 attenuation」：Inverse square law + Absorptive</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 簡答 B2】(1) What is Multipath Interference? (2) Which two problems get worse as frequency increases? (3) Which is the most serious at WLAN frequency?<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>直接波與反射波</b>同時到達接收端而互相干擾；若兩波反相會抵消成無訊號。<br>
+        (2) <b>Shadow zones（死區）</b> 與 <b>Absorptive attenuation（吸收衰減）</b> 隨頻率升高而變嚴重。<br>
+        (3) <b>Multipath Interference（多路徑干擾）</b>。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 BANDS & BANDWIDTH ============ -->
+<section id="s3">
+  <div class="sec-head"><div class="num">3</div><h2>頻段與頻寬<span>Radio Bands &amp; Bandwidth — 通道、2.4G vs 5G</span></h2></div>
+
+  <div class="card">
+    <h3>📏 <span class="en">Channel Bandwidth &amp; Speed</span>　通道頻寬與速度</h3>
+    <ul class="facts">
+      <li><span class="term">Channel bandwidth（通道頻寬）</span> = 通道內「最高頻率 − 最低頻率」。例：88.0–88.2 MHz → 頻寬 0.2 MHz（200 kHz）。</li>
+      <li>速度與頻寬「成正比」：<mark>頻寬加倍 → 可能速度加倍；頻寬 ×N → 速度可達 N 倍</mark>。</li>
+      <li><span class="term">Broadband（寬頻）</span> = 寬的無線通道頻寬 → 高速度。（俗稱也把快的系統叫 broadband，即使不是無線。）</li>
+      <li>越高速的訊號，需要越寬的通道頻寬。</li>
+    </ul>
+    <div class="box note"><div class="t">🔗 連結 Shannon（Ch6/考古）</div>
+      「速度可由『加倍頻寬 bandwidth』而加倍」— 頻寬乘 N，速度可達 N 倍。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 填充 A7】By Shannon equation, transmission speed can be doubled by doubling the ____.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>bandwidth（頻寬）</b>。頻寬與速度成正比。</div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📶 <span class="en">2.4 GHz vs 5 GHz Service Bands</span><span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
+    <h4>2.4 GHz 頻段</h4>
+    <ul class="facts">
+      <li>範圍 2.4–2.485 GHz；<span class="zh">傳播特性佳（good propagation，距離遠、穿透好）</span>。</li>
+      <li>對 20 MHz 通道，只有 <mark>3 個非重疊通道（non-overlapping channels）：Channel 1, 6, 11</mark>。</li>
+      <li>附近 AP 用同通道會 <span class="term">co-channel interference（同頻干擾）</span>；除非很小的網路，否則很難讓鄰近 AP 都用不同通道。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 200" role="img" aria-label="2.4GHz 通道重疊與 1/6/11 非重疊示意">
+        <!-- overlapping bell channels 1..11 faint -->
+        <g opacity=".25" fill="#94a3b8">
+          <ellipse cx="120" cy="120" rx="55" ry="55"/><ellipse cx="175" cy="120" rx="55" ry="55"/>
+          <ellipse cx="230" cy="120" rx="55" ry="55"/><ellipse cx="285" cy="120" rx="55" ry="55"/>
+          <ellipse cx="340" cy="120" rx="55" ry="55"/><ellipse cx="395" cy="120" rx="55" ry="55"/>
+          <ellipse cx="450" cy="120" rx="55" ry="55"/>
+        </g>
+        <!-- non-overlap 1,6,11 -->
+        <path d="M40 120 q60 -95 120 0 z" fill="#2563eb" opacity=".75"/>
+        <path d="M280 120 q60 -95 120 0 z" fill="#7c3aed" opacity=".75"/>
+        <path d="M460 120 q60 -95 120 0 z" fill="#0891b2" opacity=".75"/>
+        <text x="100" y="100" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">Ch 1</text>
+        <text x="340" y="100" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">Ch 6</text>
+        <text x="520" y="100" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">Ch 11</text>
+        <line x1="20" y1="120" x2="620" y2="120" stroke="#475569" stroke-width="2"/>
+        <text x="100" y="140" font-size="11" fill="#64748b" text-anchor="middle">2.412</text>
+        <text x="340" y="140" font-size="11" fill="#64748b" text-anchor="middle">2.437</text>
+        <text x="520" y="140" font-size="11" fill="#64748b" text-anchor="middle">2.462 GHz</text>
+        <text x="320" y="175" font-size="12" fill="#64748b" text-anchor="middle">灰色＝所有通道彼此重疊；只有 1 / 6 / 11 互不重疊（彩色）</text>
+      </svg>
+      <div class="cap">2.4 GHz 只有 1 / 6 / 11 三個互不重疊的 20 MHz 通道</div>
+    </div>
+    <h4>5 GHz 頻段</h4>
+    <ul class="facts">
+      <li>頻寬較多，有 <mark>11～24 個非重疊 20 MHz 通道</mark>。</li>
+      <li>容易讓鄰近 AP 使用不重疊通道（干擾少）。</li>
+      <li>但新標準把「通道變寬」會 <span class="term">減少</span> 可用通道數（wider channels → fewer channels）。</li>
+    </ul>
+    <table>
+      <tr><th>比較</th><th>2.4 GHz</th><th>5 GHz</th></tr>
+      <tr><td>非重疊通道</td><td>只有 3 個（1,6,11）</td><td><span class="hl">11–24 個（多）</span></td></tr>
+      <tr><td>傳播 propagation</td><td><span class="hl">較好</span>（距離遠、穿透佳）</td><td>較差（頻率高）</td></tr>
+      <tr><td>主要優點</td><td>傳播佳、涵蓋遠</td><td>通道多、干擾少、速度高</td></tr>
+    </table>
+    <div class="box exam"><div class="t">🎯 考古直球（一句話版）</div>
+      Q：2.4G 主要優點？→ <b>傳播較好（涵蓋距離遠、穿透佳）</b>。　Q：5G 主要優點？→ <b>非重疊通道多、干擾少、速度高</b>。<br>
+      Q：哪個頻段非重疊通道較多？→ <b>5 GHz</b>。　Q：哪個頻段傳播較差？→ <b>5 GHz</b>。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 簡答 B1】802.11 operates in 2.4GHz and 5 GHz bands. (1) Main advantage of 2.4GHz? (2) Main advantage of 5GHz?<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>傳播特性較佳</b>——涵蓋距離較遠、穿透障礙物較好。<br>
+        (2) <b>頻寬較多</b>——可有 11–24 個非重疊通道，附近 AP 易使用不重疊通道（干擾少）、速度較高。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 簡答 B1】(1) Which band provides more non-overlapping channels? (2) Which band is worse in radio propagation?<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>5 GHz</b>（11–24 個非重疊通道；2.4 GHz 只有 3 個：1,6,11）。<br>
+        (2) <b>5 GHz</b>（頻率較高、傳播較差；2.4 GHz 傳播特性較好）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 填充 A8】In 802.11g, the three non-overlapping channels are ____.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Channel 1, 6, 11</b>。</div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📜 <span class="en">Licensed vs Unlicensed Bands</span>　授權 vs 免授權頻段</h3>
+    <ul class="facts">
+      <li><span class="term">Licensed bands（授權頻段）</span>：需要執照才能發射（FM 廣播等），政府限制執照以控制干擾。</li>
+      <li>蜂巢式電話頻段：<mark>只有中央天線需要授權，手機本身不用</mark>。</li>
+      <li><span class="term">Unlicensed bands（免授權頻段）</span>：少數頻段免照即可使用，可自由移動。<b>802.11 Wi-Fi 就用免授權的 2.4 與 5 GHz</b>。</li>
+      <li>代價：對其他使用者的干擾「沒有法律救濟」，只能協調；自己也不可用「非法的高功率」造成不合理干擾。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 4 SPREAD SPECTRUM ============ -->
+<section id="s4">
+  <div class="sec-head"><div class="num">4</div><h2>展頻傳輸<span>Spread Spectrum Transmission</span></h2></div>
+  <div class="card">
+    <h3>🌈 <span class="en">Spread Spectrum</span>　展頻<span class="exam-badge warm">考過2次</span></h3>
+    <ul class="facts">
+      <li><b>法律要求</b>：在 2.4 與 5 GHz 頻段，依法必須使用 <span class="term">spread spectrum transmission</span>。</li>
+      <li>用「比訊號速度所需更寬」的通道頻寬來傳 → 可 <mark>降低傳播問題，尤其是多路徑干擾（multipath interference）</mark>。</li>
+      <li>⚠️ 在 WLAN 中，展頻 <span class="hl">不是</span> 用來做「資安/加密」的（NOT used for security）。注意：軍事上展頻可抗干擾/防竊聽，但 WLAN 用它只為對抗傳播問題。</li>
+    </ul>
+    <div class="box q"><div class="t">💭 新手疑問：為什麼不要把頻寬開得比訊號需要的更大？</div>
+      正常情況下「不該」浪費頻寬；但展頻是 <b>「雖然浪費頻寬，卻是避免傳播問題所必需」</b>（wasteful but necessary）。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 填充 A4】____ is transmission with channel bandwidth much wider than required for the signal's speed.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Spread spectrum transmission</b>（展頻傳輸；2.4/5 GHz 頻段法規要求，可降低多路徑干擾）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 802.11 OPERATION ============ -->
+<section id="s5">
+  <div class="sec-head"><div class="num">5</div><h2>802.11 WLAN 運作<span>WLAN Operation — 框架轉換、BSS/ESS、CSMA/CA</span></h2></div>
+
+  <div class="card">
+    <h3>🔄 <span class="en">Frame Conversion at the AP</span>　AP 的框架轉換<span class="exam-badge warm">易考觀念</span></h3>
+    <div class="diagram">
+      <div class="flow" style="flex-direction:column">
+        <div class="node" style="min-width:320px">① 發送端把封包 packet 放進 <b>802.11 frame</b>，無線送到 AP</div>
+        <div class="arr">▼</div>
+        <div class="node" style="min-width:320px">② 802.11 frame 格式「不適用」802.3 Ethernet → AP 把 packet 取出，<b>丟棄 802.11 frame</b></div>
+        <div class="arr">▼</div>
+        <div class="node" style="min-width:320px">③ AP 把 packet 重新封裝成 <b>802.3 frame</b>，經交換器送到目的主機</div>
+        <div class="arr">▼</div>
+        <div class="node" style="min-width:320px">④ 目的主機從 802.3 frame 取出 packet</div>
+      </div>
+    </div>
+    <div class="box exam"><div class="t">🎯 經典觀念題</div>
+      ・<b>IP packet</b> 會一路送到目的主機嗎？→ <b>會</b>（packet 全程不變）。<br>
+      ・<b>802.11 frame</b> 會一路送到目的主機嗎？→ <b>不會</b>，只到 AP 就被丟棄（因為 frame 格式只適用該無線段；交換器與目的主機看不懂 802.11 frame）。<br>
+      ・有線 Ethernet 網路 = <span class="hl">Distribution System (DS)</span>。</div>
+  </div>
+
+  <div class="card">
+    <h3>🏷️ <span class="en">BSS · SSID · ESS · Handoff</span>　網路命名與漫遊</h3>
+    <div class="kgrid">
+      <div class="kcard"><span class="en">BSS</span><span class="zh">Basic Service Set：一個 AP + 它的無線主機</span></div>
+      <div class="kcard"><span class="en">SSID</span><span class="zh">Service Set Identifier：網路的「名稱」</span></div>
+      <div class="kcard"><span class="en">ESS</span><span class="zh">Extended SS：一群「相同 SSID」的 AP 集合</span></div>
+      <div class="kcard"><span class="en">Hand Off / Roaming</span><span class="zh">漫遊：在同 SSID 的 AP 間移動切換</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎧 <span class="en">CSMA/CA + ACK</span>　載波偵測多重存取＋碰撞避免＋確認<span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
+    <p class="lead"><span class="term">Carrier Sense Multiple Access with Collision Avoidance and Acknowledgement</span>，是 802.11 的 <mark>強制（mandatory）</mark> MAC 方法。</p>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 200" role="img" aria-label="CSMA/CA + ACK 時序圖">
+        <line x1="20" y1="160" x2="620" y2="160" stroke="#475569" stroke-width="2"/>
+        <text x="320" y="190" font-size="12" fill="#64748b" text-anchor="middle">時間 →</text>
+        <!-- listen -->
+        <rect x="30" y="120" width="90" height="40" rx="6" fill="#0891b2"/><text x="75" y="145" font-size="12" fill="#fff" text-anchor="middle">① CS 聆聽</text>
+        <!-- busy -->
+        <rect x="125" y="120" width="110" height="40" rx="6" fill="#94a3b8"/><text x="180" y="145" font-size="11" fill="#fff" text-anchor="middle">通道忙→等待</text>
+        <!-- random backoff -->
+        <rect x="240" y="120" width="120" height="40" rx="6" fill="#d97706"/><text x="300" y="140" font-size="11" fill="#fff" text-anchor="middle">② CA 隨機</text><text x="300" y="153" font-size="11" fill="#fff" text-anchor="middle">退避 backoff</text>
+        <!-- transmit -->
+        <rect x="365" y="120" width="150" height="40" rx="6" fill="#2563eb"/><text x="440" y="145" font-size="12" fill="#fff" text-anchor="middle">傳送 frame</text>
+        <!-- ack -->
+        <rect x="520" y="120" width="90" height="40" rx="6" fill="#16a34a"/><text x="565" y="145" font-size="12" fill="#fff" text-anchor="middle">③ ACK</text>
+        <text x="75" y="105" font-size="11" fill="#0891b2" text-anchor="middle">先聽再說</text>
+        <text x="300" y="105" font-size="11" fill="#d97706" text-anchor="middle">各等隨機時間避免搶送</text>
+        <text x="565" y="105" font-size="11" fill="#16a34a" text-anchor="middle">收到才回ACK</text>
+      </svg>
+      <div class="cap">CSMA/CA + ACK：先聆聽 → 隨機退避避免碰撞 → 傳送 → 立即 ACK 確認（可靠協定）</div>
+    </div>
+    <table>
+      <tr><th>步驟</th><th>英文</th><th>說明</th></tr>
+      <tr><td><b>CS</b><br>載波偵測</td><td>Carrier Sense</td><td>發送前先「聆聽」通道；若有人正在傳就等待。藉此控制多台裝置不同時傳送。</td></tr>
+      <tr><td><b>CA</b><br>碰撞避免</td><td>Collision Avoidance</td><td>當前發送者停止後，多台等待的裝置會搶送 → 改為各等「<span class="hl">隨機（randomized）</span>」時間再送 → 通常可避免碰撞，但<span class="zh">沒效率</span>。</td></tr>
+      <tr><td><b>ACK</b><br>確認</td><td>Acknowledgement</td><td>接收端正確收到後「立即」回 ACK；CA 的隨機延遲保證有足夠時間給這個立即 ACK。發送端若收不到 ACK，就用 CSMA 重送。</td></tr>
+    </table>
+    <ul class="facts">
+      <li>CSMA/CA + ACK 是「<span class="term">reliable protocol（可靠協定）</span>」— 在有線網路罕見，但無線夠不可靠，值得這樣做。</li>
+      <li>缺點：<mark>等待很多 → 沒效率（inefficient）</mark>。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 簡答 B5】CSMA/CA+ACK is the mandatory MAC method of 802.11. (1) What is CS? (2) What is CA? (3) What is ACK?<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>CS（Carrier Sense）</b>：傳送前先聆聽載波，忙碌就等待。<br>
+        (2) <b>CA（Collision Avoidance）</b>：通道空出後，各等待裝置先等「隨機」退避時間再傳，避免同時搶送碰撞。<br>
+        (3) <b>ACK</b>：接收端正確收到後立即回送確認；發送端收不到 ACK 就重送 → 使 802.11 成為可靠協定。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 簡答 B4】(1) What does "Carrier Sense Multiple Access" mean? (2) CA means Collision Avoidance—how can collisions be avoided?<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) 傳送前先「聆聽載波」，若偵測到別人正在傳就等待，藉此控制多台裝置不同時傳送。<br>
+        (2) 當前發送者停止後，等待中的各裝置先各自等一段「<b>隨機</b>」時間再傳，避免同時搶送造成碰撞。</div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🙈 <span class="en">Hidden Node Problem &amp; RTS/CTS</span>　隱藏節點與 RTS/CTS<span class="exam-badge warm">考過2次</span></h3>
+    <ul class="facts">
+      <li><span class="term">CSMA/CA 是強制且預設</span>，且比 RTS/CTS「更有效率」。</li>
+      <li><span class="term">RTS/CTS（Request-to-Send / Clear-to-Send）</span> 通常是「選用（optional）」。</li>
+      <li>當兩台以上的 client 站台「彼此聽不到（hidden node）」時，RTS/CTS 很有用：先 RTS、AP 回 CTS，<mark>讓聽到 CTS 的站台都先暫停</mark>，避免它們同時傳送。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 200" role="img" aria-label="隱藏節點與 RTS/CTS 示意圖">
+        <!-- AP center -->
+        <circle cx="320" cy="100" r="26" fill="#2563eb"/><text x="320" y="105" font-size="12" fill="#fff" text-anchor="middle">AP</text>
+        <!-- A left, C right -->
+        <rect x="40" y="80" width="70" height="40" rx="6" fill="#1e293b"/><text x="75" y="105" font-size="13" fill="#7dd3fc" text-anchor="middle">A</text>
+        <rect x="530" y="80" width="70" height="40" rx="6" fill="#1e293b"/><text x="565" y="105" font-size="13" fill="#86efac" text-anchor="middle">C</text>
+        <!-- both reach AP -->
+        <line x1="110" y1="100" x2="294" y2="100" stroke="#16a34a" stroke-width="2"/>
+        <line x1="346" y1="100" x2="530" y2="100" stroke="#16a34a" stroke-width="2"/>
+        <!-- A and C cannot hear each other -->
+        <path d="M110 130 Q320 175 530 130" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="320" y="172" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="700">A 與 C 彼此聽不到（hidden node）→ 可能同時傳送而碰撞</text>
+        <text x="195" y="80" font-size="11" fill="#16a34a" text-anchor="middle">都聽得到 AP</text>
+        <text x="445" y="80" font-size="11" fill="#16a34a" text-anchor="middle">都聽得到 AP</text>
+        <text x="320" y="45" font-size="12" fill="#1e293b" text-anchor="middle" font-weight="700">解法：A 先送 RTS → AP 廣播 CTS → C 聽到 CTS 就暫停</text>
+      </svg>
+      <div class="cap">RTS/CTS：透過 AP 回送的 CTS 讓彼此聽不到的站台互相讓路</div>
+    </div>
+    <div class="box note"><div class="t">📝 一句話分辨</div>
+      CSMA/CA = 預設、強制、較有效率；RTS/CTS = 選用、專治「隱藏節點」問題。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 填充 A6】CSMA/CA+ACK is mandatory; another optional MAC mechanism ____ can solve the hidden node problem.<span class="src">2020</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>RTS/CTS</b>（Request-to-Send / Clear-to-Send）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 STANDARDS ============ -->
+<section id="s6">
+  <div class="sec-head"><div class="num">6</div><h2>802.11 傳輸標準<span>Transmission Standards — g/a/n/ac、MIMO</span></h2></div>
+
+  <div class="card">
+    <h3>📚 <span class="en">802.11 g / a / n / ac</span></h3>
+    <table>
+      <tr><th>標準</th><th>通道頻寬</th><th>5 GHz 通道數（美國）</th><th>MIMO?</th><th>最大空間流</th><th>MU-MIMO?</th></tr>
+      <tr><td>802.11g</td><td>20 MHz</td><td>NA（僅 2.4 GHz）</td><td>No</td><td>—</td><td>No</td></tr>
+      <tr><td>802.11a</td><td>20 MHz</td><td>20–25</td><td>No</td><td>—</td><td>No</td></tr>
+      <tr><td>802.11n</td><td>40 MHz（遇干擾退回 20）</td><td>20–25 @20MHz / 8–12 @40MHz</td><td>Yes</td><td><span class="hl">4</span>（up to 600 Mbps）</td><td>No</td></tr>
+      <tr><td>802.11ac</td><td>80 / 160 MHz</td><td>4–6 @80MHz / 1–2 @160MHz</td><td>Yes</td><td><span class="hl">8</span></td><td>Yes</td></tr>
+    </table>
+    <div class="box note"><div class="t">🔑 規律</div>「<b>通道越寬 → 通道數越少</b>（wider channels means fewer channels）」。</div>
+  </div>
+
+  <div class="card">
+    <h3>📡 <span class="en">MIMO · Beamforming · MU-MIMO</span></h3>
+    <h4>MIMO（Multiple Input Multiple Output）</h4>
+    <ul class="facts">
+      <li>AP 在「同一通道」用多支天線（A、B）同時送出多個訊號，稱為 <span class="term">spatial streams（空間流）</span>。</li>
+      <li>這些訊號在接收端的多支天線「不同時間」到達，時間差讓它們可被「分離並理解」。</li>
+      <li><b>MIMO 兩大好處</b>：① <mark>更高速度</mark>（一個通道送更多資訊）；② <mark>更長傳播距離</mark>。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 180" role="img" aria-label="MIMO 多天線空間流示意圖">
+        <rect x="40" y="55" width="90" height="70" rx="8" fill="#2563eb"/><text x="85" y="95" font-size="13" fill="#fff" text-anchor="middle">AP</text>
+        <rect x="510" y="55" width="90" height="70" rx="8" fill="#1e293b"/><text x="555" y="95" font-size="12" fill="#7dd3fc" text-anchor="middle">Client</text>
+        <!-- antennas lines (3 spatial streams) -->
+        <line x1="130" y1="70" x2="510" y2="65" stroke="#dc2626" stroke-width="2"/><text x="320" y="55" font-size="11" fill="#dc2626" text-anchor="middle">spatial stream 1</text>
+        <line x1="130" y1="90" x2="510" y2="90" stroke="#16a34a" stroke-width="2"/><text x="320" y="84" font-size="11" fill="#16a34a" text-anchor="middle">spatial stream 2</text>
+        <line x1="130" y1="110" x2="510" y2="115" stroke="#d97706" stroke-width="2"/><text x="320" y="132" font-size="11" fill="#d97706" text-anchor="middle">spatial stream 3</text>
+        <text x="320" y="160" font-size="12" fill="#64748b" text-anchor="middle">同一通道、多支天線同時送多股訊號，到達時間略有差異 → 可分離 → 速度↑、距離↑</text>
+      </svg>
+      <div class="cap">MIMO：多天線同時送出多個 spatial streams</div>
+    </div>
+    <h4>Beamforming（波束成形）</h4>
+    <p class="lead">讓 AP 能「聚焦」它的發送與接收方向。</p>
+    <h4>MU-MIMO（Multiuser MIMO）</h4>
+    <ul class="facts">
+      <li>允許「兩台」無線主機「同時」傳送。</li>
+      <li>定義於 <span class="term">802.11ac</span>，且只有單一標準，較易被採用；但早期 pre-standard 的 ac 產品通常還沒支援。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>📊 <span class="en">Throughput Realities</span>　實際吞吐量的真相</h3>
+    <ul class="facts">
+      <li><span class="term">Rated speed（額定速度）</span> = 標準規定值；<span class="term">Throughput（吞吐量）</span> = 實際達到的速度。</li>
+      <li>總吞吐量「實質低於」額定速度，<mark>有時低達 50%</mark>。</li>
+      <li><span class="term">Aggregate（總計）</span> vs <span class="term">Individual（個別）</span>：AP 的吞吐量是所有裝置共享的「總和」，個別裝置可能低很多。</li>
+      <li><b>Throughput vs Distance</b>：離 AP 越遠訊號越弱，主機改用「較慢但較可靠」的位元編碼（每時脈送較少位元）→ 個別吞吐量下降。</li>
+      <li><span class="term">Backward compatibility（向後相容）</span>：新標準裝置仍支援舊標準，會「退回」到舊裝置能用的標準（只拿到舊速度）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7 MESH ============ -->
+<section id="s7">
+  <div class="sec-head"><div class="num">7</div><h2>無線網狀網路<span>Wireless Mesh Networking</span></h2></div>
+  <div class="card">
+    <h3>🕸️ <span class="en">Mesh</span></h3>
+    <ul class="facts">
+      <li>沒有有線 Ethernet 網路（沒有 distribution system）。</li>
+      <li>框架（frames）由 <mark>各個 AP 與無線主機互相轉送（forwarded）</mark>。</li>
+      <li>由 <span class="term">802.11s</span> 規範，<span class="hl">尚未成熟（not a mature standard）</span>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CRAM ============ -->
+<section id="cram">
+  <div class="sec-head"><div class="num">⚡</div><h2>考前 60 秒速記<span>Last-Minute Cram — 進考場前看這張就好</span></h2></div>
+  <div class="card">
+    <table>
+      <tr><th>考點</th><th>必記答案</th></tr>
+      <tr><td>反平方律公式</td><td>S₂ = S₁ × (r₁/r₂)²；距離 ×4 → 強度 ÷16。考古數字答案<span class="hl">恆為 5 mW</span></td></tr>
+      <tr><td>五大傳播問題</td><td>反平方律、吸收衰減、死區、<b>多路徑</b>、EMI</td></tr>
+      <tr><td>隨頻率升高惡化的兩個</td><td><b>死區 Shadow zones</b> + <b>吸收衰減 Absorptive attenuation</b></td></tr>
+      <tr><td>WLAN 最嚴重</td><td><b>多路徑干擾 Multipath interference</b></td></tr>
+      <tr><td>兩種「衰減 attenuation」</td><td>反平方律 + 吸收</td></tr>
+      <tr><td>2.4 GHz 優點 / 通道</td><td>傳播好（遠、穿透佳）／ 只有 3 個非重疊：<b>1, 6, 11</b></td></tr>
+      <tr><td>5 GHz 優點</td><td>非重疊通道多（11–24）、干擾少、速度高（但傳播較差）</td></tr>
+      <tr><td>展頻 Spread Spectrum</td><td>頻寬遠寬於訊號所需；降低多路徑；<b>不是</b>用於資安</td></tr>
+      <tr><td>Shannon</td><td>加倍 <b>bandwidth</b> → 加倍速度</td></tr>
+      <tr><td>黃金頻段 500MHz–10GHz</td><td>太低→頻寬不足；太高→傳播差；中間兼顧高速＋傳播</td></tr>
+      <tr><td>CSMA/CA + ACK</td><td>CS=先聽；CA=各等<b>隨機</b>退避；ACK=收到回確認（可靠）。強制、預設、較有效率</td></tr>
+      <tr><td>RTS/CTS</td><td>選用；解決 <b>隱藏節點 hidden node</b></td></tr>
+      <tr><td>AP 框架轉換</td><td>IP packet 全程不變；802.11 frame 只到 AP 被丟棄；有線網路＝<b>DS</b></td></tr>
+      <tr><td>MIMO 兩大好處</td><td>更高速度 + 更長距離（多個 spatial streams）</td></tr>
+      <tr><td>通道越寬 →</td><td>通道數越<b>少</b></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><div class="num">★</div><h2>互動測驗<span>Self-Check Quiz — 點選作答，立即看詳解</span></h2></div>
+  <div class="quiz">
+    <h3>🧪 隨堂測驗（10 題）</h3>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">1. 訊號在 2 公尺處為 80 mW，依反平方律，8 公尺處為多少？</div>
+      <button>40 mW</button><button>20 mW</button><button>5 mW</button><button>10 mW</button>
+      <div class="exp">✅ 80 × (2/8)² = 80 × 1/16 = <b>5 mW</b>。距離 ×4 → 強度 ÷16。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">2. 下列哪一個是「WLAN 頻段中最嚴重」的傳播問題？</div>
+      <button>吸收衰減 Absorptive attenuation</button><button>多路徑干擾 Multipath interference</button><button>死區 Shadow zones</button><button>EMI</button>
+      <div class="exp">✅ <b>Multipath interference</b> 是 WLAN 頻段最嚴重的問題（直接波與反射波干擾，反相時抵消）。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">3. 哪「兩個」傳播問題會隨頻率升高而變嚴重？</div>
+      <button>EMI 與 Multipath</button><button>Inverse square 與 EMI</button><button>Multipath 與 Inverse square</button><button>Shadow zones 與 Absorptive attenuation</button>
+      <div class="exp">✅ <b>Shadow zones（死區）與 Absorptive attenuation（吸收衰減）</b>隨頻率升高而惡化。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">4. 802.11g 在 2.4 GHz 的三個非重疊通道是？</div>
+      <button>1, 6, 11</button><button>1, 5, 9</button><button>2, 7, 12</button><button>1, 6, 12</button>
+      <div class="exp">✅ <b>Channel 1, 6, 11</b>（20 MHz 通道在 2.4 GHz 只能容下這 3 個不重疊）。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">5. 5 GHz 頻段相較 2.4 GHz 的主要優點是？</div>
+      <button>傳播距離較遠</button><button>穿透障礙物較好</button><button>非重疊通道多、干擾少、速度高</button><button>免授權</button>
+      <div class="exp">✅ 5 GHz <b>頻寬多 → 11–24 個非重疊通道</b>，鄰近 AP 易用不重疊通道、速度較高。（傳播反而較差）</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">6. CSMA/CA 中的「CA（碰撞避免）」靠什麼避免碰撞？</div>
+      <button>提高發射功率</button><button>各裝置等待「隨機」時間再傳送</button><button>使用更寬頻寬</button><button>加密訊號</button>
+      <div class="exp">✅ 當前發送者停止後，等待中的裝置各等一段 <b>隨機(randomized)時間</b> 再送，避免同時搶送造成碰撞。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">7. 關於 AP 的框架處理，何者「正確」？</div>
+      <button>802.11 frame 一路送到目的主機</button><button>IP packet 在 AP 被丟棄</button><button>有線網路稱為 BSS</button><button>AP 丟棄 802.11 frame，把 packet 重封裝成 802.3 frame</button>
+      <div class="exp">✅ AP 取出 packet、<b>丟棄 802.11 frame</b>，再封成 802.3 frame 送出；IP packet 全程不變，802.11 frame 只到 AP。有線網路稱 DS。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">8. RTS/CTS 主要解決哪個問題？</div>
+      <button>隱藏節點 Hidden node problem</button><button>反平方律衰減</button><button>多路徑干擾</button><button>IP 位址不足</button>
+      <div class="exp">✅ RTS/CTS（選用）讓彼此「聽不到」的站台透過 CTS 互相讓路，解決 <b>hidden node problem</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">9. MIMO 的「兩大好處」是？</div>
+      <button>更安全、更省電</button><button>免授權、更便宜</button><button>更高速度、更長距離</button><button>更少干擾、更低延遲</button>
+      <div class="exp">✅ MIMO 以多個 spatial streams 帶來 <b>更高速度</b> 與 <b>更長傳播距離</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">10. 在 2.4/5 GHz 頻段「依法必須」使用展頻，其主要目的是？</div>
+      <button>加密保護資料安全</button><button>降低傳播問題（尤其多路徑干擾）</button><button>增加 IP 位址</button><button>節省電力</button>
+      <div class="exp">✅ 展頻可 <b>降低傳播問題、尤其多路徑干擾</b>；它在 WLAN 中<b>不是</b>用於資安。</div>
+    </div>
+
+    <p id="score" style="text-align:center;font-size:1.1rem;font-weight:700;margin-top:14px"></p>
+  </div>
+</section>
+
+</main>
+
+<button class="backtop" id="bt">↑</button>
+<footer>
+  <b>Ch6 無線區域網路 知識點詳解</b>　|　依課本投影片 ch06（89 頁）＋三份期末考古題整理，🔥標記為實際考過考點。<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 企業資訊通訊與網路
+</footer>
+
+<script>
+// progress bar
+const prog=document.getElementById('prog');
+const bt=document.getElementById('bt');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=sc+'%';
+  bt.style.display=h.scrollTop>500?'block':'none';
+});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+// quiz
+let answered=0,correct=0;const total=document.querySelectorAll('.qitem').length;
+document.querySelectorAll('.qitem').forEach(item=>{
+  const ans=+item.dataset.a;
+  const btns=item.querySelectorAll('button');
+  const exp=item.querySelector('.exp');
+  btns.forEach((b,i)=>{
+    b.onclick=()=>{
+      if(item.dataset.done)return;
+      item.dataset.done=1;answered++;
+      if(i===ans){b.classList.add('right');correct++;}
+      else{b.classList.add('wrong');btns[ans].classList.add('right');}
+      exp.classList.add('show');
+      if(answered===total){
+        const s=document.getElementById('score');
+        s.textContent=`🎉 完成！答對 ${correct} / ${total} 題（${Math.round(correct/total*100)} 分）`;
+        s.style.color=correct>=8?'#86efac':(correct>=6?'#fde68a':'#fca5a5');
+      }
+    };
+  });
+});
+</script>
+</body>
+</html>

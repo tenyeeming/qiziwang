@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企業資訊通訊與網路　期末複習總站 | Ch6–11 知識點詳解</title>
+<style>
+:root{--ink:#1e293b;--muted:#64748b;--brand:#2563eb;--brand2:#7c3aed;--accent:#0891b2;--line:#e2e8f0;--soft:#f1f5f9;--warn:#dc2626}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;color:var(--ink);background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(135deg,#0f172a,#1e293b 55%,#312e81);color:#fff;padding:74px 20px 60px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 18% 22%,rgba(37,99,235,.32),transparent 45%),
+            radial-gradient(circle at 82% 28%,rgba(124,58,237,.36),transparent 45%),
+            radial-gradient(circle at 60% 90%,rgba(8,145,178,.26),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:5px 18px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.6rem;font-weight:800;margin-bottom:12px;line-height:1.22}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:10px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:640px;margin:14px auto 0}
+.container{max-width:1020px;margin:0 auto;padding:0 20px}
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:-34px auto 44px;max-width:900px;position:relative;z-index:5}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 22px;text-align:center;box-shadow:0 10px 26px rgba(15,23,42,.08);min-width:130px}
+.stat b{display:block;font-size:1.7rem;color:var(--brand);font-weight:800}
+.stat span{font-size:.82rem;color:var(--muted)}
+.sec-title{display:flex;align-items:center;gap:12px;margin:42px 0 20px}
+.sec-title h2{font-size:1.45rem;font-weight:800}
+.sec-title .line{flex:1;height:2px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.chap{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 4px 14px rgba(15,23,42,.05);transition:.2s;position:relative;overflow:hidden}
+.chap::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c,var(--brand))}
+.chap:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(15,23,42,.13);border-color:var(--c,var(--brand))}
+.chap .ch{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.chap .badge{width:48px;height:48px;border-radius:13px;background:var(--c,var(--brand));color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.15rem;flex:none}
+.chap h3{font-size:1.12rem;font-weight:800;line-height:1.3}
+.chap h3 span{display:block;font-size:.78rem;color:var(--muted);font-weight:500;margin-top:2px}
+.chap p{font-size:.88rem;color:#475569;margin:8px 0 12px}
+.chap .tags{display:flex;flex-wrap:wrap;gap:6px}
+.chap .tags i{font-style:normal;font-size:.72rem;background:var(--soft);color:#475569;border-radius:999px;padding:3px 9px}
+.chap .go{margin-top:13px;font-size:.85rem;font-weight:700;color:var(--c,var(--brand))}
+.res{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.rcard{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 17px;transition:.18s}
+.rcard:hover{background:var(--soft);border-color:var(--brand);transform:translateX(3px)}
+.rcard .ic{font-size:1.6rem;flex:none}
+.rcard b{font-size:.96rem}
+.rcard span{display:block;font-size:.78rem;color:var(--muted)}
+.note{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--brand);border-radius:12px;padding:16px 18px;margin:20px 0;font-size:.9rem;color:#1e3a8a}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.88rem;margin-top:50px}
+footer b{color:#e2e8f0}
+@media(max-width:640px){header h1{font-size:1.9rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="tag">FINAL EXAM REVIEW · 期末複習總站</div>
+    <h1>企業資訊通訊與網路　期末複習總站
+      <small>Ch6–Ch11 知識點詳解 · 五份考古題整理 · 中英對照 · 互動測驗</small></h1>
+    <p>依課本投影片 ch06–ch11 ＋ 五份期末考古題（109-1 / 2020 / 卷三 / 2023 / 2025）整理。點下方任一章直接跳轉複習。</p>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>6</b><span>章詳解網站</span></div>
+  <div class="stat"><b>5</b><span>份考古題</span></div>
+  <div class="stat"><b>60+</b><span>互動測驗題</span></div>
+  <div class="stat"><b>🔥</b><span>考點頻率標記</span></div>
+</div>
+
+<main class="container">
+
+  <div class="sec-title"><h2>📚 章節知識點詳解</h2><div class="line"></div></div>
+  <div class="grid">
+
+    <a class="chap" style="--c:#0891b2" href="ch06.html">
+      <div class="ch"><div class="badge">6</div><h3>無線訊號傳播與 802.11<span>Wireless Propagation</span></h3></div>
+      <p>反平方律、頻段與通道、展頻、CSMA/CA、MIMO、傳播問題。</p>
+      <div class="tags"><i>反平方律</i><i>2.4G/5G</i><i>CSMA/CA</i><i>五大傳播</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+    <a class="chap" style="--c:#7c3aed" href="ch07.html">
+      <div class="ch"><div class="badge">7</div><h3>無線 LAN 安全與其他技術<span>Wireless Security</span></h3></div>
+      <p>802.11i/WPA2、PSK vs 802.1X、Evil Twin、分貝、Bluetooth、NFC/RFID。</p>
+      <div class="tags"><i>PSK/802.1X</i><i>Evil Twin</i><i>分貝</i><i>Bluetooth</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+    <a class="chap" style="--c:#2563eb" href="ch08.html">
+      <div class="ch"><div class="badge">8</div><h3>TCP/IP 網際網路核心<span>TCP/IP Internetworking</span></h3></div>
+      <p>IP 遮罩 bitwise-AND、路由表最長前綴、IPv6 縮寫、ARP、TTL、TCP 握手。</p>
+      <div class="tags"><i>bitwise-AND</i><i>路由表</i><i>IPv6</i><i>TCP 握手</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+    <a class="chap" style="--c:#16a34a" href="ch09.html">
+      <div class="ch"><div class="badge">9</div><h3>管理與保護網際網路<span>Managing &amp; Securing</span></h3></div>
+      <p>子網計算、NAT、DNS、IPsec Transport/Tunnel、動態路由、ICMP。</p>
+      <div class="tags"><i>子網 2ᴺ−2</i><i>NAT</i><i>IPsec</i><i>ICMP</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+    <a class="chap" style="--c:#d97706" href="ch10.html">
+      <div class="ch"><div class="badge">10</div><h3>廣域網路 WAN<span>Wide Area Networks</span></h3></div>
+      <p>ADSL、行動電話、專線 T1/T3、速度排序、Carrier Ethernet、MPLS。</p>
+      <div class="tags"><i>ADSL</i><i>MPLS</i><i>速度排序</i><i>T1 bonding</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+    <a class="chap" style="--c:#dc2626" href="ch11.html">
+      <div class="ch"><div class="badge">11</div><h3>網路應用<span>Networked Applications</span></h3></div>
+      <p>應用架構、SQL Injection/XSS、Email(SMTP)、VoIP(SIP/RTP)、HTTP、P2P。</p>
+      <div class="tags"><i>SMTP</i><i>SIP/RTP</i><i>HTTP</i><i>SQL/XSS</i></div>
+      <div class="go">開始複習 →</div>
+    </a>
+
+  </div>
+
+  <div class="note">💡 每章頁面都有：<b>🔥 五卷考古出題頻率表</b>、<b>🆕 2023/2025 新卷考點專區</b>、SVG 圖解、可展開的考古題原文＋解答、考前速記表、10 題互動測驗。建議先看頂部的考頻表抓重點。</div>
+
+  <div class="sec-title"><h2>📝 考古題與速查資源</h2><div class="line"></div></div>
+  <div class="res">
+    <a class="rcard" href="exam-old-qa.pdf"><span class="ic">📄</span><div><b>舊三卷 題目與解答</b><span>109-1 / 2020 / 卷三（PDF）</span></div></a>
+    <a class="rcard" href="exam-old-qa.docx"><span class="ic">📝</span><div><b>舊三卷 題目與解答</b><span>可編輯（DOCX）</span></div></a>
+    <a class="rcard" href="exam-new-qa.docx"><span class="ic">🆕</span><div><b>新兩卷 題目與解答</b><span>2025 / 2023（DOCX）</span></div></a>
+    <a class="rcard" href="formula.docx"><span class="ic">📐</span><div><b>常考公式速查卡</b><span>反平方律/子網/dB（DOCX）</span></div></a>
+  </div>
+
+  <div class="note">📊 新舊考卷考點重複率約 <b>82%</b>。最穩定必考（五卷幾乎都出）：bitwise-AND 子網、反平方律、子網位元數計算、路由表最長前綴、TTL/Hop Limit、PSK、MPLS、IPsec 模式、五大傳播問題、CSMA。</div>
+
+</main>
+
+<footer>
+  <b>企業資訊通訊與網路　期末複習總站</b>　|　Ch6–11 知識點詳解 ＋ 五份期末考古題整理<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 國立暨南國際大學
+</footer>
+</body>
+</html>

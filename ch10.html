@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch10 廣域網路 WAN 知識點詳解 | Wide Area Networks</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+  --brand:#2563eb; --brand2:#7c3aed; --accent:#0891b2; --good:#16a34a; --warn:#dc2626;
+  --amber:#d97706; --line:#e2e8f0; --soft:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  color:var(--ink);background:#f8fafc;line-height:1.75;-webkit-font-smoothing:antialiased}
+#prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:999;
+  background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+header{background:linear-gradient(135deg,#0f172a,#1e293b 60%,#312e81);color:#fff;
+  padding:70px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,rgba(217,119,6,.30),transparent 45%),
+             radial-gradient(circle at 80% 30%,rgba(124,58,237,.35),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:5px 16px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.5rem;font-weight:800;margin-bottom:10px;line-height:1.25}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:8px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:680px;margin:14px auto 0;font-size:1rem}
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:16px;
+  margin:-30px auto 40px;max-width:940px;padding:22px 26px;box-shadow:0 12px 30px rgba(15,23,42,.08);position:relative;z-index:5}
+nav.toc h2{font-size:.9rem;color:var(--muted);letter-spacing:2px;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+nav.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);
+  padding:9px 12px;border-radius:10px;font-size:.95rem;transition:.2s}
+nav.toc a:hover{background:var(--soft);color:var(--brand);transform:translateX(3px)}
+nav.toc a b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:.8rem;flex:none}
+section{margin-bottom:54px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.sec-head .num{font-size:1rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:1.6rem;font-weight:800}
+.sec-head h2 span{display:block;font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.card h3{font-size:1.18rem;color:#0f172a;margin-bottom:10px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card h3 .en{color:var(--brand);font-weight:700}
+.card h4{font-size:1rem;margin:14px 0 6px;color:#334155}
+p.lead{margin:8px 0}
+.term{color:var(--brand);font-weight:700}
+.zh{color:var(--muted)}
+ul.facts{list-style:none;margin:10px 0}
+ul.facts li{position:relative;padding:5px 0 5px 26px}
+ul.facts li::before{content:"▸";position:absolute;left:6px;color:var(--brand);font-weight:700}
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.box.metaphor{background:#fef9c3;border-color:#eab308}
+.box.q{background:#ede9fe;border-color:#7c3aed}
+.box.exam{background:#fee2e2;border-color:#dc2626}
+.box.note{background:#e0f2fe;border-color:#0891b2}
+.box.formula{background:#ecfdf5;border-color:#16a34a}
+.formula .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.25rem;font-weight:700;
+  text-align:center;padding:8px;color:#065f46}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem;overflow:hidden;border-radius:10px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#1e293b;color:#fff;font-weight:600}
+tr:nth-child(even) td{background:#f8fafc}
+td .hl{color:var(--warn);font-weight:700}
+.diagram{background:#0f172a;border-radius:14px;padding:26px 20px;margin:16px 0;color:#e2e8f0;text-align:center}
+.diagram .cap{color:#94a3b8;font-size:.85rem;margin-top:14px}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.flow .node{background:#1e293b;color:#fff;border-radius:10px;padding:10px 14px;font-size:.85rem;text-align:center;min-width:90px}
+.flow .node b{display:block;color:#7dd3fc}
+.flow .arr{color:var(--brand);font-size:1.4rem;font-weight:700}
+.quiz{background:linear-gradient(135deg,#1e293b,#312e81);color:#fff;border-radius:16px;padding:26px;margin:18px 0}
+.quiz h3{color:#fff}
+.qitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin:14px 0}
+.qitem .qq{font-weight:600;margin-bottom:10px}
+.qitem button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.08);color:#e2e8f0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px 14px;margin:6px 0;cursor:pointer;
+  font-size:.92rem;transition:.15s;font-family:inherit}
+.qitem button:hover{background:rgba(255,255,255,.16)}
+.qitem button.right{background:#16a34a;border-color:#16a34a;color:#fff}
+.qitem button.wrong{background:#dc2626;border-color:#dc2626;color:#fff}
+.qitem .exp{display:none;margin-top:10px;padding:10px 14px;background:rgba(125,211,252,.12);
+  border-radius:9px;font-size:.9rem;border-left:3px solid #38bdf8}
+.qitem .exp.show{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:12px 0}
+.kcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard .en{font-weight:700;color:var(--brand);font-size:.95rem}
+.kcard .zh{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+.backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand);color:#fff;border:none;font-size:1.3rem;cursor:pointer;display:none;
+  box-shadow:0 8px 20px rgba(37,99,235,.4);z-index:50}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.9rem;margin-top:40px}
+footer b{color:#e2e8f0}
+mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;margin:2px}
+.exam-badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700;margin-left:8px;vertical-align:middle;
+  box-shadow:0 2px 6px rgba(220,38,38,.35);white-space:nowrap}
+.exam-badge.hot{background:linear-gradient(135deg,#dc2626,#ea580c)}
+.exam-badge.warm{background:#d97706}
+.exam-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626 60%,#ea580c);color:#fff;
+  border-radius:18px;padding:26px 28px;margin:0 auto 36px;max-width:940px;box-shadow:0 16px 40px rgba(220,38,38,.25)}
+.exam-hero h2{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.exam-hero p{color:#fee2e2;font-size:.92rem;margin-bottom:16px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.freq-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px 15px}
+.freq-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.freq-item .name{font-weight:700;font-size:.95rem}
+.freq-item .stars{font-size:.8rem;letter-spacing:1px;color:#fde68a;flex:none}
+.freq-item .desc{color:#fecaca;font-size:.8rem;line-height:1.5}
+.freq-item a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.5)}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.05);text-align:center}
+.svgbox svg{max-width:100%;height:auto}
+.svgbox .cap{color:var(--muted);font-size:.85rem;margin-top:10px}
+.examq{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:14px 16px;margin:12px 0}
+.examq .qline{font-weight:600;color:#92400e;display:flex;gap:8px;align-items:flex-start}
+.examq .src{display:inline-block;background:#92400e;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.examq details{margin-top:8px}
+.examq summary{cursor:pointer;color:#b45309;font-weight:600;font-size:.88rem;user-select:none}
+.examq .ans{margin-top:8px;padding:10px 12px;background:#ecfdf5;border-left:4px solid #16a34a;border-radius:8px;font-size:.9rem}
+.steps{counter-reset:st;list-style:none;margin:12px 0}
+.steps li{position:relative;padding:10px 12px 10px 48px;margin:8px 0;background:var(--soft);border-radius:10px;border:1px solid var(--line)}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:12px;top:10px;
+  width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+@media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.exam-badge{font-size:.66rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="wrap">
+    <div class="tag">CHAPTER 10 · WIDE AREA NETWORKS</div>
+    <h1>第 10 章　廣域網路 WAN 知識點詳解
+      <small>WAN/MAN/LAN、ADSL/纜線、行動電話、專線 T1-T3、Carrier Ethernet、MPLS</small></h1>
+    <p>依課本投影片 ch10（59 頁）＋三份期末考古題逐項整理。中英對照、含速度排序、頻道重用、MPLS 圖解與互動測驗。🔥 標記＝實際考過。</p>
+  </div>
+</header>
+
+<nav class="toc container">
+  <h2>目錄 · CONTENTS</h2>
+  <ol>
+    <li><a href="#s1"><b>1</b>WAN / MAN / LAN 比較</a></li>
+    <li><a href="#s2"><b>2</b>ADSL 與纜線數據機</a></li>
+    <li><a href="#s3"><b>3</b>行動電話系統</a></li>
+    <li><a href="#s4"><b>4</b>專線 Leased Lines</a></li>
+    <li><a href="#s5"><b>5</b>速度排序 T1/T3</a></li>
+    <li><a href="#s6"><b>6</b>Carrier Ethernet</a></li>
+    <li><a href="#s7"><b>7</b>MPLS 標籤交換</a></li>
+    <li><a href="#s8"><b>8</b>PSDN 解決方案</a></li>
+    <li><a href="#cram"><b>⚡</b>考前速記 Cram</a></li>
+    <li><a href="#quiz"><b>★</b>互動測驗 Quiz</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ============ EXAM FREQUENCY ============ -->
+<div class="exam-hero">
+  <h2>🔥 Ch10 考古題出題頻率（五份期末卷統計：109-1 / 2020 / 卷三 / 2023 / 2025）</h2>
+  <p>★ 數量＝考過次數。Ch10 重點：<b>MPLS、ADSL、Leased line、速度排序、Handoff、MTSO、PSDN 方案推薦</b>。MPLS 與專線概念考過多次。</p>
+  <div class="freq-grid">
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s7">MPLS 標籤交換</a></span><span class="stars">★★</span></div>
+      <div class="desc">在 IP header 前插 label、查表轉送、比傳統路由便宜。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s2">ADSL</a></span><span class="stars">★★</span></div>
+      <div class="desc">用既有 1-pair VG UTP、下行高上行低、便宜（不必拉新線）。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s4">Leased line / POP</a></span><span class="stars">★★</span></div>
+      <div class="desc">當 access line 連到最近的 POP；CSU/DSU 介面。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s5">速度排序 T1/ADSL/T3/802.11g</a></span><span class="stars">★</span></div>
+      <div class="desc">T1(1.544)&lt;ADSL(10下行)&lt;T3(44.7)&lt;802.11g(54)。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">Handoff / MTSO</a></span><span class="stars">★</span></div>
+      <div class="desc">跨 cell 換手；MTSO 行動交換局連各 cellsite 與 PSTN。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s8">PSDN 方案推薦</a></span><span class="stars">★</span></div>
+      <div class="desc">三站互連：每站一條 access line 到 POP，由 PSDN 雲互連。</div></div>
+  </div>
+</div>
+
+<!-- ============ NEW EXAMS 2023/2025 ============ -->
+<section id="new">
+  <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
+  <div class="card">
+    <h3>🔁 <span class="en">Repeated</span>　舊卷考過、新卷再考</h3>
+    <ul class="facts">
+      <li><b>ADSL</b>：2025 A7、2023 A13 都考「1-pair VG UTP、下行高上行低」＝ADSL。</li>
+      <li><b>MPLS</b>：2025 A11、2023 A12 都考「在 IP header 前插 label、依 label 轉送」＝MPLS。</li>
+      <li><b>Leased line 例子</b>：2023 A14 → <mark>T1</mark>（1.544 Mbps）。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">T1 / bonded T1 / T3 速度比較</span>　bonding（2025 A12）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <ul class="facts">
+      <li><span class="term">Bonding（綁定）</span>：T1/E1 線可綁在一起提供 2、3、4 倍容量。</li>
+      <li>速度：T1 = <mark>1.544</mark> Mbps；五條 bonded T1 = 5 × 1.544 = <mark>7.72</mark> Mbps；T3 = <mark>44.736</mark> Mbps。</li>
+      <li>∴ 最快是 <b>T3</b>（44.736 &gt; 7.72 &gt; 1.544）。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2025 A12】T1、five bonded T1、T3 三者誰最快？<span class="src">2025</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>T3</b>（44.736 Mbps）。五條 bonded T1 只有 7.72 Mbps，仍遠小於 T3。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">Channel Reuse</span>　頻道重用名詞解釋（2023 B1）<span class="exam-badge warm">🆕 新卷</span></h3>
+    <ul class="facts">
+      <li>在蜂窩網路中，於<b>不同 cell 重複使用相同頻道</b>，使營運商能服務更多客戶。</li>
+      <li>例：500 頻道 × 100 個 cell = <mark>50,000</mark> 個同時用戶（沒重用只能 500）。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2023 B1(3)】Explain Channel Reuse (for Cellular Telephone Service).<span class="src">2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">在不同 cell 重複使用相同頻道，使營運商能以同一頻道服務多個客戶（500 頻道 × 100 cell = 50,000 同時用戶）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 WAN/MAN/LAN ============ -->
+<section id="s1">
+  <div class="sec-head"><div class="num">1</div><h2>WAN / MAN / LAN 比較<span>Network Categories</span></h2></div>
+  <div class="card">
+    <h3>🌐 <span class="en">Three Categories</span>　三種網路範圍</h3>
+    <table>
+      <tr><th>類別</th><th>LAN 區域網路</th><th>MAN 都會網路</th><th>WAN 廣域網路</th></tr>
+      <tr><td>服務範圍</td><td>客戶場所（家、辦公室、校園）</td><td>都會區內各站點（城市與郊區）</td><td>區域/國家/全球各站點</td></tr>
+      <tr><td>由誰建置/管理</td><td><b>自己 Self</b></td><td>電信業者 Carrier</td><td>電信業者 Carrier</td></tr>
+      <tr><td>選技術的能力</td><td>高</td><td>低</td><td>低</td></tr>
+      <tr><td>每位元成本</td><td>低</td><td>中</td><td><span class="hl">高</span></td></tr>
+      <tr><td>典型速度</td><td>1 Gbps</td><td>10 Mbps~1 Gbps</td><td>1~100 Mbps</td></tr>
+    </table>
+    <div class="box note"><div class="t">🆚 Internet vs 企業 WAN</div>
+      <b>Internet</b>：無所不在又便宜，但缺乏組織所需的 QoS；<b>企業 WAN</b>：提供所需 QoS，但比 Internet 貴很多，主要用於公司各站點之間的傳輸。</div>
+  </div>
+  <div class="card">
+    <h3>🔌 <span class="en">Network Access vs Network Core</span>　接取 vs 核心</h3>
+    <ul class="facts">
+      <li><span class="term">Network Access（接取）</span>：用戶端設備（CPE）經 <span class="term">access link（接取線路）</span> 連到電信業者網路。</li>
+      <li><span class="term">Network Core（核心）</span>：電信業者內部用來互連各站點的高品質傳輸網路。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2 ADSL & CABLE ============ -->
+<section id="s2">
+  <div class="sec-head"><div class="num">2</div><h2>ADSL 與纜線數據機<span>Residential Access — ADSL &amp; Cable Modem</span></h2></div>
+  <div class="card">
+    <h3>📞 <span class="en">ADSL</span>　非對稱數位用戶線路<span class="exam-badge hot">🔥 考過2次</span></h3>
+    <ul class="facts">
+      <li>本地迴路（local loop）原本就把 <mark>一對（1-pair）語音級（voice grade）UTP</mark> 拉到每一戶；<b>原本不是設計來傳資料</b>。</li>
+      <li>ADSL 用進階技術，讓資料能跑在這條既有的 1-pair VG 線上。</li>
+      <li>💰 <b>因為線路早就裝好了、不必再拉新線</b>，所以 ADSL 便宜。</li>
+      <li><span class="term">Asymmetric（非對稱）</span>：<b>下行（downstream）高、上行（upstream）受限</b>。</li>
+      <li>機房端設備：<span class="term">DSLAM（DSL Access Multiplexer）</span>。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A10】____ provides residential Internet access over one-pair voice-grade UTPs, high downstream, limited upstream.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>ADSL</b>（Asymmetric DSL；利用既有 1-pair VG UTP，下行高上行低）。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📺 <span class="en">Cable Modem Service</span>　纜線數據機</h3>
+    <ul class="facts">
+      <li>原本是為了把電視訊號送到收訊不良的家庭而生（同軸電纜 coaxial cable），現在也提供雙向資料服務。</li>
+      <li>在美國很普及，但多數國家不普及。</li>
+    </ul>
+    <div class="box metaphor"><div class="t">🧩 ADSL vs Cable</div>
+      Cable：個人吞吐量「稍快」、成本「稍高」；ADSL：吞吐量「稍慢」、成本「稍低」。</div>
+  </div>
+</section>
+
+<!-- ============ 3 CELLULAR ============ -->
+<section id="s3">
+  <div class="sec-head"><div class="num">3</div><h2>行動電話系統<span>Cellular Telephone Service</span></h2></div>
+  <div class="card">
+    <h3>📱 <span class="en">Cell, Cellsite, Channel Reuse, Handoff</span>　五個關鍵詞<span class="exam-badge warm">考過 (handoff)</span></h3>
+    <ul class="facts">
+      <li><span class="term">Cell（細胞）</span>＝一塊<b>地理區域</b>；<span class="term">Cellsite（基地台）</span>＝一棟<b>放行動設備的建築</b>。兩者別搞混。</li>
+      <li><span class="term">Channel Reuse（頻道重用）</span>：同一頻道可在<b>不同 cell 重複使用</b> → 一個頻道能服務多個客戶。
+        <br>例：500 頻道 × 100 cells → 可服務 <b>50,000</b> 個同時用戶（沒重用只能 500）。</li>
+      <li><span class="term">Handoff（換手 / Roaming）</span>：用戶在 cell 之間移動時，被「交接」到新 cell 的 cellsite。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 A6】In cellular telephony, ____ occur when a subscriber moves between cells.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>handoffs</b>（換手 / roaming）。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🏢 <span class="en">MTSO &amp; LTE</span>　行動交換局與速度</h3>
+    <ul class="facts">
+      <li><span class="term">MTSO（Mobile Telephone Switching Office，行動電話交換局）</span>：連接各 cellsite，並接到 PSTN（公眾電話網），負責<b>換手與通道分配</b>。</li>
+      <li>cellsite 用點對點微波天線連到 MTSO。</li>
+      <li>現今多用 <span class="term">LTE（Long-Term Evolution）</span>；尖峰下載多為 5–20 Mbps；LTE Advanced 要求 3 Gbps 下行。</li>
+      <li>3G/4G/5G 世代由 ITU 定義，但行銷常浮濫使用。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B13(a)】Briefly explain MTSO.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>MTSO</b>：行動電話交換局，連接各 cellsite 並接到 PSTN，負責換手與通道分配。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 LEASED LINES ============ -->
+<section id="s4">
+  <div class="sec-head"><div class="num">4</div><h2>專線 Leased Lines<span>Network Core — Leased Lines</span></h2></div>
+  <div class="card">
+    <h3>🔗 <span class="en">Leased Line &amp; POP</span>　專線與接取點<span class="exam-badge warm">考過</span></h3>
+    <ul class="facts">
+      <li><span class="term">Leased line（專線）</span>屬 Layer 1，可當 access line。</li>
+      <li>連到 ISP <mark>最近的 POP（Point of Presence，接取點）</mark>。每個站點用一條專線當 access line 連到當地 POP。</li>
+      <li>每個客戶站點需 <span class="term">CSU/DSU（Channel/Data Service Unit）</span> 介面連到電話網路。</li>
+    </ul>
+    <h4>三層核心技術</h4>
+    <table>
+      <tr><th>技術</th><th>層</th><th>特性</th></tr>
+      <tr><td>Leased Lines</td><td>Layer 1</td><td>專線、access line</td></tr>
+      <tr><td>Carrier Ethernet</td><td>Layer 2</td><td>把站點乙太網路延伸到整個公司</td></tr>
+      <tr><td>MPLS</td><td>Layer 3</td><td>強流量工程、高 QoS</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A8】To connect all sites via PSDN, each site uses a ____ line as access line to ISP's nearest POP.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Leased line</b>（專線；當作 access line 連到最近的 POP）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 SPEED SORT ============ -->
+<section id="s5">
+  <div class="sec-head"><div class="num">5</div><h2>速度排序：T1 / T3 / ADSL / 802.11g<span>Digital Hierarchy &amp; Speed Ranking</span></h2></div>
+  <div class="card">
+    <h3>📊 <span class="en">North American Digital Hierarchy</span>　數位階層速度</h3>
+    <table>
+      <tr><th>線路</th><th>速度</th><th>典型介質</th></tr>
+      <tr><td>T1</td><td><b>1.544 Mbps</b></td><td>2-pair 資料級 UTP</td></tr>
+      <tr><td>T3</td><td><b>44.736 Mbps</b></td><td>業者光纖</td></tr>
+      <tr><td>E1（歐洲）</td><td>2.048 Mbps</td><td>2-pair 資料級 UTP</td></tr>
+      <tr><td>E3（歐洲）</td><td>34.368 Mbps</td><td>業者光纖</td></tr>
+    </table>
+    <p class="lead">SONET/SDH（&gt;50 Mbps 後標準化）：OC3=155、OC12=622、OC48=2,488、OC192=9,953 Mbps…</p>
+  </div>
+  <div class="card">
+    <h3>🥇 <span class="en">Exam: Sort by Speed</span>　速度由小到大排序<span class="exam-badge warm">考過</span></h3>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 90" role="img" aria-label="速度排序">
+        <rect x="20" y="35" width="120" height="40" rx="8" fill="#0891b2"/><text x="80" y="52" font-size="11" fill="#fff" text-anchor="middle">T1</text><text x="80" y="67" font-size="9" fill="#cffafe" text-anchor="middle">1.544 Mbps</text>
+        <text x="150" y="60" font-size="16" fill="#64748b">&lt;</text>
+        <rect x="170" y="35" width="120" height="40" rx="8" fill="#2563eb"/><text x="230" y="52" font-size="11" fill="#fff" text-anchor="middle">ADSL</text><text x="230" y="67" font-size="9" fill="#bfdbfe" text-anchor="middle">10 Mbps 下行</text>
+        <text x="300" y="60" font-size="16" fill="#64748b">&lt;</text>
+        <rect x="320" y="35" width="120" height="40" rx="8" fill="#7c3aed"/><text x="380" y="52" font-size="11" fill="#fff" text-anchor="middle">T3</text><text x="380" y="67" font-size="9" fill="#ddd6fe" text-anchor="middle">44.736 Mbps</text>
+        <text x="450" y="60" font-size="16" fill="#64748b">&lt;</text>
+        <rect x="470" y="35" width="150" height="40" rx="8" fill="#16a34a"/><text x="545" y="52" font-size="11" fill="#fff" text-anchor="middle">802.11g</text><text x="545" y="67" font-size="9" fill="#dcfce7" text-anchor="middle">54 Mbps 額定</text>
+      </svg>
+      <div class="cap">由慢到快：T1 &lt; ADSL &lt; T3 &lt; 802.11g</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B3】Sort by speed ascending: 10Mbps/2Mbps ADSL, 802.11g, T1, T3.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>T1 (1.544 Mbps) &lt; ADSL (下行 10 Mbps) &lt; T3 (44.736 Mbps) &lt; 802.11g (54 Mbps 額定)</b>。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B13(d)】Briefly explain 1000Base-T.<span class="src">考古·ch05</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>1000Base-T</b>：Gigabit Ethernet（1 Gbps），跑在 Cat5e/6 UTP 銅纜上、最長 100 m。（此為 ch05 內容，Slide 19）</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 CARRIER ETHERNET ============ -->
+<section id="s6">
+  <div class="sec-head"><div class="num">6</div><h2>Carrier Ethernet<span>Switched (Layer 2) Technology</span></h2></div>
+  <div class="card">
+    <h3>🔀 <span class="en">E-Line &amp; E-LAN</span>　兩種服務</h3>
+    <ul class="facts">
+      <li><span class="term">E-Line service</span>：像擁有一條專線（點對點）。</li>
+      <li><span class="term">E-LAN service</span>：把站點的乙太網路 LAN 延伸到<b>多個站點</b>。</li>
+      <li>歷史 PSDN 技術（Frame Relay、ATM）已凋零；現在主流是 Carrier Ethernet。</li>
+    </ul>
+    <h4>Carrier Ethernet 好處</h4>
+    <ul class="facts">
+      <li>低成本、員工熟悉的技術、可用高速度、<b>速度敏捷（speed agility，可快速升速）</b>、QoS、安全。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7 MPLS ============ -->
+<section id="s7">
+  <div class="sec-head"><div class="num">7</div><h2>MPLS 標籤交換<span>Multiprotocol Label Switching</span></h2></div>
+  <div class="card">
+    <h3>🏷️ <span class="en">Why MPLS?</span>　為何要 MPLS<span class="exam-badge hot">🔥 考過2次</span></h3>
+    <ul class="facts">
+      <li>傳統路由：每個封包都要走「找符合列→挑最佳→送出」三步驟，<mark>很耗處理能力 → 貴</mark>。</li>
+      <li>MPLS：<b>先</b>為一段 IP 位址範圍找好最佳路徑，給它一個 <span class="term">label number（標籤號碼）</span>；之後每個封包帶這個 label。</li>
+      <li>路由器<b>只做快速查表</b>（用 label 查），不必重跑三步驟 → 處理量小、<b>比傳統路由便宜</b>。</li>
+      <li><span class="term">label 位置</span>：夾在 <b>frame header 與 IP packet header 之間</b>。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 70" role="img" aria-label="MPLS label 位置">
+        <rect x="60" y="20" width="160" height="38" rx="6" fill="#334155"/><text x="140" y="44" font-size="12" fill="#fff" text-anchor="middle">Frame Header</text>
+        <rect x="220" y="20" width="140" height="38" rx="6" fill="#dc2626"/><text x="290" y="44" font-size="12" fill="#fff" text-anchor="middle">MPLS Label</text>
+        <rect x="360" y="20" width="200" height="38" rx="6" fill="#2563eb"/><text x="460" y="44" font-size="12" fill="#fff" text-anchor="middle">IP Packet Header</text>
+      </svg>
+      <div class="cap">MPLS Label 夾在 Frame Header 與 IP Packet Header 之間</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A9】____ is a routing mechanism. It inserts a label in front of the IP header.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>MPLS</b>（Multiprotocol Label Switching；以 label 查表轉送，較傳統路由便宜）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 A7】____, making routing more efficient. A label header is inserted in front of the IP header.<span class="src">2020</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>MPLS</b>（Multiprotocol Label Switching）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 PSDN SOLUTION ============ -->
+<section id="s8">
+  <div class="sec-head"><div class="num">8</div><h2>PSDN 廣域網方案<span>Recommending a WAN Solution</span></h2></div>
+  <div class="card">
+    <h3>🗺️ <span class="en">Three-Site WAN via PSDN</span>　三站互連方案<span class="exam-badge warm">考過 (簡答)</span></h3>
+    <p class="lead">【2020 B3】NCNU 有三站（台中、台南、台北）要用 WAN 互連，中華電信提供專線與三市都有 POP 的 PSDN。</p>
+    <ul class="facts">
+      <li>建議用 <span class="term">PSDN（如 MPLS / Carrier Ethernet）</span>：每個站點只需<b>一條專線</b>當 access line 連到當地最近的 POP，再由電信業者的 PSDN 雲把三站互連。</li>
+      <li>💰 比起三站兩兩拉專線（<mark>全網狀 N 站需 N(N−1)/2 條，3 站需 3 條</mark>）成本低很多，且具 QoS。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 180" role="img" aria-label="PSDN 三站互連">
+        <ellipse cx="320" cy="90" rx="90" ry="55" fill="#1e293b"/><text x="320" y="88" font-size="13" fill="#7dd3fc" text-anchor="middle">PSDN 雲</text><text x="320" y="106" font-size="9" fill="#94a3b8" text-anchor="middle">(MPLS/Carrier Eth)</text>
+        <rect x="40" y="20" width="100" height="36" rx="6" fill="#2563eb"/><text x="90" y="43" font-size="11" fill="#fff" text-anchor="middle">台中站</text>
+        <rect x="40" y="125" width="100" height="36" rx="6" fill="#7c3aed"/><text x="90" y="148" font-size="11" fill="#fff" text-anchor="middle">台南站</text>
+        <rect x="500" y="72" width="100" height="36" rx="6" fill="#16a34a"/><text x="550" y="95" font-size="11" fill="#fff" text-anchor="middle">台北站</text>
+        <line x1="140" y1="40" x2="245" y2="70" stroke="#fde68a" stroke-width="2"/><text x="185" y="48" font-size="8" fill="#92400e">專線→POP</text>
+        <line x1="140" y1="143" x2="250" y2="110" stroke="#fde68a" stroke-width="2"/><text x="185" y="140" font-size="8" fill="#92400e">專線→POP</text>
+        <line x1="500" y1="90" x2="405" y2="90" stroke="#fde68a" stroke-width="2"/><text x="455" y="82" font-size="8" fill="#92400e">專線→POP</text>
+      </svg>
+      <div class="cap">三站各拉一條專線到當地 POP，由 PSDN 雲互連（比全網狀省線又有 QoS）</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 B3】NCNU 三站經 WAN 互連，推薦方案並畫圖。<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">建議用 PSDN（MPLS/Carrier Ethernet）：每站只需一條專線當 access line 連到當地最近 POP，再由電信業者 PSDN 雲互連三站。比三站兩兩拉專線（全網狀 N(N−1)/2 條）成本低很多，且具 QoS。圖：台中／台南／台北三站各→專線→各自 POP→中華電信 PSDN 雲互連。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRAM ============ -->
+<section id="cram">
+  <div class="sec-head"><div class="num">⚡</div><h2>考前速記<span>Last-Minute Cram — 進考場前看這張</span></h2></div>
+  <div class="card">
+    <table>
+      <tr><th>考點</th><th>必記答案</th></tr>
+      <tr><td>ADSL</td><td>既有 1-pair VG UTP、下行高上行低、便宜（不拉新線）；機房 DSLAM</td></tr>
+      <tr><td>Leased line</td><td>當 access line 連到最近 POP；需 CSU/DSU</td></tr>
+      <tr><td>三層核心</td><td>Leased(L1)、Carrier Ethernet(L2)、MPLS(L3)</td></tr>
+      <tr><td>MPLS</td><td>在 frame 與 IP header 間插 label、查表轉送、比傳統路由便宜</td></tr>
+      <tr><td>速度排序</td><td>T1(1.544)&lt;ADSL(10下行)&lt;T3(44.736)&lt;802.11g(54)</td></tr>
+      <tr><td>T1 / T3</td><td>1.544 Mbps / 44.736 Mbps</td></tr>
+      <tr><td>1000Base-T (ch05)</td><td>1 Gbps、Cat5e/6 UTP、100 m</td></tr>
+      <tr><td>Cell vs Cellsite</td><td>cell=地理區域；cellsite=放設備的建築</td></tr>
+      <tr><td>Channel Reuse</td><td>同頻道不同 cell 重用；500頻道×100cell=50000用戶</td></tr>
+      <tr><td>Handoff</td><td>跨 cell 移動時換手 (roaming)</td></tr>
+      <tr><td>MTSO</td><td>行動交換局，連各 cellsite 與 PSTN，管換手/通道</td></tr>
+      <tr><td>PSDN 三站方案</td><td>各站一條專線到 POP、PSDN 雲互連；省線又有 QoS</td></tr>
+      <tr><td>SaaS (ch11)</td><td>軟體即服務，雲端經瀏覽器使用</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><div class="num">★</div><h2>互動測驗<span>Self-Check Quiz — 點選作答，立即看詳解</span></h2></div>
+  <div class="quiz">
+    <h3>🧪 隨堂測驗（10 題）</h3>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">1. 利用既有「一對語音級 UTP」提供家用上網、下行高上行低的技術是？</div>
+      <button>纜線數據機</button><button>ADSL</button><button>T3</button><button>MPLS</button>
+      <div class="exp">✅ <b>ADSL</b>（Asymmetric DSL）：用既有 1-pair VG UTP，下行高、上行受限，因不必拉新線而便宜。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">2. 「在 IP 標頭前面插入一個 label、以查表方式轉送、比傳統路由便宜」的是？</div>
+      <button>ADSL</button><button>NAT</button><button>MPLS</button><button>ARP</button>
+      <div class="exp">✅ <b>MPLS</b>：先為一段位址找好路徑給 label，之後只快速查表，省處理量。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">3. 把 T1、ADSL(10Mbps下行)、T3、802.11g 由慢到快排序，正確的是？</div>
+      <button>T1 < ADSL < T3 < 802.11g</button><button>ADSL < T1 < T3 < 802.11g</button><button>T1 < T3 < ADSL < 802.11g</button><button>T1 < ADSL < 802.11g < T3</button>
+      <div class="exp">✅ T1=1.544 &lt; ADSL=10 &lt; T3=44.736 &lt; 802.11g=54 Mbps。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">4. MPLS 的 label 位於哪個位置？</div>
+      <button>IP 標頭內部</button><button>資料欄最後面</button><button>TCP 標頭中</button><button>frame 標頭與 IP 標頭之間</button>
+      <div class="exp">✅ MPLS Label 夾在 <b>frame header 與 IP packet header 之間</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">5. 用戶在 cell 之間移動時發生的是？</div>
+      <button>channel reuse</button><button>handoff（換手）</button><button>roaming ban</button><button>spread spectrum</button>
+      <div class="exp">✅ <b>handoff（換手/roaming）</b>：被交接到新 cell 的 cellsite。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">6. 連接各 cellsite、並接到 PSTN、負責換手與通道分配的是？</div>
+      <button>DSLAM</button><button>POP</button><button>MTSO</button><button>CSU/DSU</button>
+      <div class="exp">✅ <b>MTSO</b>（Mobile Telephone Switching Office，行動電話交換局）。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">7. 每個站點用一條 ____ 當 access line 連到 ISP 最近的 POP。</div>
+      <button>leased line（專線）</button><button>ADSL</button><button>無線網路</button><button>MPLS label</button>
+      <div class="exp">✅ <b>Leased line（專線）</b> 當 access line 連到最近 POP；站點需 CSU/DSU 介面。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">8. 三站要互連，用 PSDN 比「兩兩拉專線」好的主因是？</div>
+      <button>速度一定比較快</button><button>不需要任何專線</button><button>完全免費</button><button>省下大量線路、且具 QoS（每站只需一條到 POP）</button>
+      <div class="exp">✅ PSDN：每站只需一條專線到當地 POP，由雲互連；全網狀需 N(N−1)/2 條，成本高。PSDN 省線又有 QoS。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">9. 關於 cell 與 cellsite，何者正確？</div>
+      <button>兩者都是建築物</button><button>cell 是地理區域，cellsite 是放設備的建築</button><button>cell 是設備，cellsite 是區域</button><button>兩者都是頻道</button>
+      <div class="exp">✅ <b>cell＝地理區域；cellsite＝放行動設備的建築</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">10. 500 個頻道、100 個 cell，搭配頻道重用最多可服務幾個同時用戶？</div>
+      <button>500</button><button>600</button><button>50,000</button><button>無上限</button>
+      <div class="exp">✅ 頻道重用：500 × 100 = <b>50,000</b> 個同時用戶（沒重用只能 500）。</div>
+    </div>
+
+    <p id="score" style="text-align:center;font-size:1.1rem;font-weight:700;margin-top:14px"></p>
+  </div>
+</section>
+
+</main>
+
+<button class="backtop" id="bt">↑</button>
+<footer>
+  <b>Ch10 廣域網路 WAN 知識點詳解</b>　|　依課本投影片 ch10（59 頁）＋三份期末考古題整理，🔥標記為實際考過考點。<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 企業資訊通訊與網路
+</footer>
+
+<script>
+const prog=document.getElementById('prog');
+const bt=document.getElementById('bt');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=sc+'%';
+  bt.style.display=h.scrollTop>500?'block':'none';
+});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+let answered=0,correct=0;const total=document.querySelectorAll('.qitem').length;
+document.querySelectorAll('.qitem').forEach(item=>{
+  const ans=+item.dataset.a;
+  const btns=item.querySelectorAll('button');
+  const exp=item.querySelector('.exp');
+  btns.forEach((b,i)=>{
+    b.onclick=()=>{
+      if(item.dataset.done)return;
+      item.dataset.done=1;answered++;
+      if(i===ans){b.classList.add('right');correct++;}
+      else{b.classList.add('wrong');btns[ans].classList.add('right');}
+      exp.classList.add('show');
+      if(answered===total){
+        const s=document.getElementById('score');
+        s.textContent=`🎉 完成！答對 ${correct} / ${total} 題（${Math.round(correct/total*100)} 分）`;
+        s.style.color=correct>=8?'#86efac':(correct>=6?'#fde68a':'#fca5a5');
+      }
+    };
+  });
+});
+</script>
+</body>
+</html>

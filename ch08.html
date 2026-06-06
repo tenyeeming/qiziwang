@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch8 TCP/IP 網際網路核心 知識點詳解 | TCP/IP Internetworking</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+  --brand:#2563eb; --brand2:#7c3aed; --accent:#0891b2; --good:#16a34a; --warn:#dc2626;
+  --amber:#d97706; --line:#e2e8f0; --soft:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  color:var(--ink);background:#f8fafc;line-height:1.75;-webkit-font-smoothing:antialiased}
+#prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:999;
+  background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+header{background:linear-gradient(135deg,#0f172a,#1e293b 60%,#312e81);color:#fff;
+  padding:70px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,rgba(37,99,235,.30),transparent 45%),
+             radial-gradient(circle at 80% 30%,rgba(124,58,237,.35),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:5px 16px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.5rem;font-weight:800;margin-bottom:10px;line-height:1.25}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:8px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:680px;margin:14px auto 0;font-size:1rem}
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:16px;
+  margin:-30px auto 40px;max-width:940px;padding:22px 26px;box-shadow:0 12px 30px rgba(15,23,42,.08);position:relative;z-index:5}
+nav.toc h2{font-size:.9rem;color:var(--muted);letter-spacing:2px;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+nav.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);
+  padding:9px 12px;border-radius:10px;font-size:.95rem;transition:.2s}
+nav.toc a:hover{background:var(--soft);color:var(--brand);transform:translateX(3px)}
+nav.toc a b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:.8rem;flex:none}
+section{margin-bottom:54px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.sec-head .num{font-size:1rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:1.6rem;font-weight:800}
+.sec-head h2 span{display:block;font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.card h3{font-size:1.18rem;color:#0f172a;margin-bottom:10px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card h3 .en{color:var(--brand);font-weight:700}
+.card h4{font-size:1rem;margin:14px 0 6px;color:#334155}
+p.lead{margin:8px 0}
+.term{color:var(--brand);font-weight:700}
+.zh{color:var(--muted)}
+ul.facts{list-style:none;margin:10px 0}
+ul.facts li{position:relative;padding:5px 0 5px 26px}
+ul.facts li::before{content:"▸";position:absolute;left:6px;color:var(--brand);font-weight:700}
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.box.metaphor{background:#fef9c3;border-color:#eab308}
+.box.q{background:#ede9fe;border-color:#7c3aed}
+.box.exam{background:#fee2e2;border-color:#dc2626}
+.box.note{background:#e0f2fe;border-color:#0891b2}
+.box.formula{background:#ecfdf5;border-color:#16a34a}
+.formula .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.25rem;font-weight:700;
+  text-align:center;padding:8px;color:#065f46}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem;overflow:hidden;border-radius:10px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#1e293b;color:#fff;font-weight:600}
+tr:nth-child(even) td{background:#f8fafc}
+td .hl{color:var(--warn);font-weight:700}
+.bitcalc{font-family:"Consolas","Courier New",monospace;font-size:.95rem;background:#0f172a;color:#e2e8f0;
+  border-radius:10px;padding:16px 18px;margin:14px 0;overflow-x:auto;line-height:1.9}
+.bitcalc .lbl{color:#94a3b8;display:inline-block;min-width:120px}
+.bitcalc .b1{color:#7dd3fc}
+.bitcalc .b0{color:#fca5a5}
+.bitcalc .res{color:#86efac;font-weight:700}
+.bitcalc hr{border:none;border-top:1px dashed #475569;margin:6px 0}
+.diagram{background:#0f172a;border-radius:14px;padding:26px 20px;margin:16px 0;color:#e2e8f0;text-align:center}
+.diagram .cap{color:#94a3b8;font-size:.85rem;margin-top:14px}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.flow .node{background:#1e293b;color:#fff;border-radius:10px;padding:10px 14px;font-size:.85rem;text-align:center;min-width:90px}
+.flow .node b{display:block;color:#7dd3fc}
+.flow .arr{color:var(--brand);font-size:1.4rem;font-weight:700}
+.quiz{background:linear-gradient(135deg,#1e293b,#312e81);color:#fff;border-radius:16px;padding:26px;margin:18px 0}
+.quiz h3{color:#fff}
+.qitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin:14px 0}
+.qitem .qq{font-weight:600;margin-bottom:10px}
+.qitem button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.08);color:#e2e8f0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px 14px;margin:6px 0;cursor:pointer;
+  font-size:.92rem;transition:.15s;font-family:inherit}
+.qitem button:hover{background:rgba(255,255,255,.16)}
+.qitem button.right{background:#16a34a;border-color:#16a34a;color:#fff}
+.qitem button.wrong{background:#dc2626;border-color:#dc2626;color:#fff}
+.qitem .exp{display:none;margin-top:10px;padding:10px 14px;background:rgba(125,211,252,.12);
+  border-radius:9px;font-size:.9rem;border-left:3px solid #38bdf8}
+.qitem .exp.show{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:12px 0}
+.kcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard .en{font-weight:700;color:var(--brand);font-size:.95rem}
+.kcard .zh{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+.backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand);color:#fff;border:none;font-size:1.3rem;cursor:pointer;display:none;
+  box-shadow:0 8px 20px rgba(37,99,235,.4);z-index:50}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.9rem;margin-top:40px}
+footer b{color:#e2e8f0}
+mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;margin:2px}
+.exam-badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700;margin-left:8px;vertical-align:middle;
+  box-shadow:0 2px 6px rgba(220,38,38,.35);white-space:nowrap}
+.exam-badge.hot{background:linear-gradient(135deg,#dc2626,#ea580c)}
+.exam-badge.warm{background:#d97706}
+.exam-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626 60%,#ea580c);color:#fff;
+  border-radius:18px;padding:26px 28px;margin:0 auto 36px;max-width:940px;box-shadow:0 16px 40px rgba(220,38,38,.25)}
+.exam-hero h2{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.exam-hero p{color:#fee2e2;font-size:.92rem;margin-bottom:16px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.freq-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px 15px}
+.freq-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.freq-item .name{font-weight:700;font-size:.95rem}
+.freq-item .stars{font-size:.8rem;letter-spacing:1px;color:#fde68a;flex:none}
+.freq-item .desc{color:#fecaca;font-size:.8rem;line-height:1.5}
+.freq-item a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.5)}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.05);text-align:center}
+.svgbox svg{max-width:100%;height:auto}
+.svgbox .cap{color:var(--muted);font-size:.85rem;margin-top:10px}
+.examq{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:14px 16px;margin:12px 0}
+.examq .qline{font-weight:600;color:#92400e;display:flex;gap:8px;align-items:flex-start}
+.examq .src{display:inline-block;background:#92400e;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.examq details{margin-top:8px}
+.examq summary{cursor:pointer;color:#b45309;font-weight:600;font-size:.88rem;user-select:none}
+.examq .ans{margin-top:8px;padding:10px 12px;background:#ecfdf5;border-left:4px solid #16a34a;border-radius:8px;font-size:.9rem}
+.steps{counter-reset:st;list-style:none;margin:12px 0}
+.steps li{position:relative;padding:10px 12px 10px 48px;margin:8px 0;background:var(--soft);border-radius:10px;border:1px solid var(--line)}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:12px;top:10px;
+  width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+@media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.exam-badge{font-size:.66rem}.bitcalc{font-size:.78rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="wrap">
+    <div class="tag">CHAPTER 8 · TCP/IP INTERNETWORKING</div>
+    <h1>第 8 章　TCP/IP 網際網路核心 知識點詳解
+      <small>Internetworking — IP 位址/遮罩、路由器運作、ARP、IPv4 vs IPv6、TCP/UDP</small></h1>
+    <p>依課本投影片 ch08（118 頁）＋三份期末考古題逐項整理。中英對照、含 bitwise-AND 與 IPv6 縮寫逐位計算、路由表最長前綴範例與互動測驗。🔥 標記＝實際考過。</p>
+  </div>
+</header>
+
+<nav class="toc container">
+  <h2>目錄 · CONTENTS</h2>
+  <ol>
+    <li><a href="#s1"><b>1</b>TCP/IP 分層回顧</a></li>
+    <li><a href="#s2"><b>2</b>階層式 IP 位址與遮罩</a></li>
+    <li><a href="#s3"><b>3</b>遮罩計算 bitwise-AND</a></li>
+    <li><a href="#s4"><b>4</b>路由器運作 3 步驟</a></li>
+    <li><a href="#s5"><b>5</b>最長前綴 + Metric</a></li>
+    <li><a href="#s6"><b>6</b>ARP 位址解析</a></li>
+    <li><a href="#s7"><b>7</b>IPv4 標頭</a></li>
+    <li><a href="#s8"><b>8</b>IPv6 與縮寫規則</a></li>
+    <li><a href="#s9"><b>9</b>IPv6 標頭與延伸標頭</a></li>
+    <li><a href="#s10"><b>10</b>TCP 與 UDP</a></li>
+    <li><a href="#cram"><b>⚡</b>考前速記 Cram</a></li>
+    <li><a href="#quiz"><b>★</b>互動測驗 Quiz</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ============ EXAM FREQUENCY ============ -->
+<div class="exam-hero">
+  <h2>🔥 Ch8 考古題出題頻率（五份期末卷統計：109-1 / 2020 / 卷三 / 2023 / 2025）</h2>
+  <p>★ 數量＝考過次數。Ch8 是<b>計算題重災區</b>：<b>bitwise-AND 子網遮罩、IPv6 縮寫、路由表最長前綴、TTL/Hop Limit、TCP 三/四次握手</b>幾乎每卷必出，務必動手練到熟。</p>
+  <div class="freq-grid">
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s5">路由表最長前綴 + Metric</a></span><span class="stars">★★★</span></div>
+      <div class="desc">給路由表找 best-match：最長前綴優先；同長度比 metric（速度取大、成本取小）。三卷都考。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s7">TTL / Hop Limit</a></span><span class="stars">★★★</span></div>
+      <div class="desc">每經一台 router 減 1，到 0 丟棄。IPv4 叫 TTL、IPv6 叫 Hop Limit（功能相同）。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">bitwise-AND 子網遮罩</a></span><span class="stars">★★</span></div>
+      <div class="desc">IP AND Mask = 網路位址。10.34.65.117 AND 255.255.240.0、163.22.72.51 AND 255.255.224.0。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s8">IPv6 位址縮寫</a></span><span class="stars">★★</span></div>
+      <div class="desc">把縮寫展開成完整 8 段：fe80::c2f:a4:300、2001::1:fe20:a42:3e。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s10">TCP 三次/四次握手</a></span><span class="stars">★★</span></div>
+      <div class="desc">SYN 同步什麼、四次揮手、為何四步、Sequence Number 作用。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s9">Next Header</a></span><span class="stars">★★</span></div>
+      <div class="desc">IPv6 延伸標頭以 Next Header 串接；TCP=6、UDP=17、ICMPv6=58。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s6">ARP</a></span><span class="stars">★</span></div>
+      <div class="desc">已知 IP 求 MAC（EUI-48）；廣播 ARP Request → 單播 ARP Response。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s4">交換表 vs 路由表</a></span><span class="stars">★</span></div>
+      <div class="desc">階層式乙太網每位址只有一條路徑、交換表每位址僅一列；路由器是網狀、要找最佳路。</div></div>
+  </div>
+</div>
+
+<!-- ============ NEW EXAMS 2023/2025 ============ -->
+<section id="new">
+  <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
+  <div class="card">
+    <h3>🔁 <span class="en">Repeated</span>　舊卷考過、新卷再考（Ch8 是計算重災區）</h3>
+    <ul class="facts">
+      <li><b>IPv6 縮寫展開</b>：2025 fe80:1::a3:b40:8（::=3段0）、2023 fe80::c2f:80a4:d0（::=4段0）。</li>
+      <li><b>bitwise-AND</b>：2025 174&amp;240=160→123.25.160.0；2023 120&amp;224=96→163.22.96.0。</li>
+      <li><b>TTL / Hop Limit</b>：2023 考 IPv4 TTL、2025 考 IPv6 Hop Limit。</li>
+      <li><b>Next Header</b>：2023 A9 再考延伸標頭以此串接。</li>
+      <li><b>TCP 三/四次握手</b>：2025 B3、2023 A10（SYN→SYN/ACK→ACK）。</li>
+      <li><b>路由表最長前綴</b>：2025 給完整 10 列表（cost），五卷必考。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">IPv4 Header Length = 5</span>　標頭長度欄位（2025 A4）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <ul class="facts">
+      <li>Header Length 欄位以 <mark>4 octets（32 bits）為單位</mark>：值 1 = 4 octets、值 <b>5 = 20 octets</b>。</li>
+      <li>所以「標頭 20 octets → 欄位值 = <b>5</b>」（無選項時的標準 IPv4 標頭）。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2025 A4】header length 欄位值＝？（標頭 20 octets）<span class="src">2025</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>5</b>（20 ÷ 4 = 5；header length 以 4 octets 為單位）。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">TCP/IPv4 Header Fields</span>　欄位解釋（2023 B5）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <table>
+      <tr><th>欄位</th><th>解釋</th></tr>
+      <tr><td><b>Sequence Number</b>（TCP）</td><td>每個 segment 的序號，接收端用來<b>重組訊息、偵測遺失</b></td></tr>
+      <tr><td><b>Acknowledgment Number</b>（TCP）</td><td>接收端正確收到後回送的確認，指出在確認哪一段</td></tr>
+      <tr><td><b>Source/Destination Port</b>（TCP）</td><td>來源/目的端的<b>連接埠號</b>（多工伺服器用 port 區分不同應用）</td></tr>
+      <tr><td><b>Identification / Flags / Fragment Offset</b>（IPv4）</td><td>用於 IP 封包的<b>分段與重組</b>：Identification 標記同一原始封包、Flags 控制可否分段/是否還有後續、Fragment Offset 指出此片段在原資料的位移</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【2023 B5】解釋 Sequence/Ack Number、Source/Dest Port、Identification/Flags/Fragment Offset。<span class="src">2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">Seq＝重組訊息/偵測遺失；Ack＝確認收到哪段；Source/Dest Port＝來源/目的埠號；Identification/Flags/Fragment Offset＝IPv4 封包分段與重組用。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">2025 Routing Table (完整表，cost)</span>　路由表三題詳解<span class="exam-badge hot">🆕 新卷</span></h3>
+    <p class="lead">表（cost 取小）：R1 0.0.0.0/0(80)、R2 123.0.0.0/8(60)、R3/R4 123.45.0.0/16(40/35)、R5 123.45.1.0/24(20)、R6 123.50.2.0/24(10)、R7/R8 123.60.5.0/24(30/25)、R9 123.80.7.0/24(10)、R10 123.80.8.0/24(30)。</p>
+    <table>
+      <tr><th>目的位址</th><th>符合列</th><th>選定（最長前綴；平手 cost 取小）</th></tr>
+      <tr><td>123.45.1.21</td><td>1,2,3,4,5</td><td><b>Row 5</b>（唯一 /24）</td></tr>
+      <tr><td>123.20.5.11</td><td>1,2</td><td><b>Row 2</b>（/8 最長）</td></tr>
+      <tr><td>123.80.12.9</td><td>1,2</td><td><b>Row 2</b>（.7/.8≠.12，只剩 /8 與預設）</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【2025 B5 / 2023 B7】路由表（metric=cost）找符合列與選定列。<span class="src">2025·2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">2025：123.45.1.21→1,2,3,4,5 選 Row 5；123.20.5.11→1,2 選 Row 2；123.80.12.9→1,2 選 Row 2。<br>2023（原卷給定）：140.121.33.10→1,6,8,9,11 選 Row 8；140.110.45.21→1,4,5,11 選 Row 5；140.22.1.2→1,2,3,11 選 Row 2。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">Protocol Pool 新細項</span>　協定池選擇（2025 B7）<span class="exam-badge warm">🆕 新卷</span></h3>
+    <ul class="facts">
+      <li>「有 <b>Flow Label</b> 欄位的協定」＝ <mark>IPv6</mark>（Flow Label 為 IPv6 標頭欄位）。</li>
+      <li>「有 <b>Protocol</b> 欄位指出上層協定的協定」＝ <mark>IPv4</mark>（1=ICMP、6=TCP、17=UDP）。</li>
+      <li>「用 ARP 找下一跳 MAC」＝ ARP；「傳輸層協定」＝ TCP/UDP。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 1 LAYERS ============ -->
+<section id="s1">
+  <div class="sec-head"><div class="num">1</div><h2>TCP/IP 分層架構回顧<span>Recap of TCP/IP Concepts</span></h2></div>
+  <div class="card">
+    <h3>🧱 <span class="en">Who Makes the Standards?</span>　哪一層由誰制定</h3>
+    <ul class="facts">
+      <li>第 1–2 層（實體、資料連結）：單一交換網路、無線網路 → <mark>標準幾乎全來自 OSI</mark>。</li>
+      <li>第 3–4 層（網際網路、傳輸）：Internets → <mark>標準主要來自 IETF</mark>，稱 <span class="term">TCP/IP 標準</span>，出版品叫 <span class="term">RFC（Requests for Comments）</span>。</li>
+    </ul>
+    <table>
+      <tr><th>章節</th><th>主題</th><th>層</th></tr>
+      <tr><td>5</td><td>單一交換網路</td><td>1–2</td></tr>
+      <tr><td>6–7</td><td>單一無線網路</td><td>1–2</td></tr>
+      <tr><td><b>8–9</b></td><td><b>Internets（網際網路）</b></td><td><b>3–4</b></td></tr>
+      <tr><td>10</td><td>廣域網路 WAN</td><td>1–4</td></tr>
+      <tr><td>11</td><td>應用 Applications</td><td>5</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>📚 <span class="en">Core Protocols by Layer</span>　各層核心協定</h3>
+    <table>
+      <tr><th>層</th><th>協定</th></tr>
+      <tr><td>5 應用層</td><td>HTTP、SMTP、DNS、動態路由協定…（使用者應用 + 監督應用）</td></tr>
+      <tr><td>4 傳輸層</td><td><span class="term">TCP</span>、<span class="term">UDP</span></td></tr>
+      <tr><td>3 網際網路層</td><td><span class="term">IP</span>、<span class="term">ICMP</span>、<span class="term">ARP</span></td></tr>
+      <tr><td>2 資料連結 / 1 實體</td><td>None — 使用 OSI 標準</td></tr>
+    </table>
+    <div class="box note"><div class="t">🧠 重點</div>
+      TCP/IP 的「核心」是 <b>IP / TCP / UDP</b>；ICMP、ARP 是網際網路層的輔助協定；HTTP/SMTP/DNS 是應用層標準。</div>
+  </div>
+</section>
+
+<!-- ============ 2 HIERARCHICAL IP ============ -->
+<section id="s2">
+  <div class="sec-head"><div class="num">2</div><h2>階層式 IP 位址與遮罩<span>Hierarchical IP Addresses &amp; Masks</span></h2></div>
+  <div class="card">
+    <h3>🏠 <span class="en">Three Parts of an IPv4 Address</span>　IPv4 的三段結構</h3>
+    <ul class="facts">
+      <li>一個 IPv4 位址（共 32 bits）通常分三段：<span class="term">Network 網路部分</span> + <span class="term">Subnet 子網部分</span> + <span class="term">Host 主機部分</span>。</li>
+      <li>Network 部分由號碼登記機構（ISP/IANA）配給公司；公司再自行把剩下的 bits 切成 Subnet 與 Host。</li>
+      <li>⚠️ 問題：<mark>光看位址看不出三段各占幾 bits</mark>，只知道總和是 32 bits → 解法是「遮罩 mask」。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 90" role="img" aria-label="IPv4 三段結構">
+        <rect x="30" y="30" width="240" height="40" rx="6" fill="#2563eb"/><text x="150" y="55" font-size="13" fill="#fff" text-anchor="middle">Network 網路部分</text>
+        <rect x="270" y="30" width="180" height="40" rx="6" fill="#7c3aed"/><text x="360" y="55" font-size="13" fill="#fff" text-anchor="middle">Subnet 子網</text>
+        <rect x="450" y="30" width="160" height="40" rx="6" fill="#0891b2"/><text x="530" y="55" font-size="13" fill="#fff" text-anchor="middle">Host 主機</text>
+        <text x="320" y="20" font-size="11" fill="#64748b" text-anchor="middle">總共 32 bits</text>
+      </svg>
+      <div class="cap">三段相加 = 32 bits，但各段長度需靠遮罩才能得知</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎭 <span class="en">What Is a Mask?</span>　遮罩是什麼</h3>
+    <ul class="facts">
+      <li>遮罩 = <mark>一連串開頭的 1、後面接一連串的 0</mark>，總共 32 bits。</li>
+      <li>像噴漆模板（stencil）：mask bit = 1 的位置「讓 IP 的 bit 通過」；mask bit = 0 的位置「一律變 0」。</li>
+      <li>表示法：點分十進位（如 255.255.0.0）或前綴（如 /16，代表開頭有 16 個 1）。</li>
+    </ul>
+    <table>
+      <tr><th>遮罩</th><th>二進位</th><th>點分十進位</th><th>前綴</th></tr>
+      <tr><td>網路遮罩</td><td>11111111 11111111 00000000 00000000</td><td>255.255.0.0</td><td>/16</td></tr>
+      <tr><td>子網遮罩</td><td>11111111 11111111 11111111 00000000</td><td>255.255.255.0</td><td>/24</td></tr>
+    </table>
+    <div class="box metaphor"><div class="t">🧩 八個 1 = 255</div>
+      每組 8 個 1 在十進位就是 255；8 個 0 就是 0。所以 /16＝兩組 255 接兩組 0＝255.255.0.0。</div>
+  </div>
+</section>
+
+<!-- ============ 3 BITWISE AND ============ -->
+<section id="s3">
+  <div class="sec-head"><div class="num">3</div><h2>遮罩運算：bitwise-AND<span>Applying a Mask — 算出網路位址</span></h2></div>
+  <div class="card">
+    <h3>➗ <span class="en">The AND Rule</span>　AND 規則（必背）<span class="exam-badge hot">🔥 必考計算</span></h3>
+    <table>
+      <tr><th>IP bit</th><th>Mask bit</th><th>結果</th></tr>
+      <tr><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td><span class="hl">0</span></td></tr>
+      <tr><td>0</td><td>0</td><td>0</td></tr>
+    </table>
+    <div class="box formula"><div class="t">📐 一句話規則</div>
+      <p style="text-align:center"><b>Mask bit = 1 → 保留 IP 原值；Mask bit = 0 → 結果一律為 0。</b></p></div>
+    <div class="box note"><div class="t">💡 8-bit 邊界的捷徑</div>
+      遮罩那一段是 255（全 1）→ 該 octet 原封不動；遮罩是 0（全 0）→ 該 octet 變 0。<b>只有「不是 255 也不是 0」的那一段才需要動手算二進位。</b></div>
+  </div>
+
+  <div class="card">
+    <h3>🧮 <span class="en">Worked Example (textbook)</span>　課本範例：跨 8-bit 邊界</h3>
+    <p class="lead">3.143.12.12 AND 255.248.0.0 = ?（第 2 段 248 不是 255 也不是 0，要算）</p>
+    <div class="bitcalc">
+<span class="lbl">143 =</span> <span class="b1">1000</span><span class="b0">1111</span><br>
+<span class="lbl">248 =</span> <span class="b1">1111</span><span class="b0">1000</span>  ← 遮罩<br>
+<hr>
+<span class="lbl">AND =</span> <span class="res">10001000</span> = <span class="res">136</span><br>
+<span class="lbl">結果:</span> <span class="res">3.136.0.0</span>（第1段3保留、第3/4段遮罩為0→0）
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📝 <span class="en">Exam Calculations</span>　考古題實算<span class="exam-badge warm">考過2次</span></h3>
+    <h4>① 10.34.65.117 AND 255.255.240.0（109-1 A2）</h4>
+    <div class="bitcalc">
+<span class="lbl">10 AND 255 =</span> <span class="res">10</span>　（遮罩全1，保留）<br>
+<span class="lbl">34 AND 255 =</span> <span class="res">34</span>　（遮罩全1，保留）<br>
+<span class="lbl">65  =</span> <span class="b1">0100</span><span class="b0">0001</span><br>
+<span class="lbl">240 =</span> <span class="b1">1111</span><span class="b0">0000</span><br>
+<hr>
+<span class="lbl">AND =</span> <span class="res">01000000</span> = <span class="res">64</span><br>
+<span class="lbl">117 AND 0 =</span> <span class="res">0</span>　（遮罩全0→0）<br>
+<hr>
+<span class="lbl">答案:</span> <span class="res">10.34.64.0</span>
+    </div>
+    <h4>② 163.22.72.51 AND 255.255.224.0（2020 A2）</h4>
+    <div class="bitcalc">
+<span class="lbl">163 AND 255 =</span> <span class="res">163</span><br>
+<span class="lbl">22 AND 255 =</span> <span class="res">22</span><br>
+<span class="lbl">72  =</span> <span class="b1">010</span><span class="b0">01000</span><br>
+<span class="lbl">224 =</span> <span class="b1">111</span><span class="b0">00000</span><br>
+<hr>
+<span class="lbl">AND =</span> <span class="res">01000000</span> = <span class="res">64</span><br>
+<span class="lbl">51 AND 0 =</span> <span class="res">0</span><br>
+<hr>
+<span class="lbl">答案:</span> <span class="res">163.22.64.0</span>
+    </div>
+    <div class="box note"><div class="t">🔑 240 與 224 的二進位要記熟</div>
+      128=10000000、192=11000000、224=11100000、240=11110000、248=11111000、252=11111100、254=11111110、255=11111111。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A2】10.34.65.117 bitwise-AND 255.255.240.0 = ____<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>10.34.64.0</b>（65 &amp; 240 = 64，第 4 段 &amp; 0 = 0）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 A2】163.22.72.51 bitwise-AND 255.255.224.0 = ____<span class="src">2020</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>163.22.64.0</b>（72 &amp; 224 = 64，第 4 段 &amp; 0 = 0）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 ROUTER OPERATION ============ -->
+<section id="s4">
+  <div class="sec-head"><div class="num">4</div><h2>路由器運作：三步驟<span>Router Operation — A Routing Decision</span></h2></div>
+  <div class="card">
+    <h3>🔀 <span class="en">Switch vs Router</span>　交換器 vs 路由器（觀念對比）<span class="exam-badge warm">考過 (填充)</span></h3>
+    <table>
+      <tr><th>項目</th><th>乙太交換器 Switch</th><th>路由器 Router</th></tr>
+      <tr><td>拓撲</td><td>階層式（hierarchy）</td><td>網狀（mesh，多條替代路徑）</td></tr>
+      <tr><td>任兩主機間路徑數</td><td><span class="hl">只有一條（one）</span></td><td>可能多條（可靠性）</td></tr>
+      <tr><td>表的每個位址</td><td>交換表每位址只有 <b>一列</b></td><td>路由表可能 <b>多列符合</b>，要挑最佳</td></tr>
+      <tr><td>表的單位</td><td>單一 EUI-48(MAC) 位址</td><td>一段 IP 位址範圍（destination + mask）</td></tr>
+      <tr><td>成本</td><td>低（switching 便宜）</td><td>高（routing 較貴）</td></tr>
+    </table>
+    <div class="box exam"><div class="t">🎯 考點</div>
+      「In a hierarchical Ethernet LAN, the number of paths between any two end hosts is ____」→ <b>one</b>（所以交換表每個位址只有一列）。</div>
+  </div>
+  <div class="card">
+    <h3>🪜 <span class="en">Three Steps of a Routing Decision</span>　路由決策三步驟</h3>
+    <ol class="steps">
+      <li><b>Step 1 找出所有符合的列（All Row Matches）</b>：對每一列，把該列遮罩套到封包目的 IP（bitwise-AND），結果若等於該列的 Destination 欄 → 該列符合。<b>必須檢查全部的列</b>（可能多列符合）。</li>
+      <li><b>Step 2 找最佳符合列（Best-Match Row）</b>：基本規則＝<mark>最長前綴（遮罩開頭 1 最多）</mark>；若最長前綴相同 → 用 metric 決勝。</li>
+      <li><b>Step 3 依最佳列送出</b>：從該列的 Interface（埠）送出，送往 Next-Hop Router；若 Next-Hop 欄是 <b>Local</b>，代表目的主機就在該介面網段上，直接送達。</li>
+    </ol>
+    <div class="box q"><div class="t">💭 小題（課本 p40）</div>
+      若有 127,976 列、只有第 2 與第 7 列符合：① 路由器先檢查哪一列？→ <b>第 1 列</b>（從頭逐列）。② 要檢查幾列？→ <b>全部 127,976 列</b>（不能提早停）。</div>
+  </div>
+</section>
+
+<!-- ============ 5 LONGEST PREFIX + METRIC ============ -->
+<section id="s5">
+  <div class="sec-head"><div class="num">5</div><h2>最長前綴 + Metric 決勝<span>Longest-Match &amp; Tie-Breaking — 全章最常考</span></h2></div>
+  <div class="card">
+    <h3>🏆 <span class="en">The Rules</span>　判斷規則<span class="exam-badge hot">🔥 三卷都考</span></h3>
+    <ul class="facts">
+      <li><b>基本規則</b>：在所有符合的列中，選 <mark>遮罩最長（前綴 /N 最大）</mark> 的那一列。例：/24 勝 /16。</li>
+      <li><b>決勝（Tie-Breaker）</b>：若最長前綴有多列相同 → 比 metric：
+        <br>　・metric 是 <span class="term">speed（速度）</span> → 取 <b>數值大</b> 的（越快越好）。
+        <br>　・metric 是 <span class="term">cost（成本）</span> → 取 <b>數值小</b> 的（越便宜越好）。</li>
+    </ul>
+    <div class="box note"><div class="t">⚠️ 最易錯的地方</div>
+      先比「前綴長度」，<b>前綴一樣長才比 metric</b>；而 metric 是速度就取大、是成本就取小，方向別搞反。</div>
+  </div>
+
+  <div class="card">
+    <h3>🧮 <span class="en">Worked Examples (textbook p46–48)</span>　課本三個範例</h3>
+    <h4>範例 A（speed metric）</h4>
+    <table>
+      <tr><th>列</th><th>遮罩</th><th>speed metric</th><th>選嗎</th></tr>
+      <tr><td>220</td><td>/24</td><td>40</td><td><span style="color:#16a34a;font-weight:700">✔ 選（前綴最長）</span></td></tr>
+      <tr><td>345</td><td>/18</td><td>50</td><td>否</td></tr>
+      <tr><td>682</td><td>/8</td><td>40</td><td>否</td></tr>
+    </table>
+    <p style="font-size:.9rem;color:#64748b">→ /24 最長，直接選 220（不需比 metric）。</p>
+    <h4>範例 B（speed metric，有平手）</h4>
+    <table>
+      <tr><th>列</th><th>遮罩</th><th>speed metric</th><th>選嗎</th></tr>
+      <tr><td>107</td><td>/12</td><td>30</td><td>否</td></tr>
+      <tr><td>220</td><td>/14</td><td>100</td><td>否</td></tr>
+      <tr><td>345</td><td>/18</td><td>50</td><td><span style="color:#16a34a;font-weight:700">✔ 選</span></td></tr>
+      <tr><td>682</td><td>/18</td><td>40</td><td>否</td></tr>
+    </table>
+    <p style="font-size:.9rem;color:#64748b">→ /18 平手（345、682）；speed 取大：50 &gt; 40 → 選 <b>345</b>。</p>
+    <h4>範例 C（同表，但 cost metric）</h4>
+    <table>
+      <tr><th>列</th><th>遮罩</th><th>cost metric</th><th>選嗎</th></tr>
+      <tr><td>345</td><td>/18</td><td>50</td><td>否</td></tr>
+      <tr><td>682</td><td>/18</td><td>40</td><td><span style="color:#16a34a;font-weight:700">✔ 選</span></td></tr>
+    </table>
+    <p style="font-size:.9rem;color:#64748b">→ /18 平手；cost 取小：40 &lt; 50 → 選 <b>682</b>。（同樣的表，metric 意義不同，答案就不同！）</p>
+  </div>
+
+  <div class="card">
+    <h3>📝 <span class="en">Exam Routing Questions</span>　考古題（路由表題）</h3>
+    <div class="box note"><div class="t">📌 解題 SOP</div>
+      ① 逐列把目的 IP 套遮罩，列出所有符合的列；② 取前綴最長者；③ 若平手，speed 取大 / cost 取小。考卷的路由表會附在題目上，方法都一樣。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B7】routing table（metric = speed）：(1) 156.114.26.9 (2) 156.110.45.7 (3) 156.63.1.2<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看解題</summary>
+        <div class="ans">(1) 符合 Row 1,2,7,9,10；最長前綴 9、10 皆 /24，比速度 36&gt;30 → <b>選 Row 9</b>。<br>
+        (2) 符合 Row 1,2,5,6；最長前綴 Row 6 為 /24 → <b>選 Row 6</b>。<br>
+        (3) 符合 Row 1,2,3,4；最長前綴 3、4 皆 /16，比速度 18&gt;12 → <b>選 Row 4</b>。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 B8】routing table（metric = speed）：(1) 140.37.26.9 (2) 140.36.25.7 (3) 142.20.1.2<span class="src">2020</span></span></div>
+      <details><summary>▶ 看解題</summary>
+        <div class="ans">(1) 符合 Row 1,2,7,9,10；9、10 皆 /24，比速度 30&gt;26 → <b>選 Row 10</b>。<br>
+        (2) 符合 Row 1,2,5；最長前綴 Row 5 為 /16 → <b>選 Row 5</b>（Row 6 為 140.36.24.0/24，25≠24 不符）。<br>
+        (3) 只符合 Row 1（142.x 不屬 140.x）→ <b>選 Row 1 預設路由</b>。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B9】routing table（metric = cost）：(a) 140.128.12.80 (b) 140.128.12.140 (c) 140.128.15.200<span class="src">考古</span></span></div>
+      <details><summary>▶ 看解題</summary>
+        <div class="ans">(a) 符合 Row 1,2,3；最長前綴 Row 3 為 /24 → <b>選 Row 3</b>（.80 &amp; /26 = .64 ≠ .128，Row 4 不符）。<br>
+        (b) 符合 Row 1,2,3,4；Row 4 為 /26 最長（.140 &amp; /26 = .128 符合）→ <b>選 Row 4</b>。<br>
+        (c) 符合 Row 1,2,5,6；5、6 皆 /24，cost 取小 6&lt;8 → <b>選 Row 6</b>。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ARP ============ -->
+<section id="s6">
+  <div class="sec-head"><div class="num">6</div><h2>ARP 位址解析協定<span>Address Resolution Protocol</span></h2></div>
+  <div class="card">
+    <h3>🔍 <span class="en">Why ARP?</span>　為什麼需要 ARP<span class="exam-badge warm">考過 (填充)</span></h3>
+    <ul class="facts">
+      <li>路由器要把封包送給「下一跳路由器」或「目的主機」，<b>從路由表知道對方的 IP 位址</b>。</li>
+      <li>但封包要裝進該網段的 <b>frame</b> 才能送出，而路由器 <mark>不知道對方的資料連結層位址（MAC / EUI-48）</mark>。</li>
+      <li>解法：用 <span class="term">ARP（Address Resolution Protocol）</span>，<b>已知 IP → 查出 MAC</b>。</li>
+    </ul>
+    <div class="flow">
+      <div class="node"><b>① 廣播</b>ARP Request<br>「IP 10.19.8.17<br>你的 EUI-48 是?」</div>
+      <div class="arr">→</div>
+      <div class="node"><b>② 單播</b>ARP Response<br>「我的 EUI-48 是<br>A7-23-DA-95-7C-99」</div>
+      <div class="arr">→</div>
+      <div class="node"><b>③ 存快取</b>ARP Cache<br>IP↔MAC 配對<br>下次免再問</div>
+    </div>
+    <div class="box note"><div class="t">📝 重點</div>
+      ARP Request 是<b>廣播</b>（問整個網段）；ARP Response 是<b>單播</b>回覆。問到的 IP↔MAC 配對存進 <b>ARP Cache</b>，同一位址不必再跑一次 ARP。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 A10】If a router knows a target's IP address, it may use ____ to find the target's MAC address.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>ARP</b>（Address Resolution Protocol）。已知 IP 求 MAC。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 IPv4 HEADER ============ -->
+<section id="s7">
+  <div class="sec-head"><div class="num">7</div><h2>IPv4 標頭<span>IPv4 Header Fields</span></h2></div>
+  <div class="card">
+    <h3>📋 <span class="en">Key IPv4 Fields</span>　重要欄位</h3>
+    <table>
+      <tr><th>欄位</th><th>長度</th><th>用途</th></tr>
+      <tr><td>Version</td><td>4 bits</td><td>值 = 4（0100）</td></tr>
+      <tr><td>Header / Total Length</td><td>各 16 bits 等</td><td>標頭與封包大小（單位 octet）</td></tr>
+      <tr><td>DSCP / Diff-Serv</td><td>6/8 bits</td><td>服務品質 QoS 標記</td></tr>
+      <tr><td><b>Time to Live (TTL)</b></td><td>8 bits</td><td><span class="hl">每經一台 router 減 1，到 0 丟棄</span></td></tr>
+      <tr><td><b>Protocol</b></td><td>8 bits</td><td>資料欄是哪種：<b>1=ICMP、6=TCP、17=UDP</b></td></tr>
+      <tr><td>Header Checksum</td><td>16 bits</td><td>檢查標頭錯誤；有錯就丟棄（無重送→不可靠）</td></tr>
+      <tr><td>Source / Destination IP</td><td>各 32 bits</td><td>來源/目的位址</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>⏱️ <span class="en">TTL — Time to Live</span>　存活時間<span class="exam-badge hot">🔥 考過3次</span></h3>
+    <ul class="facts">
+      <li>發送端設定初值（通常 <mark>64 ~ 128</mark>）。</li>
+      <li>路徑上 <b>每經一台 router 減 1</b>；減到 <b>0</b> 的路由器把封包<b>丟棄</b>，並可能回送一個 ICMP 錯誤訊息。</li>
+      <li>目的：<b>防止封包在網路中無限繞圈（routing loop）</b>。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 90" role="img" aria-label="TTL 每經一跳減1">
+        <rect x="20" y="35" width="90" height="40" rx="8" fill="#1e293b"/><text x="65" y="52" font-size="11" fill="#7dd3fc" text-anchor="middle">Host</text><text x="65" y="67" font-size="10" fill="#86efac" text-anchor="middle">TTL=64</text>
+        <text x="125" y="60" font-size="18" fill="#2563eb">→</text>
+        <rect x="150" y="35" width="80" height="40" rx="8" fill="#334155"/><text x="190" y="52" font-size="11" fill="#fff" text-anchor="middle">R1</text><text x="190" y="67" font-size="10" fill="#fde68a" text-anchor="middle">63</text>
+        <text x="240" y="60" font-size="18" fill="#2563eb">→</text>
+        <rect x="265" y="35" width="80" height="40" rx="8" fill="#334155"/><text x="305" y="52" font-size="11" fill="#fff" text-anchor="middle">R2</text><text x="305" y="67" font-size="10" fill="#fde68a" text-anchor="middle">62</text>
+        <text x="355" y="60" font-size="18" fill="#2563eb">→ … →</text>
+        <rect x="430" y="35" width="90" height="40" rx="8" fill="#7f1d1d"/><text x="475" y="52" font-size="11" fill="#fff" text-anchor="middle">Rn</text><text x="475" y="67" font-size="10" fill="#fca5a5" text-anchor="middle">TTL=0 丟棄</text>
+        <text x="545" y="60" font-size="11" fill="#dc2626">✗ 防迴圈</text>
+      </svg>
+      <div class="cap">每跳減 1，歸零即丟，避免封包無限繞行</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 A5 / 卷三 A12】When an IPv4 packet is forwarded by a router, the ____ field is decreased by one.<span class="src">2020·考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>TTL</b>（Time to Live）。對應 IPv6 為 Hop Limit。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 IPv6 SHORTENING ============ -->
+<section id="s8">
+  <div class="sec-head"><div class="num">8</div><h2>IPv6 與位址縮寫規則<span>IPv6 Addressing — 縮寫與展開</span></h2></div>
+  <div class="card">
+    <h3>🌍 <span class="en">IPv4 vs IPv6</span>　為何要 IPv6</h3>
+    <table>
+      <tr><th></th><th>IPv4</th><th>IPv6</th></tr>
+      <tr><td>長度</td><td>32 bits</td><td><b>128 bits</b></td></tr>
+      <tr><td>位址數</td><td>2³² ≈ 40 億（已用罄）</td><td>2¹²⁸（天文數字）</td></tr>
+      <tr><td>表示法</td><td>點分十進位 192.0.2.1</td><td>16 進位、冒號分隔 8 段</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>✂️ <span class="en">Shortening Rules</span>　縮寫規則（4 條）<span class="exam-badge hot">🔥 必考展開</span></h3>
+    <ol class="steps">
+      <li>把 128 bits 每 4 bits 轉成 1 個 16 進位符號（小寫），4 個符號為一段，<b>共 8 段</b>，段間用冒號 <code>:</code>。</li>
+      <li><b>去掉每段「開頭」的 0</b>（leading zeros）。例：<code>0027</code>→<code>27</code>、<code>0fca</code>→<code>fca</code>、<code>0000</code>→<code>0</code>。</li>
+      <li>若有「一整段連續全為 0」的區塊，可用 <code>::</code> 取代（只留外側冒號）。</li>
+      <li>若有<b>多個</b>連續全 0 區塊，<mark>只能對「最長」那一個用 <code>::</code></mark>；若長度平手，對<b>第一個</b>用。其餘區塊不可省。</li>
+    </ol>
+    <div class="box exam"><div class="t">🎯 考試是反過來：把縮寫「展開」成完整 8 段</div>
+      看到 <code>::</code> → 它代表「<b>把缺的段補成全 0、湊滿 8 段</b>」。先數出現有幾段，8 減掉就是 <code>::</code> 代表幾段全 0。每段再補滿 4 位（前面補 0）。</div>
+  </div>
+  <div class="card">
+    <h3>📝 <span class="en">Exam Expansions</span>　考古題展開實作<span class="exam-badge warm">考過2次</span></h3>
+    <h4>① fe80::c2f:a4:300（109-1 A1）</h4>
+    <div class="bitcalc">
+現有段: <span class="b1">fe80</span> | <span class="b1">c2f</span> | <span class="b1">a4</span> | <span class="b1">300</span> = 4 段<br>
+∴ <span class="b0">::</span> 代表 8−4 = <span class="res">4 段全零</span><br>
+<hr>
+展開: <span class="res">fe80:0000:0000:0000:0000:0c2f:00a4:0300</span>
+    </div>
+    <h4>② 2001::1:fe20:a42:3e（2020 A1）</h4>
+    <div class="bitcalc">
+現有段: <span class="b1">2001</span> | <span class="b1">1</span> | <span class="b1">fe20</span> | <span class="b1">a42</span> | <span class="b1">3e</span> = 5 段<br>
+∴ <span class="b0">::</span> 代表 8−5 = <span class="res">3 段全零</span><br>
+<hr>
+展開: <span class="res">2001:0000:0000:0000:0001:fe20:0a42:003e</span>
+    </div>
+    <div class="box note"><div class="t">⚠️ 別忘了每段補滿 4 位</div>
+      <code>1</code>→<code>0001</code>、<code>a42</code>→<code>0a42</code>、<code>3e</code>→<code>003e</code>、<code>a4</code>→<code>00a4</code>、<code>300</code>→<code>0300</code>、<code>c2f</code>→<code>0c2f</code>。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A1】"fe80::c2f:a4:300" 的完整 IPv6 位址 = ____<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>fe80:0000:0000:0000:0000:0c2f:00a4:0300</b>（:: = 4 段全零）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 A1】"2001::1:fe20:a42:3e" 的完整 IPv6 位址 = ____<span class="src">2020</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>2001:0000:0000:0000:0001:fe20:0a42:003e</b>（:: = 3 段全零）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9 IPv6 HEADER ============ -->
+<section id="s9">
+  <div class="sec-head"><div class="num">9</div><h2>IPv6 標頭與延伸標頭<span>IPv6 Header &amp; Extension Headers</span></h2></div>
+  <div class="card">
+    <h3>📋 <span class="en">IPv6 Header (always 40 octets)</span>　IPv6 標頭固定 40 octets</h3>
+    <table>
+      <tr><th>欄位</th><th>說明</th></tr>
+      <tr><td>Version</td><td>值 = 6（0110）</td></tr>
+      <tr><td>Traffic Class / Diff-Serv</td><td>服務品質 QoS</td></tr>
+      <tr><td>Flow Label（20 bits）</td><td>標記封包屬於某一特定「流（flow）」</td></tr>
+      <tr><td>Payload Length</td><td>標頭後面內容的長度（octet）</td></tr>
+      <tr><td><b>Hop Limit</b></td><td><span class="hl">和 IPv4 的 TTL 功能完全相同</span>（每跳減 1，歸零丟棄）</td></tr>
+      <tr><td><b>Next Header</b></td><td>指出下一個標頭的型態（延伸標頭或上層協定）</td></tr>
+      <tr><td>Source / Destination</td><td>各 128 bits</td></tr>
+    </table>
+    <div class="box note"><div class="t">🆚 IPv6 拿掉了什麼</div>
+      ① <b>沒有 Fragmentation</b>（封包太大就丟，由發送端先測 MTU）；② <b>沒有 Header Checksum</b>（交給傳輸層管錯誤，減少每台 router 的處理時間）。</div>
+  </div>
+  <div class="card">
+    <h3>🔗 <span class="en">Hop Limit &amp; Next Header</span>　兩個必考欄位<span class="exam-badge hot">🔥 考過多次</span></h3>
+    <h4>Hop Limit（= IPv4 TTL）</h4>
+    <p class="lead">課本原話：「IPv6 Hop Limit works exactly like the Time-to-Live field in IPv4.」名字換了但功能一樣。</p>
+    <h4>Next Header（延伸標頭的串接欄位）</h4>
+    <ul class="facts">
+      <li>IPv6 有許多 <span class="term">延伸標頭（extension headers）</span>，<mark>以 Next Header 欄位一個串一個（daisy chain）</mark>。</li>
+      <li>路徑上的 router 通常只需看 Hop-by-Hop Options Header → 減少每封包處理時間。</li>
+    </ul>
+    <table>
+      <tr><th>Next Header 值</th><th>意義</th></tr>
+      <tr><td>0</td><td>Hop-by-Hop Options Header</td></tr>
+      <tr><td>43 / 44</td><td>Routing / Fragmentation Header</td></tr>
+      <tr><td>50 / 51</td><td>ESP / Authentication Header（IPsec）</td></tr>
+      <tr><td><b>6</b></td><td><b>TCP</b></td></tr>
+      <tr><td><b>17</b></td><td><b>UDP</b></td></tr>
+      <tr><td><b>58</b></td><td><b>ICMPv6</b></td></tr>
+      <tr><td>59</td><td>No Next Header（沒有下一個了）</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 A5】When an IPv6 packet is forwarded by a router, the ____ field is decreased by one.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Hop Limit</b>（功能等同 IPv4 的 TTL）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 A8 / 109-1 B5(3)】IPv6 extension headers are daisy chained based on the ____ field. / 解釋 Next Header。<span class="src">2020·109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Next Header</b>：指出下一個標頭的型態——延伸標頭或上層協定（TCP=6、UDP=17、ICMPv6=58），延伸標頭以此欄串接。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 TCP / UDP ============ -->
+<section id="s10">
+  <div class="sec-head"><div class="num">10</div><h2>TCP 與 UDP<span>Transport Layer — TCP &amp; UDP</span></h2></div>
+  <div class="card">
+    <h3>🧩 <span class="en">TCP Process &amp; Sequence Number</span>　TCP 運作與序號</h3>
+    <ul class="facts">
+      <li>TCP 收到應用訊息 → 切成 <span class="term">segments（區段）</span>，每段裝進一個 IP 封包送出。</li>
+      <li>每個 segment 放一個 <span class="term">Sequence Number（序號）</span>；<mark>接收端用序號把訊息重組、偵測遺失</mark>。</li>
+      <li>接收端正確收到後回送 <span class="term">acknowledgement（ACK，確認）</span>，內含 acknowledgement number 指出在確認哪一段。</li>
+      <li>TCP 是 <b>連線導向（connection-oriented）</b>：有明確的開啟與關閉。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🤝 <span class="en">Three-Way Open &amp; Four-Way Close</span>　三次握手 / 四次揮手<span class="exam-badge hot">🔥 考過2次</span></h3>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 220" role="img" aria-label="TCP 三次握手與四次揮手">
+        <text x="160" y="20" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="700">三次握手 (Open)</text>
+        <line x1="80" y1="30" x2="80" y2="120" stroke="#94a3b8"/><line x1="240" y1="30" x2="240" y2="120" stroke="#94a3b8"/>
+        <text x="80" y="42" font-size="10" fill="#334155" text-anchor="middle">Client</text><text x="240" y="42" font-size="10" fill="#334155" text-anchor="middle">Server</text>
+        <line x1="80" y1="55" x2="240" y2="68" stroke="#2563eb" stroke-width="2" marker-end="url(#a)"/><text x="160" y="55" font-size="9" fill="#2563eb" text-anchor="middle">SYN</text>
+        <line x1="240" y1="80" x2="80" y2="93" stroke="#16a34a" stroke-width="2" marker-end="url(#a)"/><text x="160" y="80" font-size="9" fill="#16a34a" text-anchor="middle">SYN+ACK</text>
+        <line x1="80" y1="105" x2="240" y2="118" stroke="#2563eb" stroke-width="2" marker-end="url(#a)"/><text x="160" y="105" font-size="9" fill="#2563eb" text-anchor="middle">ACK</text>
+        <text x="470" y="20" font-size="13" fill="#dc2626" text-anchor="middle" font-weight="700">四次揮手 (Close)</text>
+        <line x1="390" y1="30" x2="390" y2="200" stroke="#94a3b8"/><line x1="550" y1="30" x2="550" y2="200" stroke="#94a3b8"/>
+        <text x="390" y="42" font-size="10" fill="#334155" text-anchor="middle">A</text><text x="550" y="42" font-size="10" fill="#334155" text-anchor="middle">B</text>
+        <line x1="390" y1="60" x2="550" y2="73" stroke="#dc2626" stroke-width="2" marker-end="url(#a)"/><text x="470" y="60" font-size="9" fill="#dc2626" text-anchor="middle">FIN</text>
+        <line x1="550" y1="90" x2="390" y2="103" stroke="#16a34a" stroke-width="2" marker-end="url(#a)"/><text x="470" y="90" font-size="9" fill="#16a34a" text-anchor="middle">ACK</text>
+        <line x1="550" y1="125" x2="390" y2="138" stroke="#dc2626" stroke-width="2" marker-end="url(#a)"/><text x="470" y="125" font-size="9" fill="#dc2626" text-anchor="middle">FIN</text>
+        <line x1="390" y1="155" x2="550" y2="168" stroke="#16a34a" stroke-width="2" marker-end="url(#a)"/><text x="470" y="155" font-size="9" fill="#16a34a" text-anchor="middle">ACK</text>
+        <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
+      </svg>
+      <div class="cap">開啟：SYN → SYN+ACK → ACK（3 次）；關閉：FIN → ACK → FIN → ACK（4 次）</div>
+    </div>
+    <ul class="facts">
+      <li><b>SYN 同步的是什麼？</b> → 雙方的 <mark>初始序號（initial sequence number, ISN）</mark>。</li>
+      <li><b>為何關閉要四步？</b> → TCP 是<b>全雙工</b>，兩個傳輸方向獨立；一方送完 FIN 時另一方可能還在傳，所以每個方向各用一組 FIN/ACK 分開關閉 → 共 4 步。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 B4】(1) SYN means synchronize—what is synchronized? (2) four-way closing? (3) Why four steps?<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) 同步雙方的「初始序號（ISN）」。<br>
+        (2) 四次揮手：FIN→ACK→FIN→ACK，兩方向各自關閉。<br>
+        (3) TCP 全雙工、兩方向獨立；一方送完(FIN)時另一方可能還在傳，故每方向各一組 FIN/ACK，共四步。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B8】(a) Three-way opening of a TCP connection (b) Four-way closing.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">(a) SYN → SYN+ACK → ACK（同步雙方初始序號後建立連線）。<br>(b) FIN → ACK → FIN → ACK（全雙工，兩方向各自關閉）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B5(1)】解釋 TCP 的 Sequence Number。<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Sequence Number</b>：每個 TCP segment 的序號，接收端用來重組成原訊息、偵測遺失。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📦 <span class="en">UDP &amp; Ports</span>　UDP 與連接埠</h3>
+    <ul class="facts">
+      <li>UDP <b>不切片、不需序號/確認</b> → 簡單輕量；但整個應用訊息必須塞進單一 UDP datagram（最大 65,536 octets）。</li>
+      <li>UDP 訊息叫 <span class="term">datagram</span>；TCP 訊息叫 <span class="term">segment</span>。</li>
+      <li>多工伺服器用 <span class="term">port number</span> 區分不同應用；ephemeral（暫時）埠 IANA 建議 49152–65535。</li>
+    </ul>
+    <div class="box metaphor"><div class="t">🧩 TCP vs UDP 一句話</div>
+      TCP＝掛號信（可靠、要確認、會重送、有開關連線）；UDP＝明信片（快、輕、不保證到，適合即時語音/影音）。</div>
+  </div>
+</section>
+
+<!-- ============ CRAM ============ -->
+<section id="cram">
+  <div class="sec-head"><div class="num">⚡</div><h2>考前速記<span>Last-Minute Cram — 進考場前看這張</span></h2></div>
+  <div class="card">
+    <table>
+      <tr><th>考點</th><th>必記答案</th></tr>
+      <tr><td>bitwise-AND</td><td>Mask=1 保留、Mask=0 變 0；只算「非255非0」那段。240=11110000、224=11100000</td></tr>
+      <tr><td>10.34.65.117 AND 255.255.240.0</td><td><b>10.34.64.0</b>（65&amp;240=64）</td></tr>
+      <tr><td>163.22.72.51 AND 255.255.224.0</td><td><b>163.22.64.0</b>（72&amp;224=64）</td></tr>
+      <tr><td>路由 best-match</td><td>① 最長前綴優先 ② 平手比 metric：speed 取大、cost 取小</td></tr>
+      <tr><td>TTL / Hop Limit</td><td>每跳減 1、到 0 丟棄、防迴圈；IPv4=TTL、IPv6=Hop Limit</td></tr>
+      <tr><td>IPv6 縮寫展開</td><td>數現有段，8−現有=:: 代表的全零段數；每段補滿 4 位</td></tr>
+      <tr><td>fe80::c2f:a4:300</td><td><b>fe80:0000:0000:0000:0000:0c2f:00a4:0300</b>（::=4段0）</td></tr>
+      <tr><td>2001::1:fe20:a42:3e</td><td><b>2001:0000:0000:0000:0001:fe20:0a42:003e</b>（::=3段0）</td></tr>
+      <tr><td>Next Header</td><td>串接延伸標頭；TCP=6、UDP=17、ICMPv6=58</td></tr>
+      <tr><td>Protocol(IPv4)</td><td>1=ICMP、6=TCP、17=UDP</td></tr>
+      <tr><td>ARP</td><td>已知 IP 求 MAC；Request 廣播、Response 單播；存 ARP Cache</td></tr>
+      <tr><td>SYN 同步什麼</td><td>雙方<b>初始序號 ISN</b></td></tr>
+      <tr><td>三次/四次</td><td>開 SYN→SYN+ACK→ACK；關 FIN→ACK→FIN→ACK（全雙工故 4 步）</td></tr>
+      <tr><td>Sequence Number</td><td>重組訊息、偵測遺失</td></tr>
+      <tr><td>階層乙太網路徑數</td><td><b>one</b>（交換表每位址僅一列）</td></tr>
+      <tr><td>IPv6 拿掉</td><td>無 Fragmentation、無 Header Checksum；標頭固定 40 octets</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><div class="num">★</div><h2>互動測驗<span>Self-Check Quiz — 點選作答，立即看詳解</span></h2></div>
+  <div class="quiz">
+    <h3>🧪 隨堂測驗（10 題）</h3>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">1. 10.34.65.117 AND 255.255.240.0 = ?</div>
+      <button>10.34.65.0</button><button>10.34.64.0</button><button>10.34.0.0</button><button>10.34.80.0</button>
+      <div class="exp">✅ 65=01000001、240=11110000，AND=01000000=64；第4段&amp;0=0 → <b>10.34.64.0</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">2. IPv6 的 ____ 欄位每經一台路由器減 1，功能等同 IPv4 的 TTL。</div>
+      <button>Next Header</button><button>Flow Label</button><button>Hop Limit</button><button>Payload Length</button>
+      <div class="exp">✅ <b>Hop Limit</b>，課本明說「works exactly like TTL」。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">3. 把 "fe80::c2f:a4:300" 展開成完整 8 段，:: 代表幾段全零？</div>
+      <button>4 段</button><button>3 段</button><button>5 段</button><button>2 段</button>
+      <div class="exp">✅ 現有 fe80、c2f、a4、300 共 4 段，8−4=<b>4 段全零</b>。展開 fe80:0000:0000:0000:0000:0c2f:00a4:0300。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">4. 路由表中有多列符合，最長前綴又平手（都 /18），metric 是「速度」，該選哪列？</div>
+      <button>速度數值最小的</button><button>列號最小的</button><button>遮罩最短的</button><button>速度數值最大的</button>
+      <div class="exp">✅ metric 是速度 → 取<b>數值最大</b>（最快）。若是 cost 則取最小。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">5. 在階層式乙太網路 LAN 中，任兩台主機之間的路徑數是？</div>
+      <button>多條</button><button>一條（one）</button><button>零條</button><button>視交換器數量而定</button>
+      <div class="exp">✅ <b>one</b>。因為是嚴格階層、無迴圈，所以交換表每個位址只有一列。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">6. 路由器已知下一跳的 IP，但要送 frame 需知道對方 MAC，會用哪個協定？</div>
+      <button>ICMP</button><button>DNS</button><button>ARP</button><button>DHCP</button>
+      <div class="exp">✅ <b>ARP</b>：已知 IP 求 MAC。廣播 Request → 單播 Response → 存 ARP Cache。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">7. TCP 的 SYN「同步」的是什麼？</div>
+      <button>雙方的初始序號 (ISN)</button><button>雙方的時鐘</button><button>雙方的 IP 位址</button><button>雙方的視窗大小上限</button>
+      <div class="exp">✅ 同步雙方的<b>初始序號 (initial sequence number)</b>，之後用序號重組與偵測遺失。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">8. TCP 連線關閉為何需要「四次」？</div>
+      <button>因為網路不可靠要重送</button><button>因為要驗證憑證</button><button>因為 IP 位址有兩個</button><button>因為全雙工，兩個方向各自獨立關閉</button>
+      <div class="exp">✅ TCP 全雙工，兩方向獨立；一方送完 FIN 時另一方可能還在傳，故每方向各一組 FIN/ACK，共四步。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">9. IPv4 標頭的 Protocol 欄位，值 6 代表？</div>
+      <button>ICMP</button><button>TCP</button><button>UDP</button><button>ARP</button>
+      <div class="exp">✅ 1=ICMP、<b>6=TCP</b>、17=UDP。（IPv6 的 Next Header 也用同一套；ICMPv6=58）</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">10. 下列關於 IPv6 何者正確？</div>
+      <button>位址 32 bits</button><button>有 Header Checksum 加強可靠性</button><button>標頭固定 40 octets、無分片、無標頭檢查碼</button><button>用點分十進位表示</button>
+      <div class="exp">✅ IPv6 位址 128 bits、16 進位表示、標頭固定 <b>40 octets</b>，且<b>拿掉了分片與標頭檢查碼</b>以加速路由。</div>
+    </div>
+
+    <p id="score" style="text-align:center;font-size:1.1rem;font-weight:700;margin-top:14px"></p>
+  </div>
+</section>
+
+</main>
+
+<button class="backtop" id="bt">↑</button>
+<footer>
+  <b>Ch8 TCP/IP 網際網路核心 知識點詳解</b>　|　依課本投影片 ch08（118 頁）＋三份期末考古題整理，🔥標記為實際考過考點。<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 企業資訊通訊與網路
+</footer>
+
+<script>
+const prog=document.getElementById('prog');
+const bt=document.getElementById('bt');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=sc+'%';
+  bt.style.display=h.scrollTop>500?'block':'none';
+});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+let answered=0,correct=0;const total=document.querySelectorAll('.qitem').length;
+document.querySelectorAll('.qitem').forEach(item=>{
+  const ans=+item.dataset.a;
+  const btns=item.querySelectorAll('button');
+  const exp=item.querySelector('.exp');
+  btns.forEach((b,i)=>{
+    b.onclick=()=>{
+      if(item.dataset.done)return;
+      item.dataset.done=1;answered++;
+      if(i===ans){b.classList.add('right');correct++;}
+      else{b.classList.add('wrong');btns[ans].classList.add('right');}
+      exp.classList.add('show');
+      if(answered===total){
+        const s=document.getElementById('score');
+        s.textContent=`🎉 完成！答對 ${correct} / ${total} 題（${Math.round(correct/total*100)} 分）`;
+        s.style.color=correct>=8?'#86efac':(correct>=6?'#fde68a':'#fca5a5');
+      }
+    };
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch7 無線 LAN 安全與其他無線技術 知識點詳解 | Wireless Security</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+  --brand:#2563eb; --brand2:#7c3aed; --accent:#0891b2; --good:#16a34a; --warn:#dc2626;
+  --amber:#d97706; --line:#e2e8f0; --soft:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  color:var(--ink);background:#f8fafc;line-height:1.75;-webkit-font-smoothing:antialiased}
+#prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:999;
+  background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+header{background:linear-gradient(135deg,#0f172a,#1e293b 60%,#312e81);color:#fff;
+  padding:70px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,rgba(220,38,38,.30),transparent 45%),
+             radial-gradient(circle at 80% 30%,rgba(124,58,237,.35),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:5px 16px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.5rem;font-weight:800;margin-bottom:10px;line-height:1.25}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:8px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:680px;margin:14px auto 0;font-size:1rem}
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:16px;
+  margin:-30px auto 40px;max-width:940px;padding:22px 26px;box-shadow:0 12px 30px rgba(15,23,42,.08);position:relative;z-index:5}
+nav.toc h2{font-size:.9rem;color:var(--muted);letter-spacing:2px;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+nav.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);
+  padding:9px 12px;border-radius:10px;font-size:.95rem;transition:.2s}
+nav.toc a:hover{background:var(--soft);color:var(--brand);transform:translateX(3px)}
+nav.toc a b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:.8rem;flex:none}
+section{margin-bottom:54px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.sec-head .num{font-size:1rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:1.6rem;font-weight:800}
+.sec-head h2 span{display:block;font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.card h3{font-size:1.18rem;color:#0f172a;margin-bottom:10px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card h3 .en{color:var(--brand);font-weight:700}
+.card h4{font-size:1rem;margin:14px 0 6px;color:#334155}
+p.lead{margin:8px 0}
+.term{color:var(--brand);font-weight:700}
+.zh{color:var(--muted)}
+ul.facts{list-style:none;margin:10px 0}
+ul.facts li{position:relative;padding:5px 0 5px 26px}
+ul.facts li::before{content:"▸";position:absolute;left:6px;color:var(--brand);font-weight:700}
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.box.metaphor{background:#fef9c3;border-color:#eab308}
+.box.q{background:#ede9fe;border-color:#7c3aed}
+.box.exam{background:#fee2e2;border-color:#dc2626}
+.box.note{background:#e0f2fe;border-color:#0891b2}
+.box.formula{background:#ecfdf5;border-color:#16a34a}
+.formula .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.25rem;font-weight:700;
+  text-align:center;padding:8px;color:#065f46}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem;overflow:hidden;border-radius:10px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#1e293b;color:#fff;font-weight:600}
+tr:nth-child(even) td{background:#f8fafc}
+td .hl{color:var(--warn);font-weight:700}
+.diagram{background:#0f172a;border-radius:14px;padding:26px 20px;margin:16px 0;color:#e2e8f0;text-align:center}
+.diagram .cap{color:#94a3b8;font-size:.85rem;margin-top:14px}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.flow .node{background:#1e293b;color:#fff;border-radius:10px;padding:10px 14px;font-size:.85rem;text-align:center;min-width:90px}
+.flow .node b{display:block;color:#7dd3fc}
+.flow .arr{color:var(--brand);font-size:1.4rem;font-weight:700}
+.quiz{background:linear-gradient(135deg,#1e293b,#312e81);color:#fff;border-radius:16px;padding:26px;margin:18px 0}
+.quiz h3{color:#fff}
+.qitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin:14px 0}
+.qitem .qq{font-weight:600;margin-bottom:10px}
+.qitem button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.08);color:#e2e8f0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px 14px;margin:6px 0;cursor:pointer;
+  font-size:.92rem;transition:.15s;font-family:inherit}
+.qitem button:hover{background:rgba(255,255,255,.16)}
+.qitem button.right{background:#16a34a;border-color:#16a34a;color:#fff}
+.qitem button.wrong{background:#dc2626;border-color:#dc2626;color:#fff}
+.qitem .exp{display:none;margin-top:10px;padding:10px 14px;background:rgba(125,211,252,.12);
+  border-radius:9px;font-size:.9rem;border-left:3px solid #38bdf8}
+.qitem .exp.show{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:12px 0}
+.kcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard .en{font-weight:700;color:var(--brand);font-size:.95rem}
+.kcard .zh{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+.backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand);color:#fff;border:none;font-size:1.3rem;cursor:pointer;display:none;
+  box-shadow:0 8px 20px rgba(37,99,235,.4);z-index:50}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.9rem;margin-top:40px}
+footer b{color:#e2e8f0}
+mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;margin:2px}
+.exam-badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700;margin-left:8px;vertical-align:middle;
+  box-shadow:0 2px 6px rgba(220,38,38,.35);white-space:nowrap}
+.exam-badge.hot{background:linear-gradient(135deg,#dc2626,#ea580c)}
+.exam-badge.warm{background:#d97706}
+.exam-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626 60%,#ea580c);color:#fff;
+  border-radius:18px;padding:26px 28px;margin:0 auto 36px;max-width:940px;box-shadow:0 16px 40px rgba(220,38,38,.25)}
+.exam-hero h2{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.exam-hero p{color:#fee2e2;font-size:.92rem;margin-bottom:16px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.freq-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px 15px}
+.freq-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.freq-item .name{font-weight:700;font-size:.95rem}
+.freq-item .stars{font-size:.8rem;letter-spacing:1px;color:#fde68a;flex:none}
+.freq-item .desc{color:#fecaca;font-size:.8rem;line-height:1.5}
+.freq-item a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.5)}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.05);text-align:center}
+.svgbox svg{max-width:100%;height:auto}
+.svgbox .cap{color:var(--muted);font-size:.85rem;margin-top:10px}
+.examq{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:14px 16px;margin:12px 0}
+.examq .qline{font-weight:600;color:#92400e;display:flex;gap:8px;align-items:flex-start}
+.examq .src{display:inline-block;background:#92400e;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.examq details{margin-top:8px}
+.examq summary{cursor:pointer;color:#b45309;font-weight:600;font-size:.88rem;user-select:none}
+.examq .ans{margin-top:8px;padding:10px 12px;background:#ecfdf5;border-left:4px solid #16a34a;border-radius:8px;font-size:.9rem}
+@media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.exam-badge{font-size:.66rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="wrap">
+    <div class="tag">CHAPTER 7 · WIRELESS SECURITY</div>
+    <h1>第 7 章　無線 LAN 安全與其他無線技術 知識點詳解
+      <small>Wireless Security — 802.11i / WPA2, PSK vs 802.1X, Evil Twins, Decibels, Bluetooth, NFC, RFID</small></h1>
+    <p>依課本投影片 ch07（68 頁）＋三份期末考古題逐項整理。中英對照、含 dB 公式、SVG 圖解與互動測驗。🔥 標記＝實際考過。</p>
+  </div>
+</header>
+
+<nav class="toc container">
+  <h2>目錄 · CONTENTS</h2>
+  <ol>
+    <li><a href="#s1"><b>1</b>導論／TJX 事件 Intro</a></li>
+    <li><a href="#s2"><b>2</b>攻擊者與舊式防護 Threats</a></li>
+    <li><a href="#s3"><b>3</b>802.11i / WPA2 安全</a></li>
+    <li><a href="#s4"><b>4</b>PSK vs 802.1X 兩模式</a></li>
+    <li><a href="#s5"><b>5</b>WPS / PEAP / WPA3</a></li>
+    <li><a href="#s6"><b>6</b>流氓 AP 與惡意雙生</a></li>
+    <li><a href="#s7"><b>7</b>WLAN 管理 Management</a></li>
+    <li><a href="#s8"><b>8</b>分貝 Decibels</a></li>
+    <li><a href="#s9"><b>9</b>Bluetooth 藍牙</a></li>
+    <li><a href="#s10"><b>10</b>NFC / RFID / UWB</a></li>
+    <li><a href="#cram"><b>⚡</b>考前60秒速記 Cram</a></li>
+    <li><a href="#quiz"><b>★</b>互動測驗 Quiz</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ============ EXAM FREQUENCY OVERVIEW ============ -->
+<div class="exam-hero">
+  <h2>🔥 Ch7 考古題出題頻率（五份期末卷統計：109-1 / 2020 / 卷三 / 2023 / 2025）</h2>
+  <p>★ 數量＝考過次數。<b>PSK vs 802.1X</b> 是 Ch7 最常考；<b>Evil Twin、Bluetooth/UWB 比較</b> 也考過。分貝 dB 雖未直接入這三卷，但屬高機率考點，務必會算。</p>
+  <div class="freq-grid">
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s4">PSK vs 802.1X 模式</a></span><span class="stars">★★★</span></div>
+      <div class="desc">多 AP 企業選哪個、PSK 如何運作、「PSK 共用但 session key 不共用」、誰需中央認證伺服器。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s6">Evil Twin 惡意雙生</a></span><span class="stars">★</span></div>
+      <div class="desc">填充：高功率假冒真 AP、做中間人攻擊的 AP ＝？</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s9">802.11 / Bluetooth / UWB 比較</a></span><span class="stars">★</span></div>
+      <div class="desc">簡答：三者的速度與距離限制比較。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s8">分貝 Decibels</a></span><span class="stars">高機率</span></div>
+      <div class="desc">dB=10·log₁₀(P2/P1)、×2=+3dB、×10=+10dB、dBm 以 1mW 為基準。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s3">802.11i / WPA2 / WEP</a></span><span class="stars">概念</span></div>
+      <div class="desc">設定 AP 該選 802.11i(WPA2)、別選 WPA、絕不選 WEP。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s10">NFC / RFID</a></span><span class="stars">概念</span></div>
+      <div class="desc">NFC ≤4cm/424kbps；RFID 被動標籤無電源、不能加密、取代條碼。</div></div>
+  </div>
+</div>
+
+<!-- ============ NEW EXAMS 2023/2025 ============ -->
+<section id="new">
+  <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
+  <div class="card">
+    <h3>🔁 <span class="en">Repeated</span>　舊卷考過、新卷再考</h3>
+    <ul class="facts">
+      <li><b>PSK 模式</b>：2025 A9、2023 A5 都考「所有 host 用同一把 key／password」＝<mark>PSK</mark>（五卷常客）。</li>
+      <li><b>Evil twin</b>：2023 A4 再考「高功率冒充合法 AP（如 SSID 'NCNU'）誘騙用戶」＝<mark>Evil twin</mark>。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">Bluetooth vs NFC/RFID</span>　比較題（2023 B2）＋ 10m 短距技術（2025 A10）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <table>
+      <tr><th>技術</th><th>距離</th><th>速度</th><th>應用/特點</th></tr>
+      <tr><td><b>Bluetooth</b></td><td><mark>約 10 m</mark>（高速 ~30m）</td><td>~3 Mbps（高速 ~24）</td><td>PAN，<b>有 Profiles</b>（Wi-Fi 沒有）；耳機、滑鼠</td></tr>
+      <tr><td><b>NFC</b></td><td>≤ 4 cm</td><td>≤ 424 kbps</td><td>行動支付、門禁、交換名片</td></tr>
+      <tr><td><b>RFID</b></td><td>短</td><td>小</td><td>被動無電源、不能加密、<b>取代條碼</b></td></tr>
+    </table>
+    <div class="box note"><div class="t">🎯 2025 A10「10 公尺內短距通訊」</div>
+      Wi-Fi(~100m) / Bluetooth(~10m) / NFC(4cm) / RFID(短) 中，「within 10 meters」最對應 <b>Bluetooth</b>（PAN 約 10m）。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2023 B2】Compare Bluetooth and NFC/RFID in applications, distances, and speeds.<span class="src">2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Bluetooth</b>：PAN、有 Profiles、距離較遠(~10m/高速~30m)、速度較快(~3/24 Mbps)，用於耳機滑鼠。<b>NFC</b>：≤4cm、≤424kbps，行動支付/門禁。<b>RFID</b>：被動無電源、靠掃描電力回應、便宜但資訊少不能加密，取代條碼。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2025 A10】Wi-Fi/Bluetooth/NFC/RFID 中，哪個提供 10 公尺內短距通訊？<span class="src">2025</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Bluetooth</b>（PAN，最大距離約 10 m）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 INTRO / TJX ============ -->
+<section id="s1">
+  <div class="sec-head"><div class="num">1</div><h2>導論：TJX 資料外洩事件<span>Introduction — Why Wireless Security Matters</span></h2></div>
+  <div class="card">
+    <h3>🏪 <span class="en">The TJX Breach</span>　TJX 外洩案（開場案例）</h3>
+    <ul class="facts">
+      <li>駭客從 TJ Maxx 在佛州一家分店、透過一個 <mark>防護薄弱的 access point</mark> 入侵。</li>
+      <li>再從分店一路打進 <span class="zh">總部（headquarters）</span>，下載了 <mark>數百萬筆信用卡卡號</mark> 及相關資料。</li>
+      <li>事後處理「極度耗時又昂貴」；竊賊是鬆散的國際集團。</li>
+      <li>💡 教訓：<b>若當時有用 802.11i 安全標準，這起入侵根本不可能發生</b>。→ Protect your end points！</li>
+    </ul>
+    <div class="box note"><div class="t">🧠 這案例想說什麼</div>
+      無線網路是企業安全最容易被忽略的「破口」。一個沒設好的 AP，就能讓攻擊者繞過所有有線防火牆。本章就是在講「怎麼把無線這一段守好」。</div>
+  </div>
+</section>
+
+<!-- ============ 2 THREATS ============ -->
+<section id="s2">
+  <div class="sec-head"><div class="num">2</div><h2>攻擊者類型與失效的舊防護<span>War Drivers, Drive-By Hackers &amp; Failed Old Approaches</span></h2></div>
+
+  <div class="card">
+    <h3>🚗 <span class="en">War Drivers vs Drive-By Hackers</span>　探測者 vs 入侵者</h3>
+    <p class="lead">兩者都在建築物外「潛伏（lurk）」、收集 AP 資料（SSID、訊號強度、安全設定），差別在「有沒有動手」。</p>
+    <table>
+      <tr><th>類型</th><th>行為</th><th>合法性</th></tr>
+      <tr><td><b>War Driver</b><br>戰爭駕駛/探測者</td><td>只收集 AP 資料、可能公開發布；<b>不讀訊息、不發動攻擊</b></td><td><span style="color:#16a34a;font-weight:700">合法 Legal</span></td></tr>
+      <tr><td><b>Drive-By Hacker</b><br>路過駭客</td><td>收集資料後 <b>讀取訊息、發動繞過防火牆的攻擊</b></td><td><span class="hl">非法 Illegal</span></td></tr>
+    </table>
+    <div class="box note"><div class="t">📝 一句話分辨</div>
+      只「看」＝War Driver（合法）；動手「攻擊」＝Drive-By Hacker（非法）。差別在是否讀訊息/發攻擊。</div>
+  </div>
+
+  <div class="card">
+    <h3>🚫 <span class="en">Old Approaches Are NOT Secure</span>　兩個常見但「沒用」的舊防護</h3>
+    <p class="lead">安全目標 = <span class="term">CIA</span>：Confidentiality（機密性）、Integrity（完整性）、Authentication（認證）。以下兩招看似有用、其實不安全：</p>
+    <ul class="facts">
+      <li>❌ <span class="term">關閉 SSID 廣播（Turning off SSID Broadcasting）</span>：SSID 仍會出現在其他管理框架中，輕易被嗅探到。</li>
+      <li>❌ <span class="term">只接受預先核可的 EUI-48（MAC）位址</span>：MAC 位址可被偽造（spoofing），攻擊者抄一個合法 MAC 即可冒充。</li>
+    </ul>
+    <div class="box exam"><div class="t">🎯 觀念題</div>
+      問「關閉 SSID 廣播 / MAC 過濾 安不安全？」→ <b>不安全</b>。真正安全要靠 <b>802.11i（WPA2）</b> 的加密與認證。</div>
+  </div>
+</section>
+
+<!-- ============ 3 802.11i ============ -->
+<section id="s3">
+  <div class="sec-head"><div class="num">3</div><h2>802.11i / WPA2 LAN 安全<span>Core Wireless Security — 標準的選擇</span></h2></div>
+
+  <div class="card">
+    <h3>🔐 <span class="en">What 802.11i Provides</span>　802.11i 提供什麼</h3>
+    <ul class="facts">
+      <li>提供 <mark>無線主機 ↔ 無線 AP 之間</mark> 的安全（只保護這一段無線連結）。</li>
+      <li>① <span class="term">Initial authentication（初始認證）</span>。</li>
+      <li>② <span class="term">訊息加密</span> 以達成 機密性、認證、訊息完整性。</li>
+      <li>使用強密碼學標準，包含 <mark>AES</mark> 做加密以確保機密性。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🪜 <span class="en">Which Standard to Select?</span>　設定 AP 該選哪個（安全階梯）<span class="exam-badge warm">易考觀念</span></h3>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 220" role="img" aria-label="無線安全標準階梯">
+        <!-- WEP bottom -->
+        <rect x="60" y="160" width="180" height="46" rx="8" fill="#dc2626"/><text x="150" y="183" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">WEP</text><text x="150" y="199" font-size="10" fill="#fee2e2" text-anchor="middle">絕不要選（已破）</text>
+        <!-- WPA mid -->
+        <rect x="230" y="110" width="180" height="46" rx="8" fill="#d97706"/><text x="320" y="133" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">WPA</text><text x="320" y="149" font-size="10" fill="#fef3c7" text-anchor="middle">較弱，不要選</text>
+        <!-- 802.11i top -->
+        <rect x="400" y="55" width="200" height="46" rx="8" fill="#16a34a"/><text x="500" y="78" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">802.11i (WPA2)</text><text x="500" y="94" font-size="10" fill="#dcfce7" text-anchor="middle">✔ 正確選擇 · AES</text>
+        <text x="150" y="40" font-size="12" fill="#dc2626" text-anchor="middle">由 802.11 工作組制定</text>
+        <text x="500" y="38" font-size="20" fill="#16a34a" text-anchor="middle">⬆ 安全性高</text>
+      </svg>
+      <div class="cap">設定存取點時的優先順序</div>
+    </div>
+    <table>
+      <tr><th>標準</th><th>誰制定</th><th>該不該選</th></tr>
+      <tr><td><b>802.11i</b>（又稱 WPA2）</td><td>IEEE 802.11 工作組</td><td><span style="color:#16a34a;font-weight:700">✔ 應該選（用 AES）</span></td></tr>
+      <tr><td><b>WPA</b>（Wi-Fi Protected Access）</td><td>Wi-Fi Alliance</td><td>較早、較弱 → <span class="hl">不要選</span></td></tr>
+      <tr><td><b>WEP</b>（Wired Equivalent Privacy）</td><td>802.11 工作組</td><td><span class="hl">絕對絕對不要選（早已被破）</span></td></tr>
+    </table>
+    <div class="box metaphor"><div class="t">🧩 白話比喻</div>
+      WEP＝紙糊的鎖、WPA＝舊式門鎖（會被撬）、802.11i/WPA2＝防盜門加密碼鎖。安全的話直接選最上面那個。</div>
+  </div>
+</section>
+
+<!-- ============ 4 PSK vs 802.1X ============ -->
+<section id="s4">
+  <div class="sec-head"><div class="num">4</div><h2>802.11i 的兩種模式：PSK vs 802.1X<span>The Two 802.11i Modes — 全章最常考</span></h2></div>
+
+  <div class="card">
+    <h3>⚖️ <span class="en">PSK Mode vs 802.1X Mode</span><span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
+    <table>
+      <tr><th>比較項目</th><th>PSK 模式（Pre-Shared Key）</th><th>802.1X 模式</th></tr>
+      <tr><td>適用環境</td><td>家庭、<b>單一 AP</b> 的小企業</td><td><b>多個 AP</b> 的公司企業</td></tr>
+      <tr><td>用中央認證伺服器？</td><td>No（不用）</td><td><span class="hl">Yes（需要 central authentication server）</span></td></tr>
+      <tr><td>認證方式</td><td>知道 <b>預共享金鑰 PSK</b> 即通過</td><td>認證伺服器上的 <b>個人憑證 credentials</b></td></tr>
+      <tr><td>技術安全性</td><td>Strong（強）</td><td>Very Strong（非常強）</td></tr>
+      <tr><td>人為安全性</td><td><span class="hl">Vulnerable（脆弱，金鑰會被亂傳）</span></td><td>Very Strong</td></tr>
+    </table>
+    <div class="box note"><div class="t">🔑 一句話記</div>
+      <b>家用/單一 AP → PSK；企業/多 AP → 802.1X（要中央認證伺服器）</b>。802.1X 較安全但較貴。</div>
+  </div>
+
+  <div class="card">
+    <h3>🔓 <span class="en">How PSK Works &amp; Its Weakness</span>　PSK 怎麼運作、為何脆弱</h3>
+    <ul class="facts">
+      <li>AP 與所有用戶端設定 <b>同一把</b> 預共享金鑰（PSK）；知道 PSK 就能通過初始認證。</li>
+      <li>PSK 由 <span class="term">passphrase（通行密語）</span> 產生，<mark>passphrase 至少要 20 個字元</mark> 才安全。</li>
+      <li>⚠️ 人為弱點：有人會把 PSK 給未授權的人 →「它看起來不像機密，所以員工常隨手分享」。</li>
+      <li>🔑 重點觀念：<b>PSK 是共用的，但 session key（每次連線的工作金鑰）是「不共用」的</b> — 每台站台用同一把 PSK 做初始認證後，會各自推導出「不同的」session key 來實際加密。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 180" role="img" aria-label="PSK 共用但 session key 不共用">
+        <circle cx="320" cy="55" r="30" fill="#2563eb"/><text x="320" y="52" font-size="11" fill="#fff" text-anchor="middle">AP</text><text x="320" y="66" font-size="9" fill="#bfdbfe" text-anchor="middle">同一把PSK</text>
+        <rect x="60" y="120" width="120" height="44" rx="8" fill="#1e293b"/><text x="120" y="142" font-size="12" fill="#7dd3fc" text-anchor="middle">站台 A</text><text x="120" y="157" font-size="9" fill="#fca5a5" text-anchor="middle">session key Ka</text>
+        <rect x="260" y="120" width="120" height="44" rx="8" fill="#1e293b"/><text x="320" y="142" font-size="12" fill="#7dd3fc" text-anchor="middle">站台 B</text><text x="320" y="157" font-size="9" fill="#fca5a5" text-anchor="middle">session key Kb</text>
+        <rect x="460" y="120" width="120" height="44" rx="8" fill="#1e293b"/><text x="520" y="142" font-size="12" fill="#7dd3fc" text-anchor="middle">站台 C</text><text x="520" y="157" font-size="9" fill="#fca5a5" text-anchor="middle">session key Kc</text>
+        <line x1="300" y1="80" x2="120" y2="120" stroke="#16a34a" stroke-width="2"/>
+        <line x1="320" y1="85" x2="320" y2="120" stroke="#16a34a" stroke-width="2"/>
+        <line x1="340" y1="80" x2="520" y2="120" stroke="#16a34a" stroke-width="2"/>
+        <text x="320" y="105" font-size="10" fill="#16a34a" text-anchor="middle">共用 PSK 做認證</text>
+      </svg>
+      <div class="cap">PSK（綠）三台共用；但每台各自的 session key（紅）都不同 → 加密不互通</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 簡答 B6】PSK and 802.1X are the two 802.11i modes. (1) Which is better for a company with many access points? (2) How does the PSK mode work?<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>802.1X 模式</b>（使用集中式認證伺服器，適合多 AP 企業）。<br>
+        (2) <b>PSK</b>：在 AP 與所有用戶端設定同一把預共享金鑰（由 ≥20 字元 passphrase 產生），知道 PSK 即通過認證；適合家用/單一 AP 的小環境。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 簡答 B6】(1) Which needs a central authentication server? (2) Explain "In PSK mode, pre-shared key is shared, but the session key is unshared."<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>802.1X 模式</b>。<br>
+        (2) 所有站台共用同一把 PSK（用於初始認證），但每台站台再由它各自推導出「<b>不同的</b>」每次連線專屬 session key 來實際加密，因此不同站台的加密(session)金鑰並不相同。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 填充 A9】In the ____ mode of WPA and 802.11i, all stations and an AP share the same initial key.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>PSK</b>（Pre-Shared Key 預共享金鑰模式）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 WPS / PEAP / WPA3 ============ -->
+<section id="s5">
+  <div class="sec-head"><div class="num">5</div><h2>WPS、PEAP 與 WPA3<span>Setup Helpers &amp; Newer Standards</span></h2></div>
+
+  <div class="card">
+    <h3>📟 <span class="en">WPS (Wi-Fi Protected Setup)</span>　簡化設定卻很危險</h3>
+    <ul class="facts">
+      <li>由 <span class="term">Wi-Fi Alliance</span> 設計，目的是讓 PSK 設定更簡單。</li>
+      <li>使用者只要對某 AP 輸入一組 <mark>8 位數 PIN</mark> 即可。</li>
+      <li>⚠️ <span class="hl">很容易被破解（easily cracked）</span> → 可能的話應在 AP 上「關閉 WPS」。</li>
+    </ul>
+    <div class="box exam"><div class="t">🎯 記憶點</div>
+      WPS = 8 位數 PIN、易被暴力破解 → 關掉它。和 WPA 一樣，都是 Wi-Fi Alliance 自己搞出來的「安全惡夢」。</div>
+  </div>
+
+  <div class="card">
+    <h3>🛡️ <span class="en">PEAP — Protecting 802.1X</span>　用 SSL/TLS 保護 802.1X</h3>
+    <ul class="facts">
+      <li>在 AP（authenticator）與用戶端（supplicant）之間先建立一條 <span class="term">SSL/TLS VPN</span>。</li>
+      <li>用來保護後續 802.1X 訊息交換的「機密性」。</li>
+      <li>最流行的標準是 <span class="term">PEAP（Protected Extensible Authentication Protocol）</span>，由微軟開發，是 EAP 的熱門版本。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🆕 <span class="en">WPA3</span>　下一代標準</h3>
+    <ul class="facts">
+      <li>分 <span class="term">WPA3-Personal</span> 與 <span class="term">WPA3-Enterprise</span>。</li>
+      <li>用 <mark>SAE（Simultaneous Authentication of Equals）取代 PSK</mark>，提供更好的認證。</li>
+      <li>更強的密碼學：AES-CCMP 128、HMAC-SHA256、BIP-CMAC-128；WPA3-Enterprise 達 192-bit 加密。</li>
+      <li>使用 <span class="term">受保護管理框架（PMFs, Protected Management Frames）</span>。</li>
+    </ul>
+    <div class="box note"><div class="t">💡 SAE 的好處</div>
+      以密碼為基礎、安全的金鑰協商；密碼與 MAC 位址都參與金鑰生成；<b>抵抗離線字典攻擊</b>、好用、且具 <span class="term">前向保密 Forward Secrecy</span>（就算密碼外洩，先前的流量仍安全）。</div>
+  </div>
+</section>
+
+<!-- ============ 6 ROGUE / EVIL TWIN ============ -->
+<section id="s6">
+  <div class="sec-head"><div class="num">6</div><h2>802.11i 還不夠：流氓 AP 與惡意雙生<span>802.11i Is Not Enough — Rogue &amp; Evil Twin APs</span></h2></div>
+
+  <div class="card">
+    <h3>⚠️ <span class="en">Threats 802.11i Does NOT Stop</span>　802.11i 擋不住的威脅</h3>
+    <ul class="facts">
+      <li>802.11i 只保護「合法主機 ↔ 合法 AP」這段，下面兩種威脅它管不到：</li>
+      <li><span class="term">Rogue Access Point（流氓 AP）</span>：員工<b>未經授權</b>自行接上公司網路的 AP，常沒設安全 → 變成後門。</li>
+      <li><span class="term">Evil Twin Access Point（惡意雙生 AP）</span>：攻擊者架設的<b>假 AP</b>，冒充真 AP 做中間人攻擊。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>👿 <span class="en">Evil Twin &amp; the VPN Defense</span>　惡意雙生與 VPN 防禦<span class="exam-badge warm">考過 (填充)</span></h3>
+    <p class="lead"><span class="term">Evil Twin</span> 以<b>非常高的功率</b>運作、冒充真 AP，誘騙用戶端連上它，居中做中間人（man-in-the-middle）。</p>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 230" role="img" aria-label="Evil Twin 中間人與 VPN 防禦">
+        <!-- client -->
+        <rect x="30" y="95" width="90" height="46" rx="8" fill="#1e293b"/><text x="75" y="123" font-size="12" fill="#7dd3fc" text-anchor="middle">Client</text>
+        <!-- evil twin -->
+        <rect x="270" y="95" width="100" height="46" rx="8" fill="#dc2626"/><text x="320" y="116" font-size="12" fill="#fff" text-anchor="middle">Evil Twin</text><text x="320" y="132" font-size="9" fill="#fecaca" text-anchor="middle">假AP·高功率</text>
+        <!-- real AP -->
+        <rect x="520" y="95" width="90" height="46" rx="8" fill="#16a34a"/><text x="565" y="123" font-size="12" fill="#fff" text-anchor="middle">真 AP</text>
+        <line x1="120" y1="118" x2="270" y2="118" stroke="#dc2626" stroke-width="2.5"/><text x="195" y="108" font-size="10" fill="#dc2626" text-anchor="middle">金鑰 K1</text>
+        <line x1="370" y1="118" x2="520" y2="118" stroke="#16a34a" stroke-width="2.5"/><text x="445" y="108" font-size="10" fill="#16a34a" text-anchor="middle">金鑰 K2</text>
+        <text x="320" y="170" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="700">無 VPN：ET 用 K1 解密讀取 → 再用 K2 重新加密轉送（能偷看）</text>
+        <text x="320" y="200" font-size="12" fill="#2563eb" text-anchor="middle" font-weight="700">有 VPN：Client 先用 VPN 金鑰加密 → ET 解開 K1 後仍是 VPN 密文，讀不到原文 ✔</text>
+      </svg>
+      <div class="cap">VPN 防禦：在 802.11i 之上再包一層 VPN 加密，Evil Twin 解開外層也看不到內容</div>
+    </div>
+    <div class="box note"><div class="t">🛡️ VPN 為何有效（課本步驟）</div>
+      Client 先用 VPN 金鑰加密、再用與 ET 共享的金鑰加密；ET 用它與 Client 的金鑰解開外層後，<b>裡面仍是 VPN 密文</b> → ET 讀不到原始訊息。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 填充 A9】A ____ access point, operating at very high power, impersonates a real AP and does man-in-the-middle.<span class="src">2020</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>Evil Twin</b>（惡意雙生 AP；以高功率假冒真 AP 進行中間人攻擊）。</div></details>
+    </div>
+    <div class="box q"><div class="t">💭 Rogue vs Evil Twin 怎麼分？</div>
+      <b>Rogue AP</b>＝「自己人」沒授權私接的 AP（內部疏忽）；<b>Evil Twin</b>＝「壞人」架的假 AP 冒充真 AP（外部攻擊、做 MITM）。</div>
+  </div>
+</section>
+
+<!-- ============ 7 MANAGEMENT ============ -->
+<section id="s7">
+  <div class="sec-head"><div class="num">7</div><h2>802.11 Wi-Fi WLAN 管理<span>WLAN Management — 規劃、安裝、集中管理</span></h2></div>
+  <div class="card">
+    <h3>🗺️ <span class="en">Planning &amp; Installation</span>　規劃與安裝</h3>
+    <ul class="facts">
+      <li>規劃要小心，兼顧「良好涵蓋」與「降低 AP 間互相干擾」。</li>
+      <li>在藍圖上鋪設大約 <mark>10 公尺、互相重疊的圓圈</mark>；針對厚牆、檔案櫃等明顯問題調整。</li>
+      <li>多層樓建築要考慮「三維」擺放。</li>
+      <li>安裝後做 <span class="term">site survey（場勘）</span> 量測訊號品質，持續調整位置與功率（環境一直在變）。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🖥️ <span class="en">APs as Managed Devices</span>　AP 是「被管理裝置」</h3>
+    <ul class="facts">
+      <li>管理許多 AP 的人工成本很高 → <b>自動化是關鍵</b>。</li>
+      <li>AP 把資料送到管理主控台的管理員；管理員可下指令給各 AP。</li>
+      <li><b>網路管理功能</b>：故障即時通知、持續監測傳輸品質、遠端調整 AP 功率、推送軟體更新、盡量自動化。</li>
+      <li><b>安全管理功能</b>：通報流氓 AP、惡意雙生 AP、安全設定不當的 AP，並盡量自動完成。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 8 DECIBELS ============ -->
+<section id="s8">
+  <div class="sec-head"><div class="num">8</div><h2>分貝 Decibels<span>Decibels — 用對數表示功率比</span></h2></div>
+  <div class="card">
+    <h3>📐 <span class="en">The Decibel Formula</span>　分貝公式<span class="exam-badge warm">高機率考點</span></h3>
+    <div class="box formula"><div class="t">📐 公式 Formula</div>
+      <div class="eq">dB = 10 × log₁₀( P₂ / P₁ )</div>
+      <p style="text-align:center;font-size:.9rem"><b>衰減（attenuation）→ 負 dB</b>；<b>放大（amplification）→ 正 dB</b></p>
+    </div>
+    <table>
+      <tr><th>例</th><th>P₁ → P₂</th><th>P₂/P₁</th><th>dB = 10·log₁₀(比值)</th></tr>
+      <tr><td>衰減</td><td>30 mW → 10 mW</td><td>1/3 ≈ 0.333</td><td><span class="hl">−4.77 dB</span></td></tr>
+      <tr><td>衰減</td><td>40 mW → 10 mW</td><td>0.25</td><td><span class="hl">−6.02 dB</span></td></tr>
+      <tr><td>放大</td><td>10 mW → 30 mW</td><td>3</td><td>+4.77 dB</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🧮 <span class="en">Mental-Math Shortcuts</span>　心算捷徑（考試超好用）</h3>
+    <div class="kgrid">
+      <div class="kcard"><span class="en">×2 → +3 dB</span><span class="zh">每加倍 ≈ +3 dB</span></div>
+      <div class="kcard"><span class="en">÷2 → −3 dB</span><span class="zh">每減半 ≈ −3 dB</span></div>
+      <div class="kcard"><span class="en">×10 → +10 dB</span><span class="zh">每 ×10 = +10 dB</span></div>
+      <div class="kcard"><span class="en">÷10 → −10 dB</span><span class="zh">每 ÷10 = −10 dB</span></div>
+    </div>
+    <table>
+      <tr><th>2 的次方</th><th>dB</th><th>10 的次方</th><th>dB</th></tr>
+      <tr><td>×2</td><td>+3</td><td>×10</td><td>+10</td></tr>
+      <tr><td>×4</td><td>+6</td><td>×100</td><td>+20</td></tr>
+      <tr><td>×8</td><td>+9</td><td>×1000</td><td>+30</td></tr>
+      <tr><td>×16</td><td><span class="hl">+12</span></td><td>×10000</td><td><span class="hl">+40</span></td></tr>
+      <tr><td>÷8 (1/8)</td><td><span class="hl">−9</span></td><td>÷1000</td><td><span class="hl">−30</span></td></tr>
+    </table>
+    <div class="box note"><div class="t">🔗 連回 Ch6 反平方律</div>
+      距離 ×4 → 功率 ÷16 → −12 dB。（16 = 2⁴，每加倍 ±3 dB，4 次 = ±12 dB）</div>
+  </div>
+
+  <div class="card">
+    <h3>📶 <span class="en">dBm — Absolute Power</span>　dBm：以 1 mW 為基準</h3>
+    <ul class="facts">
+      <li><span class="term">dBm</span> 計算時 <mark>P₁ 永遠是 1 mW</mark>，用來比較不同無線電的「絕對功率」。</li>
+      <li>dBm = 10 × log₁₀( 功率mW / 1 mW )。</li>
+    </ul>
+    <table>
+      <tr><th>功率</th><th>dBm</th><th>算法</th></tr>
+      <tr><td>1 mW</td><td>0 dBm</td><td>基準</td></tr>
+      <tr><td>4 mW</td><td>6 dBm</td><td>×4 → +6</td></tr>
+      <tr><td>10 mW</td><td>10 dBm</td><td>×10 → +10</td></tr>
+      <tr><td>10 W (=10000 mW)</td><td>40 dBm</td><td>×10⁴ → +40</td></tr>
+      <tr><td>0.5 mW</td><td>−3 dBm</td><td>÷2 → −3</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 9 BLUETOOTH ============ -->
+<section id="s9">
+  <div class="sec-head"><div class="num">9</div><h2>Bluetooth 藍牙<span>Bluetooth — 個人區域網路 PAN</span></h2></div>
+  <div class="card">
+    <h3>🔵 <span class="en">What Is Bluetooth?</span>　藍牙是什麼</h3>
+    <ul class="facts">
+      <li>為 <mark>相對低速、短距離</mark> 傳輸而設計，是「線材替代（cable replacement）」技術 — 你身體或桌面周邊的裝置互連。</li>
+      <li>屬於 <span class="term">PAN（Personal Area Network 個人區域網路）</span> 的短距無線技術，<b>不是完整的 WLAN 技術</b>。</li>
+      <li>經典藍牙（Classic）只有約 <mark>3 Mbps</mark>，但 <b>電池壽命長</b>。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 110" role="img" aria-label="PAN LAN MAN WAN 範圍">
+        <rect x="20" y="35" width="120" height="44" rx="8" fill="#7c3aed"/><text x="80" y="56" font-size="12" fill="#fff" text-anchor="middle">PAN</text><text x="80" y="71" font-size="9" fill="#ddd6fe" text-anchor="middle">藍牙·近</text>
+        <rect x="170" y="35" width="120" height="44" rx="8" fill="#2563eb"/><text x="230" y="56" font-size="12" fill="#fff" text-anchor="middle">LAN</text><text x="230" y="71" font-size="9" fill="#bfdbfe" text-anchor="middle">Wi-Fi</text>
+        <rect x="320" y="35" width="120" height="44" rx="8" fill="#0891b2"/><text x="380" y="56" font-size="12" fill="#fff" text-anchor="middle">MAN</text>
+        <rect x="470" y="35" width="150" height="44" rx="8" fill="#16a34a"/><text x="545" y="56" font-size="12" fill="#fff" text-anchor="middle">WAN</text><text x="545" y="71" font-size="9" fill="#dcfce7" text-anchor="middle">遠</text>
+        <text x="20" y="22" font-size="11" fill="#64748b">近 near ←</text><text x="620" y="22" font-size="11" fill="#64748b" text-anchor="end">→ 遠 far</text>
+      </svg>
+      <div class="cap">網路範圍由近到遠：PAN（藍牙）→ LAN（Wi-Fi）→ MAN → WAN</div>
+    </div>
+    <h4>Classic vs High-Speed Bluetooth</h4>
+    <table>
+      <tr><th>項目</th><th>Classic Bluetooth</th><th>High-Speed Bluetooth</th></tr>
+      <tr><td>主要好處</td><td>低功率下尚可的速度（<b>電池壽命長</b>）</td><td>需要時可高速傳輸、距離較遠</td></tr>
+      <tr><td>速度</td><td>最高約 <span class="hl">3 Mbps</span></td><td>最高約 <span class="hl">24 Mbps</span></td></tr>
+      <tr><td>功率需求</td><td>低</td><td>高（只偶爾使用）</td></tr>
+      <tr><td>最大距離</td><td>約 <span class="hl">10 m</span></td><td>約 <span class="hl">30 m</span></td></tr>
+    </table>
+    <div class="box note"><div class="t">💡 BLE</div>
+      Bluetooth 4.0 引入 <b>低功耗藍牙 BLE（Bluetooth Low Energy）</b>，極省電，適合 IoT 感測器、穿戴裝置。</div>
+  </div>
+
+  <div class="card">
+    <h3>🕸️ <span class="en">Piconet · Master/Slave · Profiles</span>　微網、主從、設定檔</h3>
+    <ul class="facts">
+      <li><span class="term">Piconet（微網）</span>：藍牙裝置組成的小網路；一個 master 帶多個 slave。</li>
+      <li>一個裝置可以<b>同時</b>是某網的 master、又是另一網的 slave（例如桌機）。</li>
+      <li><span class="term">Bluetooth Profiles（設定檔）</span>：規定不同應用情境下裝置如何協同 — <mark>這在 802.11 Wi-Fi 裡完全沒有對應物</mark>。</li>
+      <li>常見 Profile：Headset（耳機）、Hands-Free（車用語音）、Basic Printing（免驅動列印）、Synchronization（同步）、HID（滑鼠鍵盤）、Bluetooth Smart（為 IoT 而生）。</li>
+    </ul>
+    <div class="box note"><div class="t">📍 iBeacon</div>
+      Apple 開發、基於 <b>BLE 近接感測</b> 的協定，發送一個唯一識別碼（UUID）讓 App 判斷位置 → 用於室內定位、零售推播。</div>
+  </div>
+
+  <div class="card">
+    <h3>📊 <span class="en">802.11 vs Bluetooth vs UWB</span>　三者比較<span class="exam-badge warm">考過 (簡答)</span></h3>
+    <table>
+      <tr><th>技術</th><th>速度</th><th>距離</th><th>定位</th></tr>
+      <tr><td><b>802.11 (Wi-Fi)</b></td><td>高（數十 Mbps ~ Gbps）</td><td>較遠（WLAN，約 ~100 m）</td><td>區域網路</td></tr>
+      <tr><td><b>Bluetooth</b></td><td>低（經典 ~3 Mbps、高速 ~24 Mbps）</td><td>短（~10 m / 高速 ~30 m）</td><td>PAN</td></tr>
+      <tr><td><b>UWB</b>（Ultra-Wideband）</td><td><span class="hl">很高（數百 Mbps，用極寬頻寬）</span></td><td><span class="hl">很短（約 ~10 m）</span></td><td>PAN</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B7】Compare 802.11, Bluetooth, and UWB in speeds and distance limits.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans"><b>802.11(Wi-Fi)</b>：速度高（數十 Mbps~Gbps）、距離較遠（WLAN，約 ~100 m）。<br>
+        <b>Bluetooth</b>：速度低（經典 ~3 Mbps、高速版 ~24 Mbps）、距離短（~10 m，高速 ~30 m），屬 PAN。<br>
+        <b>UWB</b>：以極寬頻寬達很高速度（數百 Mbps），但距離很短（約 ~10 m）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 NFC / RFID ============ -->
+<section id="s10">
+  <div class="sec-head"><div class="num">10</div><h2>其他區域無線技術：NFC / RFID<span>Other Local Wireless — NFC &amp; RFID</span></h2></div>
+  <div class="card">
+    <h3>📲 <span class="en">NFC (Near Field Communication)</span>　近場通訊</h3>
+    <ul class="facts">
+      <li>為 <mark>極短距離、低速</mark> 設計：距離 <b>最多約 4 cm（~2 吋）</b>、速度限制在 <b>424 kbps</b>。</li>
+      <li>因此非常省電；運作於 <span class="term">13.56 MHz</span> 專用頻段（同樣低耗電）。</li>
+      <li>免接觸（如刷公車費），但通常還是會把錢包貼近讀卡機以確保夠近；不必拿出卡片刷。</li>
+      <li>應用：公車票、車門解鎖/發動、門禁、交換電子名片、零售支付（含集點/優惠券）。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🏷️ <span class="en">RFID (Radio Frequency Identification)</span>　無線射頻辨識</h3>
+    <ul class="facts">
+      <li>目標：<mark>取代條碼（replace bar codes）</mark>。</li>
+      <li>標籤是電子式但 <b>沒有電源（passive，被動式）</b>；被讀取器掃描時，<b>利用掃描的電力</b>產生回應。</li>
+      <li>相較有電源的裝置「便宜」；但只能送出<b>少量資訊</b>，且 <span class="hl">不能做加密（cannot do encryption）</span>。</li>
+    </ul>
+    <div class="box exam"><div class="t">🎯 RFID 必記四點</div>
+      ① 取代條碼 ② 被動無電源、靠掃描電力回應 ③ 便宜 ④ 資訊量小、<b>不能加密</b>（所以有隱私/安全疑慮）。</div>
+  </div>
+</section>
+
+<!-- ============ CRAM ============ -->
+<section id="cram">
+  <div class="sec-head"><div class="num">⚡</div><h2>考前 60 秒速記<span>Last-Minute Cram — 進考場前看這張</span></h2></div>
+  <div class="card">
+    <table>
+      <tr><th>考點</th><th>必記答案</th></tr>
+      <tr><td>設定 AP 選哪個</td><td><b>802.11i (WPA2, 用 AES)</b>；不要 WPA；<b>絕不</b> WEP</td></tr>
+      <tr><td>關 SSID 廣播 / MAC 過濾</td><td><b>不安全</b>（SSID 可嗅探、MAC 可偽造）</td></tr>
+      <tr><td>PSK 模式</td><td>家用/單一 AP；同一把 PSK；passphrase ≥20 字元；人為脆弱</td></tr>
+      <tr><td>802.1X 模式</td><td>多 AP 企業；<b>需中央認證伺服器</b>；非常強</td></tr>
+      <tr><td>PSK 共用、session key 不共用</td><td>共用 PSK 做認證，但每台各自推導<b>不同 session key</b> 加密</td></tr>
+      <tr><td>WPS</td><td>8 位數 PIN、易破 → 關掉</td></tr>
+      <tr><td>WPA3</td><td>用 <b>SAE</b> 取代 PSK；抗離線字典、前向保密</td></tr>
+      <tr><td>Rogue AP vs Evil Twin</td><td>Rogue＝內部沒授權私接；<b>Evil Twin</b>＝高功率假冒真 AP 做 MITM</td></tr>
+      <tr><td>Evil Twin 防禦</td><td><b>VPN</b>（再包一層加密，ET 解外層也讀不到原文）</td></tr>
+      <tr><td>分貝</td><td>dB=10·log₁₀(P2/P1)；×2=+3dB；×10=+10dB；衰減為負</td></tr>
+      <tr><td>dBm</td><td>P₁ 固定 1mW：10mW=10dBm、10W=40dBm、0.5mW=−3dBm</td></tr>
+      <tr><td>Bluetooth</td><td>PAN；經典 3Mbps/10m；高速 24Mbps/30m；有 Profiles（Wi-Fi 沒有）</td></tr>
+      <tr><td>802.11 / BT / UWB</td><td>Wi-Fi 高速遠；BT 低速短(PAN)；UWB 很高速但很短(~10m)</td></tr>
+      <tr><td>NFC</td><td>≤4cm、424kbps、13.56MHz</td></tr>
+      <tr><td>RFID</td><td>取代條碼；被動無電源；便宜；資訊少、<b>不能加密</b></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><div class="num">★</div><h2>互動測驗<span>Self-Check Quiz — 點選作答，立即看詳解</span></h2></div>
+  <div class="quiz">
+    <h3>🧪 隨堂測驗（10 題）</h3>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">1. 設定 AP 時，為了安全應該選哪個標準？</div>
+      <button>WEP</button><button>WPA</button><button>802.11i（WPA2）</button><button>關閉 SSID 廣播</button>
+      <div class="exp">✅ 選 <b>802.11i（WPA2）</b>，使用 AES。WPA 較弱、WEP 早已被破都不要選。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">2. 一家有「很多 AP」的公司，較適合哪種 802.11i 模式？</div>
+      <button>PSK 模式</button><button>802.1X 模式</button><button>WEP 模式</button><button>WPS 模式</button>
+      <div class="exp">✅ <b>802.1X</b>：使用中央認證伺服器，適合多 AP 企業，安全性非常強。PSK 適合家用/單一 AP。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">3. 「PSK 是共用的，但 session key 是不共用的」意思是？</div>
+      <button>所有站台共用 PSK 認證，但各自推導出不同的 session key 加密</button><button>每台站台用不同 PSK</button><button>session key 全網相同</button><button>PSK 只給 AP 用</button>
+      <div class="exp">✅ 共用同一把 PSK 做初始認證，但每台站台再各自導出「不同」的 session key 實際加密，故加密金鑰彼此不同。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">4. 關於 WPS，下列何者正確？</div>
+      <button>由 802.11 工作組制定</button><button>非常安全</button><button>使用 AES 256 位元</button><button>用 8 位數 PIN、易被破解，應關閉</button>
+      <div class="exp">✅ WPS 由 Wi-Fi Alliance 設計，輸入 8 位數 PIN 即可，但<b>易被破解</b>，建議在 AP 上關閉。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">5. 一個「以非常高功率運作、冒充真 AP、做中間人攻擊」的存取點稱為？</div>
+      <button>Rogue AP</button><button>Mesh AP</button><button>Evil Twin AP</button><button>Distribution AP</button>
+      <div class="exp">✅ <b>Evil Twin（惡意雙生）</b>。Rogue AP 是內部員工沒授權私接的 AP，不是冒充。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">6. 要防禦 Evil Twin 的竊聽，最有效的做法是？</div>
+      <button>關閉 SSID 廣播</button><button>使用 VPN 再加一層加密</button><button>用 MAC 位址過濾</button><button>提高自己的發射功率</button>
+      <div class="exp">✅ 用 <b>VPN</b>：Client 先用 VPN 金鑰加密，Evil Twin 解開與它共享的外層後，裡面仍是 VPN 密文，讀不到原文。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">7. 功率從 40 mW 衰減到 10 mW，約等於多少 dB？</div>
+      <button>−6 dB</button><button>+6 dB</button><button>−3 dB</button><button>+12 dB</button>
+      <div class="exp">✅ 10·log₁₀(10/40)=10·log₁₀(0.25)≈ <b>−6 dB</b>。比值 1/4＝÷2 兩次＝−3−3。衰減為負值。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">8. 關於藍牙（Bluetooth），下列何者「錯誤」？</div>
+      <button>屬於 PAN 個人區域網路</button><button>經典藍牙約 3 Mbps、距離約 10 m</button><button>有 Profiles，Wi-Fi 沒有</button><button>是完整的 WLAN 技術，速度比 Wi-Fi 快</button>
+      <div class="exp">✅ 錯誤的是 D。藍牙是<b>短距 PAN、不是完整 WLAN</b>，速度比 Wi-Fi 慢，是線材替代技術。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">9. UWB 的特性是？</div>
+      <button>低速、長距離</button><button>高速、長距離</button><button>很高速、很短距離（約 10 m）</button><button>中速、無限距離</button>
+      <div class="exp">✅ <b>UWB</b> 以極寬頻寬達數百 Mbps 的很高速度，但距離很短（約 10 m），屬 PAN。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">10. 關於 RFID，下列何者正確？</div>
+      <button>標籤需要自己的電池供電</button><button>被動標籤無電源，靠掃描電力回應，且不能加密</button><button>能傳輸大量資料並加密</button><button>距離可達數公里</button>
+      <div class="exp">✅ RFID 被動標籤<b>無電源</b>、靠掃描器電力回應，便宜但<b>資訊量小、不能加密</b>，目標是取代條碼。</div>
+    </div>
+
+    <p id="score" style="text-align:center;font-size:1.1rem;font-weight:700;margin-top:14px"></p>
+  </div>
+</section>
+
+</main>
+
+<button class="backtop" id="bt">↑</button>
+<footer>
+  <b>Ch7 無線 LAN 安全與其他無線技術 知識點詳解</b>　|　依課本投影片 ch07（68 頁）＋三份期末考古題整理，🔥標記為實際考過考點。<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 企業資訊通訊與網路
+</footer>
+
+<script>
+const prog=document.getElementById('prog');
+const bt=document.getElementById('bt');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=sc+'%';
+  bt.style.display=h.scrollTop>500?'block':'none';
+});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+let answered=0,correct=0;const total=document.querySelectorAll('.qitem').length;
+document.querySelectorAll('.qitem').forEach(item=>{
+  const ans=+item.dataset.a;
+  const btns=item.querySelectorAll('button');
+  const exp=item.querySelector('.exp');
+  btns.forEach((b,i)=>{
+    b.onclick=()=>{
+      if(item.dataset.done)return;
+      item.dataset.done=1;answered++;
+      if(i===ans){b.classList.add('right');correct++;}
+      else{b.classList.add('wrong');btns[ans].classList.add('right');}
+      exp.classList.add('show');
+      if(answered===total){
+        const s=document.getElementById('score');
+        s.textContent=`🎉 完成！答對 ${correct} / ${total} 題（${Math.round(correct/total*100)} 分）`;
+        s.style.color=correct>=8?'#86efac':(correct>=6?'#fde68a':'#fca5a5');
+      }
+    };
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch11 網路應用 知識點詳解 | Networked Applications</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+  --brand:#2563eb; --brand2:#7c3aed; --accent:#0891b2; --good:#16a34a; --warn:#dc2626;
+  --amber:#d97706; --line:#e2e8f0; --soft:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  color:var(--ink);background:#f8fafc;line-height:1.75;-webkit-font-smoothing:antialiased}
+#prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:999;
+  background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+header{background:linear-gradient(135deg,#0f172a,#1e293b 60%,#312e81);color:#fff;
+  padding:70px 20px 56px;text-align:center;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,rgba(22,163,74,.30),transparent 45%),
+             radial-gradient(circle at 80% 30%,rgba(124,58,237,.35),transparent 45%)}
+header .wrap{position:relative;z-index:2}
+header .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:5px 16px;border-radius:999px;font-size:.85rem;letter-spacing:2px;margin-bottom:18px}
+header h1{font-size:2.5rem;font-weight:800;margin-bottom:10px;line-height:1.25}
+header h1 small{display:block;font-size:1.05rem;font-weight:500;color:#cbd5e1;margin-top:8px;letter-spacing:1px}
+header p{color:#cbd5e1;max-width:680px;margin:14px auto 0;font-size:1rem}
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:16px;
+  margin:-30px auto 40px;max-width:940px;padding:22px 26px;box-shadow:0 12px 30px rgba(15,23,42,.08);position:relative;z-index:5}
+nav.toc h2{font-size:.9rem;color:var(--muted);letter-spacing:2px;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+nav.toc a{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);
+  padding:9px 12px;border-radius:10px;font-size:.95rem;transition:.2s}
+nav.toc a:hover{background:var(--soft);color:var(--brand);transform:translateX(3px)}
+nav.toc a b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:.8rem;flex:none}
+section{margin-bottom:54px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.sec-head .num{font-size:1rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:1.6rem;font-weight:800}
+.sec-head h2 span{display:block;font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.card h3{font-size:1.18rem;color:#0f172a;margin-bottom:10px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card h3 .en{color:var(--brand);font-weight:700}
+.card h4{font-size:1rem;margin:14px 0 6px;color:#334155}
+p.lead{margin:8px 0}
+.term{color:var(--brand);font-weight:700}
+.zh{color:var(--muted)}
+ul.facts{list-style:none;margin:10px 0}
+ul.facts li{position:relative;padding:5px 0 5px 26px}
+ul.facts li::before{content:"▸";position:absolute;left:6px;color:var(--brand);font-weight:700}
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.box.metaphor{background:#fef9c3;border-color:#eab308}
+.box.q{background:#ede9fe;border-color:#7c3aed}
+.box.exam{background:#fee2e2;border-color:#dc2626}
+.box.note{background:#e0f2fe;border-color:#0891b2}
+.box.formula{background:#ecfdf5;border-color:#16a34a}
+.formula .eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.25rem;font-weight:700;
+  text-align:center;padding:8px;color:#065f46}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem;overflow:hidden;border-radius:10px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#1e293b;color:#fff;font-weight:600}
+tr:nth-child(even) td{background:#f8fafc}
+td .hl{color:var(--warn);font-weight:700}
+.code{font-family:"Consolas","Courier New",monospace;font-size:.9rem;background:#0f172a;color:#e2e8f0;
+  border-radius:10px;padding:16px 18px;margin:14px 0;overflow-x:auto;line-height:1.8}
+.code .k{color:#7dd3fc;font-weight:700}
+.code .c{color:#94a3b8}
+.code .r{color:#fca5a5}
+.code .g{color:#86efac}
+.diagram{background:#0f172a;border-radius:14px;padding:26px 20px;margin:16px 0;color:#e2e8f0;text-align:center}
+.diagram .cap{color:#94a3b8;font-size:.85rem;margin-top:14px}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.flow .node{background:#1e293b;color:#fff;border-radius:10px;padding:10px 14px;font-size:.85rem;text-align:center;min-width:90px}
+.flow .node b{display:block;color:#7dd3fc}
+.flow .arr{color:var(--brand);font-size:1.4rem;font-weight:700}
+.quiz{background:linear-gradient(135deg,#1e293b,#312e81);color:#fff;border-radius:16px;padding:26px;margin:18px 0}
+.quiz h3{color:#fff}
+.qitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin:14px 0}
+.qitem .qq{font-weight:600;margin-bottom:10px}
+.qitem button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.08);color:#e2e8f0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:10px 14px;margin:6px 0;cursor:pointer;
+  font-size:.92rem;transition:.15s;font-family:inherit}
+.qitem button:hover{background:rgba(255,255,255,.16)}
+.qitem button.right{background:#16a34a;border-color:#16a34a;color:#fff}
+.qitem button.wrong{background:#dc2626;border-color:#dc2626;color:#fff}
+.qitem .exp{display:none;margin-top:10px;padding:10px 14px;background:rgba(125,211,252,.12);
+  border-radius:9px;font-size:.9rem;border-left:3px solid #38bdf8}
+.qitem .exp.show{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:12px 0}
+.kcard{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard .en{font-weight:700;color:var(--brand);font-size:.95rem}
+.kcard .zh{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+.backtop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+  background:var(--brand);color:#fff;border:none;font-size:1.3rem;cursor:pointer;display:none;
+  box-shadow:0 8px 20px rgba(37,99,235,.4);z-index:50}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:34px 20px;font-size:.9rem;margin-top:40px}
+footer b{color:#e2e8f0}
+mark{background:#fde68a;padding:1px 5px;border-radius:4px;font-weight:600}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;margin:2px}
+.exam-badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700;margin-left:8px;vertical-align:middle;
+  box-shadow:0 2px 6px rgba(220,38,38,.35);white-space:nowrap}
+.exam-badge.hot{background:linear-gradient(135deg,#dc2626,#ea580c)}
+.exam-badge.warm{background:#d97706}
+.exam-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626 60%,#ea580c);color:#fff;
+  border-radius:18px;padding:26px 28px;margin:0 auto 36px;max-width:940px;box-shadow:0 16px 40px rgba(220,38,38,.25)}
+.exam-hero h2{font-size:1.35rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.exam-hero p{color:#fee2e2;font-size:.92rem;margin-bottom:16px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.freq-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px 15px}
+.freq-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.freq-item .name{font-weight:700;font-size:.95rem}
+.freq-item .stars{font-size:.8rem;letter-spacing:1px;color:#fde68a;flex:none}
+.freq-item .desc{color:#fecaca;font-size:.8rem;line-height:1.5}
+.freq-item a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.5)}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+  box-shadow:0 4px 14px rgba(15,23,42,.05);text-align:center}
+.svgbox svg{max-width:100%;height:auto}
+.svgbox .cap{color:var(--muted);font-size:.85rem;margin-top:10px}
+.examq{background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:14px 16px;margin:12px 0}
+.examq .qline{font-weight:600;color:#92400e;display:flex;gap:8px;align-items:flex-start}
+.examq .src{display:inline-block;background:#92400e;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.examq details{margin-top:8px}
+.examq summary{cursor:pointer;color:#b45309;font-weight:600;font-size:.88rem;user-select:none}
+.examq .ans{margin-top:8px;padding:10px 12px;background:#ecfdf5;border-left:4px solid #16a34a;border-radius:8px;font-size:.9rem}
+.steps{counter-reset:st;list-style:none;margin:12px 0}
+.steps li{position:relative;padding:10px 12px 10px 48px;margin:8px 0;background:var(--soft);border-radius:10px;border:1px solid var(--line)}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:12px;top:10px;
+  width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));
+  color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+@media(max-width:640px){header h1{font-size:1.8rem}.sec-head h2{font-size:1.3rem}.exam-badge{font-size:.66rem}.code{font-size:.76rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="wrap">
+    <div class="tag">CHAPTER 11 · NETWORKED APPLICATIONS</div>
+    <h1>第 11 章　網路應用 知識點詳解
+      <small>應用架構、SQL Injection/XSS、Email(SMTP)、VoIP(SIP/RTP)、HTTP/HTML、P2P</small></h1>
+    <p>依課本投影片 ch11（63 頁）＋三份期末考古題逐項整理。中英對照、含 SMTP/HTTP 訊息範例、SIP 信令圖解與互動測驗。🔥 標記＝實際考過。</p>
+  </div>
+</header>
+
+<nav class="toc container">
+  <h2>目錄 · CONTENTS</h2>
+  <ol>
+    <li><a href="#s1"><b>1</b>應用架構三型</a></li>
+    <li><a href="#s2"><b>2</b>SQL Injection &amp; XSS</a></li>
+    <li><a href="#s3"><b>3</b>電子郵件 SMTP/POP/IMAP</a></li>
+    <li><a href="#s4"><b>4</b>SMTP 指令流程</a></li>
+    <li><a href="#s5"><b>5</b>VoIP：SIP 與 RTP</a></li>
+    <li><a href="#s6"><b>6</b>HTTP 與 HTML</a></li>
+    <li><a href="#s7"><b>7</b>P2P 點對點</a></li>
+    <li><a href="#s8"><b>8</b>SaaS 等補充名詞</a></li>
+    <li><a href="#cram"><b>⚡</b>考前速記 Cram</a></li>
+    <li><a href="#quiz"><b>★</b>互動測驗 Quiz</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ============ EXAM FREQUENCY ============ -->
+<div class="exam-hero">
+  <h2>🔥 Ch11 考古題出題頻率（五份期末卷統計：109-1 / 2020 / 卷三 / 2023 / 2025）</h2>
+  <p>★ 數量＝考過次數。Ch11 重點：<b>SMTP 指令、HTTP 請求訊息、SIP/RTP VoIP、SQL Injection/XSS、P2P tracker/swarm</b>。HTTP 與 SIP 考過多次。</p>
+  <div class="freq-grid">
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s6">HTTP 請求訊息</a></span><span class="stars">★★</span></div>
+      <div class="desc">GET /…/home.htm HTTP/1.1、Host:、Connection: Keep-Alive。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s5">SIP / RTP VoIP</a></span><span class="stars">★★</span></div>
+      <div class="desc">SIP 信令、INVITE 經兩台 proxy、RTP over UDP（為何用 UDP）。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s4">SMTP 指令</a></span><span class="stars">★</span></div>
+      <div class="desc">MAIL FROM:、RCPT TO:、DATA、單獨一個句點結束訊息。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s2">SQL Injection &amp; XSS</a></span><span class="stars">★</span></div>
+      <div class="desc">' OR '1'='1 繞登入；&lt;script&gt; 竊取 cookie。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s7">P2P tracker / swarm</a></span><span class="stars">★</span></div>
+      <div class="desc">tracker 幫節點互找；swarm 是共享同檔的所有 peer。</div></div>
+    <div class="freq-item"><div class="top"><span class="name"><a href="#s8">SMTP / SaaS</a></span><span class="stars">★</span></div>
+      <div class="desc">SMTP 伺服器間遞送郵件；SaaS 軟體即服務。</div></div>
+  </div>
+</div>
+
+<!-- ============ NEW EXAMS 2023/2025 ============ -->
+<section id="new">
+  <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
+  <div class="card">
+    <h3>🔁 <span class="en">Repeated</span>　舊卷考過、新卷再考</h3>
+    <ul class="facts">
+      <li><b>SIP</b>：2023 A11「SIP 與 RTP 是 VoIP 的信令與傳輸協定」。</li>
+      <li><b>HTTP 請求 (a)(b)</b>：2023 B8 → (a)=路徑 /news/a.html、(b)=Host: abc.com。</li>
+      <li><b>SMTP</b>：2025 B6 考指令順序、2023 B6 考四者解釋。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">SMTP Command Order</span>　SMTP 指令順序（2025 B6）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <div class="code">
+<span class="k">HELO</span>  <span class="c">→ 打招呼</span>
+<span class="k">MAIL FROM:</span>  <span class="c">→ 指定寄件者</span>
+<span class="k">RCPT TO:</span>  <span class="c">→ 指定收件者</span>
+<span class="k">DATA</span>  <span class="c">→ 宣告開始送內文</span>
+<span class="c">（送出內文）</span>
+<span class="r">. (dot)</span>  <span class="c">→ 單獨一個句點 &lt;CRLF&gt;.&lt;CRLF&gt; 結束訊息</span>
+<span class="k">QUIT</span>  <span class="c">→ 結束連線</span>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2025 B6】用 .(dot)、DATA、HELO、MAIL FROM、QUIT、RCPT TO 解釋寄信流程。<span class="src">2025</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">HELO → MAIL FROM: → RCPT TO: → DATA →（內文）→ .(dot 結束訊息) → QUIT。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🆕 <span class="en">SMTP / POP / IMAP / RFC 822</span>　四者解釋（2023 B6）<span class="exam-badge hot">🆕 新卷</span></h3>
+    <table>
+      <tr><th>名稱</th><th>角色</th><th>說明</th></tr>
+      <tr><td><b>SMTP</b></td><td>傳遞（寄）</td><td>在郵件伺服器間「寄送」郵件，近乎即時</td></tr>
+      <tr><td><b>POP / IMAP</b></td><td>傳遞（收）</td><td>收件者下載/收取郵件；<b>IMAP 同步</b>電腦與主機、<b>POP 下載</b>到本機</td></tr>
+      <tr><td><b>RFC 822/2822</b></td><td>文件格式</td><td>規定郵件「格式」的標準（純文字訊息）</td></tr>
+    </table>
+    <div class="box note"><div class="t">🔑 傳遞 vs 文件</div>
+      SMTP、POP、IMAP 是「<b>傳遞標準</b>」；RFC 822/2822、HTML 是「<b>文件格式標準</b>」。送得到 + 看得懂，缺一不可。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2023 B6】Explain SMTP, POP/IMAP, and RFC 822/2822.<span class="src">2023</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">SMTP：伺服器間寄送郵件。POP/IMAP：收件者收信——IMAP 同步電腦與主機、POP 下載到本機。RFC 822/2822：規定郵件格式的文件標準。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 APP ARCHITECTURE ============ -->
+<section id="s1">
+  <div class="sec-head"><div class="num">1</div><h2>應用架構三型<span>Application Architectures</span></h2></div>
+  <div class="card">
+    <h3>🏗️ <span class="en">Three Architectures</span>　三種架構</h3>
+    <ul class="facts">
+      <li><span class="term">Stand-alone（獨立）</span>：單機運作。</li>
+      <li><span class="term">Client/Server（主從）</span>：伺服器提供服務給用戶端。</li>
+      <li><span class="term">Peer-to-Peer (P2P)</span>：用戶端互相提供服務，伺服器不用或只做次要工作（如幫忙找對方）。</li>
+    </ul>
+    <table>
+      <tr><th>架構</th><th>桌面處理能力需求</th></tr>
+      <tr><td>Terminal-Host（終端-主機）</td><td>桌面無處理能力</td></tr>
+      <tr><td>Client/Server</td><td>桌面有一些處理能力</td></tr>
+      <tr><td>P2P</td><td>桌面有大量處理能力（靠桌機算力成長才可能）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 2 SQL & XSS ============ -->
+<section id="s2">
+  <div class="sec-head"><div class="num">2</div><h2>SQL Injection &amp; XSS<span>Web 應用兩大攻擊</span></h2></div>
+  <div class="card">
+    <h3>💉 <span class="en">SQL Injection</span>　SQL 注入<span class="exam-badge warm">考過</span></h3>
+    <ul class="facts">
+      <li>在輸入欄填入 SQL 片段，使查詢語意被竄改。</li>
+      <li>經典手法：帳號/密碼輸入 <mark>' OR '1'='1</mark>，使 WHERE 條件<b>永遠為真</b> → 繞過登入或竊取資料。</li>
+    </ul>
+    <div class="code">
+<span class="c">// 正常查詢</span>
+SELECT * FROM Users WHERE (UserName=<span class="g">'fredchen'</span>) AND (PassWord=<span class="g">'199msq'</span>);
+<span class="c">// 注入 ' OR '1'='1 後</span>
+SELECT * FROM Users WHERE (UserName='' <span class="r">OR '1'='1'</span>) AND (PassWord='' <span class="r">OR '1'='1'</span>);
+<span class="c">// → 條件恆真，繞過驗證</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📜 <span class="en">Cross-Site Scripting (XSS)</span>　跨站腳本<span class="exam-badge warm">考過</span></h3>
+    <ul class="facts">
+      <li>把腳本注入會被網站「回填到網頁」的輸入；受害者瀏覽器執行該腳本。</li>
+      <li>經典手法：輸入 <mark>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</mark> → 竊取 cookie。</li>
+      <li>XSS 也可能藏在 e-mail 的超連結中（reflection 反射型）。</li>
+    </ul>
+    <div class="box note"><div class="t">🆚 SQL Injection vs XSS</div>
+      <b>SQL Injection</b>：攻擊「資料庫」（竄改查詢、繞登入、偷資料）；<b>XSS</b>：攻擊「其他使用者的瀏覽器」（執行注入腳本、偷 cookie）。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【2020 B7】Explain (1) SQL Injection and (2) Cross-Site Scripting.<span class="src">2020</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) <b>SQL Injection</b>：在輸入欄填入 SQL 片段使查詢語意被竄改，例如輸入 ' OR '1'='1 使 WHERE 永遠為真，繞過登入或竊取資料。<br>
+        (2) <b>XSS</b>：把腳本（如 &lt;script&gt;alert(document.cookie)&lt;/script&gt;）注入會被網站回填到網頁的輸入；受害者瀏覽器執行該腳本（如竊取 cookie）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 EMAIL ============ -->
+<section id="s3">
+  <div class="sec-head"><div class="num">3</div><h2>電子郵件：SMTP / POP / IMAP<span>E-Mail — 傳遞與文件標準</span></h2></div>
+  <div class="card">
+    <h3>📧 <span class="en">Delivery vs Document Standards</span>　傳遞標準 vs 文件標準</h3>
+    <table>
+      <tr><th>類型</th><th>標準</th><th>用途</th></tr>
+      <tr><td>傳遞標準 Delivery</td><td><span class="term">SMTP</span></td><td><b>伺服器間遞送（寄）</b>郵件，近乎即時</td></tr>
+      <tr><td>傳遞標準 Delivery</td><td><span class="term">POP / IMAP</span></td><td>收件者<b>稍後下載</b>郵件</td></tr>
+      <tr><td>文件標準 Document</td><td>RFC 822/2822、HTML、ASCII</td><td>訊息格式（內容是 ASCII 文字）</td></tr>
+    </table>
+    <ul class="facts">
+      <li>每個 client PC 有自己的 mail server；<mark>寄信用 SMTP，收信用 POP 或 IMAP</mark>。</li>
+      <li>也可用 <b>Web-based email</b>：全程用 HTTP，訊息文件是 HTML 網頁。</li>
+      <li>⚠️ 安全：郵件是攻擊的主要載體（病毒、蠕蟲、魚叉式釣魚 spear phishing）。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B13(b)】Briefly explain SMTP.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>SMTP</b>：簡單郵件傳輸協定，在郵件伺服器間遞送（寄）電子郵件。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 SMTP COMMANDS ============ -->
+<section id="s4">
+  <div class="sec-head"><div class="num">4</div><h2>SMTP 指令流程<span>SMTP Command Sequence</span></h2></div>
+  <div class="card">
+    <h3>📨 <span class="en">The SMTP Dialogue</span>　寄信對話<span class="exam-badge warm">考過</span></h3>
+    <div class="code">
+<span class="k">S:</span> EHLO pc-ycc            <span class="c">// 打招呼 (舊版 HELO)</span>
+<span class="k">R:</span> 250 …pleased to meet you
+<span class="k">S:</span> <span class="g">MAIL FROM:</span> Smith@Alpha.ARPA   <span class="c">// (a) 指定寄件者</span>
+<span class="k">R:</span> 250 OK
+<span class="k">S:</span> <span class="g">RCPT TO:</span> Jones@Beta.ARPA      <span class="c">// (b) 指定收件者</span>
+<span class="k">R:</span> 250 OK
+<span class="k">S:</span> DATA                       <span class="c">// 要開始送內文</span>
+<span class="k">R:</span> 354 Start mail input; end with &lt;CRLF&gt;.&lt;CRLF&gt;
+<span class="k">S:</span> Blah blah blah…
+<span class="k">S:</span> <span class="r">&lt;CRLF&gt;.&lt;CRLF&gt;</span>             <span class="c">// (c) 單獨一個句點 = 結束訊息</span>
+<span class="k">R:</span> 250 OK
+<span class="k">S:</span> QUIT                       <span class="c">// 結束連線</span>
+    </div>
+    <div class="box note"><div class="t">🔑 三個必填空格（考古題 109-1 B8）</div>
+      (a) = <b>MAIL</b>（組成 MAIL FROM:）；(b) = <b>RCPT</b>（組成 RCPT TO:）；(c) = <b>單獨一個句點 .</b>（即 &lt;CRLF&gt;.&lt;CRLF&gt; 結束訊息）。</div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B8(1)】SMTP commands (a)(b)(c) for John→Mary.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">(a)=<b>MAIL</b>（MAIL FROM:）、(b)=<b>RCPT</b>（RCPT TO:）、(c)=<b>單獨一個句點 .</b>（&lt;CRLF&gt;.&lt;CRLF&gt; 結束訊息）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 VoIP ============ -->
+<section id="s5">
+  <div class="sec-head"><div class="num">5</div><h2>VoIP：SIP 與 RTP<span>Voice over IP</span></h2></div>
+  <div class="card">
+    <h3>📞 <span class="en">Signaling vs Transport</span>　信令 vs 傳輸</h3>
+    <ul class="facts">
+      <li>電信核心概念：<span class="term">Signaling（信令）</span>＝建立連線、拆除、計費等；<span class="term">Transport（傳輸）</span>＝實際語音/影像的傳送。</li>
+      <li>VoIP 省錢：不必維護「語音與資料」兩套網路；語音數位化時還可壓縮。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🔔 <span class="en">SIP — Signaling Protocol</span>　SIP 信令協定<span class="exam-badge hot">🔥 考過2次</span></h3>
+    <ul class="facts">
+      <li><span class="term">SIP（Session Initiation Protocol）</span>是 IETF 定義的 VoIP <b>信令</b>標準。</li>
+      <li>不只開連線，還負責<b>開/關連線、計費記帳</b>等所有信令工作。</li>
+      <li>撥號流程：撥號端送 <mark>SIP INVITE</mark> 給自己的（第一台）proxy → 轉送到對方的（第二台）proxy → 再轉給被叫端；回應沿反向路徑回來。</li>
+      <li>信令建立連線後，<b>RTP 語音直接在主叫與被叫端之間傳送</b>（不經 proxy）。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 150" role="img" aria-label="SIP 經兩台 proxy">
+        <rect x="20" y="55" width="90" height="40" rx="8" fill="#1e293b"/><text x="65" y="80" font-size="11" fill="#7dd3fc" text-anchor="middle">主叫端</text>
+        <rect x="170" y="55" width="90" height="40" rx="8" fill="#7c3aed"/><text x="215" y="78" font-size="10" fill="#fff" text-anchor="middle">Proxy 1</text>
+        <rect x="370" y="55" width="90" height="40" rx="8" fill="#7c3aed"/><text x="415" y="78" font-size="10" fill="#fff" text-anchor="middle">Proxy 2</text>
+        <rect x="520" y="55" width="90" height="40" rx="8" fill="#1e293b"/><text x="565" y="80" font-size="11" fill="#7dd3fc" text-anchor="middle">被叫端</text>
+        <line x1="110" y1="65" x2="170" y2="65" stroke="#2563eb" stroke-width="2" marker-end="url(#a)"/>
+        <line x1="260" y1="65" x2="370" y2="65" stroke="#2563eb" stroke-width="2" marker-end="url(#a)"/>
+        <line x1="460" y1="65" x2="520" y2="65" stroke="#2563eb" stroke-width="2" marker-end="url(#a)"/>
+        <text x="320" y="50" font-size="10" fill="#2563eb" text-anchor="middle">SIP INVITE 信令（經兩台 proxy）</text>
+        <line x1="110" y1="120" x2="520" y2="120" stroke="#16a34a" stroke-width="3" marker-end="url(#a)"/>
+        <text x="315" y="138" font-size="11" fill="#16a34a" text-anchor="middle">RTP 語音直接點對點傳送（不經 proxy）</text>
+        <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
+      </svg>
+      <div class="cap">信令(藍)經兩台 proxy 建立；建立後語音(綠 RTP)直接在兩端之間傳</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎙️ <span class="en">RTP over UDP</span>　為何用 UDP 不用 TCP</h3>
+    <ul class="facts">
+      <li>語音是<b>即時</b>的，<mark>沒有時間等待重送遺失封包</mark>。</li>
+      <li>UDP 輕量、開銷小，適合即時流量；TCP 的重送機制反而拖慢。</li>
+      <li><span class="term">RTP（Real-time Transport Protocol）</span>再於 UDP 上加 <b>序號（sequence number）</b>與 <b>時間戳（time stamp）</b>，補足 UDP 兩個限制。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B9】(1) caller→callee 經兩台 proxy 如何撥號？(2) VoIP 用 RTP over UDP，為何不用 TCP？<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看完整解答</summary>
+        <div class="ans">(1) 撥號端送 SIP INVITE 給自己的(第一台)proxy，轉送到對方的(第二台)proxy，再轉給被叫端；回應沿反向路徑回來。信令建立連線後，RTP 語音直接在主叫與被叫端之間傳送。<br>
+        (2) 語音是即時的，沒有時間等待重送遺失封包；UDP 輕量、開銷小，適合即時流量；RTP 再於 UDP 上加序號與時間戳。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 A14】IETF defines ____ as the signaling protocol of VoIP.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans"><b>SIP</b>（Session Initiation Protocol）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 HTTP ============ -->
+<section id="s6">
+  <div class="sec-head"><div class="num">6</div><h2>HTTP 與 HTML<span>HTTP Request / Response</span></h2></div>
+  <div class="card">
+    <h3>🌐 <span class="en">HTTP Request Message</span>　HTTP 請求訊息<span class="exam-badge hot">🔥 考過2次</span></h3>
+    <div class="code">
+<span class="g">GET</span> /panko/home.htm <span class="k">HTTP/1.1</span>[CRLF]
+<span class="g">Host:</span> voyager.shidler.hawaii.edu
+Connection: Keep-Alive
+    </div>
+    <ul class="facts">
+      <li>第一行：<b>方法（GET）＋ 路徑 ＋ HTTP 版本</b>。</li>
+      <li><span class="term">Host:</span> 指出要連的主機名（虛擬主機必需）。</li>
+      <li><span class="term">CR LF</span>＝控制字元（0x0D、0x0A），用來標記文字檔的換行。</li>
+    </ul>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B8(2)】HTTP request (d)(e) for http://abc.com/news.html.<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">(d)=<b>GET</b>（GET /news.html HTTP/1.1）、(e)=<b>Host</b>（Host: abc.com）。</div></details>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B11】Give an example of an HTTP request message.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">GET /panko/home.htm HTTP/1.1[CRLF] / Host: voyager.shidler.hawaii.edu / Connection: Keep-Alive。</div></details>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📥 <span class="en">HTTP Response &amp; HTML</span>　回應訊息與下載檔數</h3>
+    <div class="code">
+<span class="k">HTTP/1.1 200 OK</span>[CRLF]
+Date: …  Server: …
+Content-type: text/plain[CRLF]
+[CRLF]
+<span class="c">// 接著是要下載的位元組（文字/圖/聲音/影片）</span>
+    </div>
+    <ul class="facts">
+      <li>HTML 檔含文字與「圖片標籤」；瀏覽器依標籤<b>分別下載各圖檔</b>再渲染。</li>
+      <li>💡 小題：一個網頁有 3 張圖、還會播音樂 → 瀏覽器要下載 <b>1(HTML)+3(圖)+1(音樂)=5 個檔</b>。</li>
+      <li>Keep-Alive：timeout=5（連線開 5 秒）、max=300（最多 300 個連續請求）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7 P2P ============ -->
+<section id="s7">
+  <div class="sec-head"><div class="num">7</div><h2>P2P 點對點<span>Peer-to-Peer Applications</span></h2></div>
+  <div class="card">
+    <h3>🔗 <span class="en">BitTorrent — Tracker &amp; Swarm</span>　tracker 與 swarm<span class="exam-badge warm">考過</span></h3>
+    <ul class="facts">
+      <li><span class="term">Tracker（追蹤器）</span>：協助節點<b>找到其他節點</b>的伺服器，記錄哪些 peer 在分享該檔、各擁有哪些片段。</li>
+      <li><span class="term">Swarm（群）</span>：正在共同分享/下載<b>同一檔案</b>的<b>所有 peer 的集合</b>（種子 + 下載者）。</li>
+      <li>P2P 中，clients 互相提供服務；伺服器只做次要工作（如 tracker 幫忙找對方）。</li>
+    </ul>
+    <div class="svgbox">
+      <svg viewBox="0 0 640 160" role="img" aria-label="BitTorrent tracker 與 swarm">
+        <rect x="260" y="15" width="120" height="36" rx="8" fill="#dc2626"/><text x="320" y="38" font-size="11" fill="#fff" text-anchor="middle">Tracker</text>
+        <ellipse cx="320" cy="110" rx="150" ry="42" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="320" y="155" font-size="10" fill="#16a34a" text-anchor="middle">Swarm（共享同檔的所有 peer）</text>
+        <circle cx="220" cy="105" r="22" fill="#1e293b"/><text x="220" y="109" font-size="9" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <circle cx="320" cy="115" r="22" fill="#1e293b"/><text x="320" y="119" font-size="9" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <circle cx="420" cy="105" r="22" fill="#1e293b"/><text x="420" y="109" font-size="9" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <line x1="300" y1="50" x2="240" y2="88" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="320" y1="51" x2="320" y2="93" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="340" y1="50" x2="400" y2="88" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="242" y1="110" x2="298" y2="115" stroke="#16a34a" stroke-width="2"/>
+        <line x1="342" y1="115" x2="398" y2="110" stroke="#16a34a" stroke-width="2"/>
+      </svg>
+      <div class="cap">Tracker 幫各 peer 互相找到（虛線）；Swarm 是分享同檔的所有 peer，彼此交換片段（綠線）</div>
+    </div>
+    <div class="examq">
+      <div class="qline">📄 <span>【109-1 B3】BitTorrent: (1) What is a tracker? (2) What is a swarm?<span class="src">109-1</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">(1) <b>Tracker</b>：協助節點找到其他節點的伺服器，記錄哪些 peer 在分享該檔、各擁有哪些片段。<br>
+        (2) <b>Swarm</b>：正在共同分享／下載同一檔案的所有 peer（種子+下載者）的集合。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 SaaS etc ============ -->
+<section id="s8">
+  <div class="sec-head"><div class="num">8</div><h2>補充名詞：SaaS 等<span>Misc. Terms</span></h2></div>
+  <div class="card">
+    <h3>📦 <span class="en">Brief Definitions</span>　簡答常見名詞<span class="exam-badge warm">考過</span></h3>
+    <table>
+      <tr><th>名詞</th><th>解釋</th></tr>
+      <tr><td><b>SaaS</b>（Software as a Service）</td><td>軟體即服務，應用軟體以雲端服務方式提供，使用者經網路（瀏覽器）使用</td></tr>
+      <tr><td><b>SMTP</b></td><td>簡單郵件傳輸協定，在郵件伺服器間遞送（寄）郵件</td></tr>
+      <tr><td><b>MTSO</b>（ch10）</td><td>行動電話交換局，連各 cellsite 與 PSTN，負責換手與通道分配</td></tr>
+      <tr><td><b>1000Base-T</b>（ch05）</td><td>Gigabit Ethernet（1 Gbps），跑在 Cat5e/6 UTP、最長 100 m</td></tr>
+    </table>
+    <div class="examq">
+      <div class="qline">📄 <span>【卷三 B13】Briefly explain: (a) MTSO (b) SMTP (c) SaaS (d) 1000Base-T.<span class="src">考古</span></span></div>
+      <details><summary>▶ 看答案</summary><div class="ans">(a) MTSO：行動電話交換局，連各 cellsite 並接到 PSTN，負責換手與通道分配。<br>(b) SMTP：簡單郵件傳輸協定，在郵件伺服器間遞送郵件。<br>(c) SaaS：軟體即服務，應用以雲端服務提供，經瀏覽器使用。<br>(d) 1000Base-T：Gigabit Ethernet（1 Gbps），跑在 4 對 UTP、最長 100 m。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRAM ============ -->
+<section id="cram">
+  <div class="sec-head"><div class="num">⚡</div><h2>考前速記<span>Last-Minute Cram — 進考場前看這張</span></h2></div>
+  <div class="card">
+    <table>
+      <tr><th>考點</th><th>必記答案</th></tr>
+      <tr><td>SMTP 指令</td><td>(a)MAIL FROM: (b)RCPT TO: (c)單獨句點 .（&lt;CRLF&gt;.&lt;CRLF&gt;）結束</td></tr>
+      <tr><td>收/寄信協定</td><td>寄=SMTP；收=POP / IMAP；Web mail 用 HTTP</td></tr>
+      <tr><td>HTTP 請求</td><td>GET /…/home.htm HTTP/1.1 ＋ Host: ＋ Connection: Keep-Alive</td></tr>
+      <tr><td>HTTP 下載檔數</td><td>1 HTML + 圖數 + 音樂；3圖+音樂=5 個檔</td></tr>
+      <tr><td>SIP</td><td>VoIP 信令協定；INVITE 經兩台 proxy；開關連線/計費</td></tr>
+      <tr><td>RTP/UDP</td><td>即時不等重送 → 用 UDP；RTP 加序號＋時間戳</td></tr>
+      <tr><td>信令 vs 傳輸</td><td>signaling 建/拆/計費；transport 實際語音</td></tr>
+      <tr><td>SQL Injection</td><td>' OR '1'='1 使 WHERE 恆真、繞登入；攻擊資料庫</td></tr>
+      <tr><td>XSS</td><td>注入 &lt;script&gt; 偷 cookie；攻擊別人的瀏覽器</td></tr>
+      <tr><td>tracker</td><td>幫 peer 互找、記錄誰有哪些片段</td></tr>
+      <tr><td>swarm</td><td>分享同一檔的所有 peer 集合（種子+下載者）</td></tr>
+      <tr><td>SaaS</td><td>軟體即服務，雲端經瀏覽器使用</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><div class="num">★</div><h2>互動測驗<span>Self-Check Quiz — 點選作答，立即看詳解</span></h2></div>
+  <div class="quiz">
+    <h3>🧪 隨堂測驗（10 題）</h3>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">1. SMTP 中，結束郵件訊息本文的方式是？</div>
+      <button>送出 QUIT</button><button>送出 RCPT TO:</button><button>送出單獨一個句點（&lt;CRLF&gt;.&lt;CRLF&gt;）</button><button>關閉 TCP 連線</button>
+      <div class="exp">✅ 用 <b>單獨一個句點</b>（&lt;CRLF&gt;.&lt;CRLF&gt;）結束訊息本文；DATA 後開始送內文。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">2. 寄信、收信分別用哪些協定？</div>
+      <button>寄 SMTP；收 POP/IMAP</button><button>寄 POP；收 SMTP</button><button>寄 HTTP；收 SMTP</button><button>寄 IMAP；收 POP</button>
+      <div class="exp">✅ <b>寄信 SMTP；收信 POP 或 IMAP</b>。Web mail 則全程用 HTTP。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">3. IETF 定義的 VoIP 信令協定是？</div>
+      <button>RTP</button><button>SIP</button><button>SMTP</button><button>HTTP</button>
+      <div class="exp">✅ <b>SIP</b>（Session Initiation Protocol）負責開/關連線、計費等信令工作。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">4. VoIP 的語音傳輸為何用 UDP 而非 TCP？</div>
+      <button>UDP 比較安全</button><button>UDP 會自動重送</button><button>TCP 不支援語音</button><button>語音即時、沒時間等重送，UDP 輕量適合即時流量</button>
+      <div class="exp">✅ 即時語音<b>沒時間等重送</b>，UDP 輕量開銷小；RTP 再加序號與時間戳補足。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">5. SQL Injection 常見的「' OR '1'='1」會造成？</div>
+      <button>WHERE 條件恆真，繞過登入驗證</button><button>瀏覽器執行腳本偷 cookie</button><button>伺服器當機重開</button><button>加密所有資料</button>
+      <div class="exp">✅ 使 WHERE 條件<b>永遠為真</b> → 繞過登入或竊取資料（攻擊資料庫）。XSS 才是偷 cookie。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">6. 「&lt;script&gt;alert(document.cookie)&lt;/script&gt;」被網站回填到網頁後執行，屬於哪種攻擊？</div>
+      <button>SQL Injection</button><button>NAT 穿越</button><button>XSS（跨站腳本）</button><button>ARP poisoning</button>
+      <div class="exp">✅ <b>XSS</b>：注入腳本被回填、由受害者瀏覽器執行（如偷 cookie），攻擊「別人的瀏覽器」。</div>
+    </div>
+
+    <div class="qitem" data-a="1">
+      <div class="qq">7. 一個 HTTP 請求訊息的第一行應包含？</div>
+      <button>只有 Host:</button><button>方法(GET)＋路徑＋HTTP 版本</button><button>只有 IP 位址</button><button>使用者帳號密碼</button>
+      <div class="exp">✅ 例：<b>GET /panko/home.htm HTTP/1.1</b>，下一行才是 Host:。</div>
+    </div>
+
+    <div class="qitem" data-a="3">
+      <div class="qq">8. 網頁有 3 張圖、載入時還播音樂，瀏覽器共要下載幾個檔？</div>
+      <button>1</button><button>3</button><button>4</button><button>5</button>
+      <div class="exp">✅ 1(HTML) + 3(圖) + 1(音樂) = <b>5 個檔</b>。</div>
+    </div>
+
+    <div class="qitem" data-a="0">
+      <div class="qq">9. BitTorrent 的 tracker 是什麼？</div>
+      <button>協助節點找到其他節點、記錄誰有哪些片段的伺服器</button><button>正在分享同檔的所有 peer 集合</button><button>下載完成的種子檔</button><button>加密金鑰</button>
+      <div class="exp">✅ <b>Tracker</b> 幫 peer 互相找到；<b>Swarm</b> 才是分享同檔的所有 peer 集合。</div>
+    </div>
+
+    <div class="qitem" data-a="2">
+      <div class="qq">10. SaaS 指的是？</div>
+      <button>一種無線傳輸標準</button><button>一種路由協定</button><button>軟體即服務，雲端經瀏覽器使用</button><button>一種加密演算法</button>
+      <div class="exp">✅ <b>SaaS（Software as a Service）</b>：應用軟體以雲端服務提供，使用者經網路/瀏覽器使用。</div>
+    </div>
+
+    <p id="score" style="text-align:center;font-size:1.1rem;font-weight:700;margin-top:14px"></p>
+  </div>
+</section>
+
+</main>
+
+<button class="backtop" id="bt">↑</button>
+<footer>
+  <b>Ch11 網路應用 知識點詳解</b>　|　依課本投影片 ch11（63 頁）＋三份期末考古題整理，🔥標記為實際考過考點。<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed. · 企業資訊通訊與網路
+</footer>
+
+<script>
+const prog=document.getElementById('prog');
+const bt=document.getElementById('bt');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=sc+'%';
+  bt.style.display=h.scrollTop>500?'block':'none';
+});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+let answered=0,correct=0;const total=document.querySelectorAll('.qitem').length;
+document.querySelectorAll('.qitem').forEach(item=>{
+  const ans=+item.dataset.a;
+  const btns=item.querySelectorAll('button');
+  const exp=item.querySelector('.exp');
+  btns.forEach((b,i)=>{
+    b.onclick=()=>{
+      if(item.dataset.done)return;
+      item.dataset.done=1;answered++;
+      if(i===ans){b.classList.add('right');correct++;}
+      else{b.classList.add('wrong');btns[ans].classList.add('right');}
+      exp.classList.add('show');
+      if(answered===total){
+        const s=document.getElementById('score');
+        s.textContent=`🎉 完成！答對 ${correct} / ${total} 題（${Math.round(correct/total*100)} 分）`;
+        s.style.color=correct>=8?'#86efac':(correct>=6?'#fde68a':'#fca5a5');
+      }
+    };
+  });
+});
+</script>
+</body>
+</html>
