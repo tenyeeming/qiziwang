@@ -231,19 +231,21 @@ footer{background:#172033}
 }
 </style>
 <style>
-/* ===== 手機／平板 圖表與排版適配（responsive patch）===== */
+/* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
+.svg-m{display:none}
 @media(max-width:600px){
-  .svgbox{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;padding:14px 12px}
-  .svgbox svg{min-width:560px;width:100%;max-width:none;height:auto;display:block}
-  .svgbox::before{content:"← 左右滑動看完整圖表 →";display:block;position:sticky;left:0;
-    font-size:.7rem;font-weight:600;color:#94a3b8;text-align:center;margin-bottom:8px}
-  .svgbox .cap{position:sticky;left:0}
+  .flow{flex-direction:column;gap:6px}
+  .flow .arr{font-size:0;margin:-2px 0}
+  .flow .arr::after{content:"▼";font-size:1.15rem;color:#2563eb}
+  .svgbox{padding:14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:center}
+  .svgbox .svg-w{display:none}
+  .svgbox svg.svg-m{display:block;width:100%;max-width:430px;height:auto;margin:0 auto}
+  .svgbox svg:not(.svg-m):not(.svg-w){min-width:520px;width:100%;height:auto}
   .bitcalc,.code,pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 @media(min-width:601px) and (max-width:1024px){
   .freq-grid{grid-template-columns:1fr 1fr}
   .kgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-  .svgbox svg{max-width:100%}
 }
 </style>
 </head>
@@ -411,7 +413,17 @@ footer{background:#172033}
       <li>⚠️ 問題：<mark>光看位址看不出三段各占幾 bits</mark>，只知道總和是 32 bits → 解法是「遮罩 mask」。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 90" role="img" aria-label="IPv4 三段結構">
+      <svg class="svg-m" viewBox="0 0 340 116" role="img" aria-label="IPv4 三段結構（手機直式版）">
+        <text x="170" y="20" font-size="12.5" fill="#64748b" text-anchor="middle">一個 IPv4 位址 = 32 bits</text>
+        <rect x="16" y="34" width="150" height="44" rx="6" fill="#2563eb"/><text x="91" y="61" font-size="13" fill="#fff" text-anchor="middle">Network</text>
+        <rect x="170" y="34" width="92" height="44" rx="6" fill="#7c3aed"/><text x="216" y="61" font-size="13" fill="#fff" text-anchor="middle">Subnet</text>
+        <rect x="266" y="34" width="60" height="44" rx="6" fill="#0891b2"/><text x="296" y="61" font-size="12" fill="#fff" text-anchor="middle">Host</text>
+        <text x="91" y="96" font-size="11.5" fill="#64748b" text-anchor="middle">網路</text>
+        <text x="216" y="96" font-size="11.5" fill="#64748b" text-anchor="middle">子網</text>
+        <text x="296" y="96" font-size="11.5" fill="#64748b" text-anchor="middle">主機</text>
+        <text x="170" y="112" font-size="11" fill="#94a3b8" text-anchor="middle">各段長度需靠「遮罩」才能得知</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 90" role="img" aria-label="IPv4 三段結構">
         <rect x="30" y="30" width="240" height="40" rx="6" fill="#2563eb"/><text x="150" y="55" font-size="13" fill="#fff" text-anchor="middle">Network 網路部分</text>
         <rect x="270" y="30" width="180" height="40" rx="6" fill="#7c3aed"/><text x="360" y="55" font-size="13" fill="#fff" text-anchor="middle">Subnet 子網</text>
         <rect x="450" y="30" width="160" height="40" rx="6" fill="#0891b2"/><text x="530" y="55" font-size="13" fill="#fff" text-anchor="middle">Host 主機</text>
@@ -655,7 +667,17 @@ footer{background:#172033}
       <li>目的：<b>防止封包在網路中無限繞圈（routing loop）</b>。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 90" role="img" aria-label="TTL 每經一跳減1">
+      <svg class="svg-m" viewBox="0 0 340 298" role="img" aria-label="TTL 每經一跳減1（手機直式版）">
+        <rect x="100" y="12" width="140" height="42" rx="8" fill="#1e293b"/><text x="170" y="32" font-size="13" fill="#7dd3fc" text-anchor="middle">Host 起點</text><text x="170" y="48" font-size="12" fill="#86efac" text-anchor="middle">TTL = 64</text>
+        <text x="170" y="72" font-size="15" fill="#94a3b8" text-anchor="middle">▼ −1</text>
+        <rect x="100" y="80" width="140" height="40" rx="8" fill="#334155"/><text x="170" y="105" font-size="13" fill="#fff" text-anchor="middle">R1　TTL = 63</text>
+        <text x="170" y="138" font-size="15" fill="#94a3b8" text-anchor="middle">▼ −1</text>
+        <rect x="100" y="146" width="140" height="40" rx="8" fill="#334155"/><text x="170" y="171" font-size="13" fill="#fff" text-anchor="middle">R2　TTL = 62</text>
+        <text x="170" y="204" font-size="14" fill="#94a3b8" text-anchor="middle">▼ … 每跳 −1</text>
+        <rect x="92" y="212" width="156" height="46" rx="8" fill="#7f1d1d"/><text x="170" y="234" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">Rn　TTL = 0</text><text x="170" y="251" font-size="12" fill="#fca5a5" text-anchor="middle">→ 丟棄封包</text>
+        <text x="170" y="284" font-size="12.5" fill="#dc2626" text-anchor="middle" font-weight="700">✗ 防止封包無限繞圈</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 90" role="img" aria-label="TTL 每經一跳減1">
         <rect x="20" y="35" width="90" height="40" rx="8" fill="#1e293b"/><text x="65" y="52" font-size="11" fill="#7dd3fc" text-anchor="middle">Host</text><text x="65" y="67" font-size="10" fill="#86efac" text-anchor="middle">TTL=64</text>
         <text x="125" y="60" font-size="18" fill="#2563eb">→</text>
         <rect x="150" y="35" width="80" height="40" rx="8" fill="#334155"/><text x="190" y="52" font-size="11" fill="#fff" text-anchor="middle">R1</text><text x="190" y="67" font-size="10" fill="#fde68a" text-anchor="middle">63</text>
@@ -789,7 +811,23 @@ footer{background:#172033}
   <div class="card">
     <h3>🤝 <span class="en">Three-Way Open &amp; Four-Way Close</span>　三次握手 / 四次揮手<span class="exam-badge hot">🔥 考過2次</span></h3>
     <div class="svgbox">
-      <svg viewBox="0 0 640 220" role="img" aria-label="TCP 三次握手與四次揮手">
+      <svg class="svg-m" viewBox="0 0 340 418" role="img" aria-label="TCP 三次握手與四次揮手（手機直式版）">
+        <defs><marker id="am" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
+        <text x="170" y="18" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="700">三次握手（開啟）</text>
+        <line x1="70" y1="28" x2="70" y2="152" stroke="#94a3b8"/><line x1="270" y1="28" x2="270" y2="152" stroke="#94a3b8"/>
+        <text x="70" y="42" font-size="12" fill="#334155" text-anchor="middle">Client</text><text x="270" y="42" font-size="12" fill="#334155" text-anchor="middle">Server</text>
+        <line x1="70" y1="60" x2="266" y2="78" stroke="#2563eb" stroke-width="2" marker-end="url(#am)"/><text x="168" y="60" font-size="12" fill="#2563eb" text-anchor="middle" font-weight="700">SYN</text>
+        <line x1="270" y1="96" x2="74" y2="114" stroke="#16a34a" stroke-width="2" marker-end="url(#am)"/><text x="168" y="96" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">SYN + ACK</text>
+        <line x1="70" y1="132" x2="266" y2="148" stroke="#2563eb" stroke-width="2" marker-end="url(#am)"/><text x="168" y="132" font-size="12" fill="#2563eb" text-anchor="middle" font-weight="700">ACK</text>
+        <text x="170" y="196" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="700">四次揮手（關閉）</text>
+        <line x1="70" y1="206" x2="70" y2="404" stroke="#94a3b8"/><line x1="270" y1="206" x2="270" y2="404" stroke="#94a3b8"/>
+        <text x="70" y="220" font-size="12" fill="#334155" text-anchor="middle">A</text><text x="270" y="220" font-size="12" fill="#334155" text-anchor="middle">B</text>
+        <line x1="70" y1="240" x2="266" y2="258" stroke="#dc2626" stroke-width="2" marker-end="url(#am)"/><text x="168" y="240" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="700">FIN</text>
+        <line x1="270" y1="280" x2="74" y2="298" stroke="#16a34a" stroke-width="2" marker-end="url(#am)"/><text x="168" y="280" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">ACK</text>
+        <line x1="270" y1="320" x2="74" y2="338" stroke="#dc2626" stroke-width="2" marker-end="url(#am)"/><text x="168" y="320" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="700">FIN</text>
+        <line x1="70" y1="360" x2="266" y2="378" stroke="#16a34a" stroke-width="2" marker-end="url(#am)"/><text x="168" y="360" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">ACK</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 220" role="img" aria-label="TCP 三次握手與四次揮手">
         <text x="160" y="20" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="700">三次握手 (Open)</text>
         <line x1="80" y1="30" x2="80" y2="120" stroke="#94a3b8"/><line x1="240" y1="30" x2="240" y2="120" stroke="#94a3b8"/>
         <text x="80" y="42" font-size="10" fill="#334155" text-anchor="middle">Client</text><text x="240" y="42" font-size="10" fill="#334155" text-anchor="middle">Server</text>

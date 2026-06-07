@@ -231,19 +231,21 @@ footer{background:#172033}
 }
 </style>
 <style>
-/* ===== 手機／平板 圖表與排版適配（responsive patch）===== */
+/* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
+.svg-m{display:none}
 @media(max-width:600px){
-  .svgbox{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;padding:14px 12px}
-  .svgbox svg{min-width:560px;width:100%;max-width:none;height:auto;display:block}
-  .svgbox::before{content:"← 左右滑動看完整圖表 →";display:block;position:sticky;left:0;
-    font-size:.7rem;font-weight:600;color:#94a3b8;text-align:center;margin-bottom:8px}
-  .svgbox .cap{position:sticky;left:0}
+  .flow{flex-direction:column;gap:6px}
+  .flow .arr{font-size:0;margin:-2px 0}
+  .flow .arr::after{content:"▼";font-size:1.15rem;color:#2563eb}
+  .svgbox{padding:14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:center}
+  .svgbox .svg-w{display:none}
+  .svgbox svg.svg-m{display:block;width:100%;max-width:430px;height:auto;margin:0 auto}
+  .svgbox svg:not(.svg-m):not(.svg-w){min-width:520px;width:100%;height:auto}
   .bitcalc,.code,pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 @media(min-width:601px) and (max-width:1024px){
   .freq-grid{grid-template-columns:1fr 1fr}
   .kgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-  .svgbox svg{max-width:100%}
 }
 </style>
 </head>
@@ -420,7 +422,17 @@ footer{background:#172033}
       <li><b>回送封包</b>：依轉換表<b>反查</b>，把對外假 IP/port 還原成原本的內部 IP/port。</li>
     </ol>
     <div class="svgbox">
-      <svg viewBox="0 0 640 150" role="img" aria-label="NAT 轉換">
+      <svg class="svg-m" viewBox="0 0 340 296" role="img" aria-label="NAT 轉換（手機直式版）">
+        <rect x="70" y="12" width="200" height="46" rx="8" fill="#16a34a"/><text x="170" y="33" font-size="13" fill="#fff" text-anchor="middle">內部主機（真實）</text><text x="170" y="50" font-size="12" fill="#dcfce7" text-anchor="middle">10.0.0.5 : 3000</text>
+        <text x="170" y="76" font-size="15" fill="#2563eb" text-anchor="middle">▼</text>
+        <rect x="70" y="84" width="200" height="50" rx="8" fill="#1e293b"/><text x="170" y="106" font-size="13" fill="#7dd3fc" text-anchor="middle">NAT 防火牆</text><text x="170" y="123" font-size="11" fill="#fde68a" text-anchor="middle">轉換表記錄對應</text>
+        <text x="170" y="152" font-size="15" fill="#2563eb" text-anchor="middle">▼</text>
+        <rect x="70" y="160" width="200" height="46" rx="8" fill="#dc2626"/><text x="170" y="181" font-size="13" fill="#fff" text-anchor="middle">對外（假）</text><text x="170" y="198" font-size="12" fill="#fecaca" text-anchor="middle">203.0.1.9 : 51000</text>
+        <text x="170" y="224" font-size="14" fill="#2563eb" text-anchor="middle">▼　Internet</text>
+        <text x="170" y="258" font-size="11.5" fill="#64748b" text-anchor="middle">回送時依轉換表反查：</text>
+        <text x="170" y="276" font-size="11.5" fill="#64748b" text-anchor="middle">203.0.1.9:51000 → 還原 10.0.0.5:3000</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 150" role="img" aria-label="NAT 轉換">
         <rect x="20" y="55" width="110" height="44" rx="8" fill="#16a34a"/><text x="75" y="73" font-size="11" fill="#fff" text-anchor="middle">內部主機</text><text x="75" y="89" font-size="9" fill="#dcfce7" text-anchor="middle">10.0.0.5:3000</text>
         <text x="140" y="82" font-size="16" fill="#2563eb">→</text>
         <rect x="170" y="50" width="130" height="54" rx="8" fill="#1e293b"/><text x="235" y="72" font-size="11" fill="#7dd3fc" text-anchor="middle">NAT 防火牆</text><text x="235" y="88" font-size="9" fill="#fde68a" text-anchor="middle">轉換表記錄對應</text>
@@ -517,7 +529,30 @@ footer{background:#172033}
       <tr><td>成本</td><td><b>較高</b>（每台主機都要設定）</td><td><b>較低</b>（只在 gateway 運作）</td></tr>
     </table>
     <div class="svgbox">
-      <svg viewBox="0 0 640 200" role="img" aria-label="Transport vs Tunnel 保護範圍">
+      <svg class="svg-m" viewBox="0 0 340 248" role="img" aria-label="Transport vs Tunnel 保護範圍（手機直式版）">
+        <text x="170" y="18" font-size="13" fill="#16a34a" text-anchor="middle" font-weight="700">Transport（全程保護）</text>
+        <g font-size="10" text-anchor="middle">
+          <rect x="22" y="30" width="50" height="32" rx="5" fill="#1e293b"/><text x="47" y="50" fill="#7dd3fc">主機A</text>
+          <rect x="80" y="30" width="34" height="32" rx="5" fill="#334155"/><text x="97" y="50" fill="#fff">GW</text>
+          <rect x="122" y="30" width="50" height="32" rx="5" fill="#0891b2"/><text x="147" y="50" fill="#fff">網際</text>
+          <rect x="180" y="30" width="34" height="32" rx="5" fill="#334155"/><text x="197" y="50" fill="#fff">GW</text>
+          <rect x="222" y="30" width="50" height="32" rx="5" fill="#1e293b"/><text x="247" y="50" fill="#7dd3fc">主機B</text>
+        </g>
+        <line x1="32" y1="70" x2="262" y2="70" stroke="#16a34a" stroke-width="4"/>
+        <text x="170" y="91" font-size="11" fill="#16a34a" text-anchor="middle">🔒 全程加密（每台主機需憑證）</text>
+        <text x="170" y="128" font-size="13" fill="#d97706" text-anchor="middle" font-weight="700">Tunnel（只保護 Internet 段）</text>
+        <g font-size="10" text-anchor="middle">
+          <rect x="22" y="140" width="50" height="32" rx="5" fill="#1e293b"/><text x="47" y="160" fill="#7dd3fc">主機A</text>
+          <rect x="80" y="140" width="34" height="32" rx="5" fill="#16a34a"/><text x="97" y="160" fill="#fff">GW</text>
+          <rect x="122" y="140" width="50" height="32" rx="5" fill="#0891b2"/><text x="147" y="160" fill="#fff">網際</text>
+          <rect x="180" y="140" width="34" height="32" rx="5" fill="#16a34a"/><text x="197" y="160" fill="#fff">GW</text>
+          <rect x="222" y="140" width="50" height="32" rx="5" fill="#1e293b"/><text x="247" y="160" fill="#7dd3fc">主機B</text>
+        </g>
+        <line x1="97" y1="180" x2="197" y2="180" stroke="#d97706" stroke-width="4"/>
+        <text x="170" y="201" font-size="11" fill="#d97706" text-anchor="middle">🔒 只有兩端 GW 加密（站內不保護）</text>
+        <text x="170" y="230" font-size="11.5" fill="#64748b" text-anchor="middle">Tunnel＝閘道對閘道 VPN 常用</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 200" role="img" aria-label="Transport vs Tunnel 保護範圍">
         <text x="160" y="18" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">Transport（全程保護）</text>
         <rect x="40" y="35" width="60" height="34" rx="6" fill="#1e293b"/><text x="70" y="56" font-size="9" fill="#7dd3fc" text-anchor="middle">主機A</text>
         <rect x="120" y="35" width="40" height="34" rx="6" fill="#334155"/><text x="140" y="56" font-size="9" fill="#fff" text-anchor="middle">GW</text>
@@ -588,7 +623,14 @@ footer{background:#172033}
       <li>所以 <b>m + n = 64</b>（前 64 bits 給路由前綴+子網）；雖「浪費」64 bits，但 IPv6 位址多到不在乎。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 80" role="img" aria-label="IPv6 全域單播三段">
+      <svg class="svg-m" viewBox="0 0 340 162" role="img" aria-label="IPv6 全域單播三段（手機直式版）">
+        <text x="170" y="18" font-size="12.5" fill="#64748b" text-anchor="middle">IPv6 位址 = 128 bits</text>
+        <rect x="20" y="28" width="300" height="34" rx="6" fill="#2563eb"/><text x="170" y="50" font-size="12.5" fill="#fff" text-anchor="middle">Global Routing Prefix (m)</text>
+        <rect x="20" y="68" width="300" height="34" rx="6" fill="#7c3aed"/><text x="170" y="90" font-size="12.5" fill="#fff" text-anchor="middle">Subnet ID (n)　← m+n = 64</text>
+        <rect x="20" y="108" width="300" height="34" rx="6" fill="#0891b2"/><text x="170" y="130" font-size="12.5" fill="#fff" text-anchor="middle">Interface ID = 固定 64 bits</text>
+        <text x="170" y="156" font-size="11" fill="#94a3b8" text-anchor="middle">前 64（前綴＋子網）＋ 後 64（介面）</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 80" role="img" aria-label="IPv6 全域單播三段">
         <rect x="30" y="28" width="240" height="38" rx="6" fill="#2563eb"/><text x="150" y="52" font-size="11" fill="#fff" text-anchor="middle">Global Routing Prefix (m)</text>
         <rect x="270" y="28" width="120" height="38" rx="6" fill="#7c3aed"/><text x="330" y="52" font-size="11" fill="#fff" text-anchor="middle">Subnet ID (n)</text>
         <rect x="390" y="28" width="220" height="38" rx="6" fill="#0891b2"/><text x="500" y="52" font-size="11" fill="#fff" text-anchor="middle">Interface ID (64 bits)</text>

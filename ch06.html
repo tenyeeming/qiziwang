@@ -244,21 +244,24 @@ footer{background:#172033}
 }
 </style>
 <style>
-/* ===== 手機／平板 圖表與排版適配（responsive patch）===== */
+/* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
+.svg-m{display:none}
 @media(max-width:600px){
-  /* 內嵌 SVG 圖表：保留可讀寬度，過窄時容器內左右滑動，避免圖內文字被縮到看不清 */
-  .svgbox{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;padding:14px 12px}
-  .svgbox svg{min-width:560px;width:100%;max-width:none;height:auto;display:block}
-  .svgbox::before{content:"← 左右滑動看完整圖表 →";display:block;position:sticky;left:0;
-    font-size:.7rem;font-weight:600;color:#94a3b8;text-align:center;margin-bottom:8px}
-  .svgbox .cap{position:sticky;left:0}
-  /* 等寬計算框／程式碼框可橫向捲動，不撐破版面 */
+  /* CSS 流程/節點圖：改直式堆疊，箭頭朝下 */
+  .flow{flex-direction:column;gap:6px}
+  .flow .arr{font-size:0;margin:-2px 0}
+  .flow .arr::after{content:"▼";font-size:1.15rem;color:#2563eb}
+  /* SVG：隱藏寬版，顯示為手機重畫的直式版 */
+  .svgbox{padding:14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:center}
+  .svgbox .svg-w{display:none}
+  .svgbox svg.svg-m{display:block;width:100%;max-width:430px;height:auto;margin:0 auto}
+  /* 尚未提供手機版者：退而求其次可左右滑動、不裁切 */
+  .svgbox svg:not(.svg-m):not(.svg-w){min-width:520px;width:100%;height:auto}
   .bitcalc,.code,pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 @media(min-width:601px) and (max-width:1024px){
   .freq-grid{grid-template-columns:1fr 1fr}
   .kgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-  .svgbox svg{max-width:100%}
 }
 </style>
 </head>
@@ -419,7 +422,22 @@ footer{background:#172033}
       <p style="text-align:center;font-size:.9rem">距離變 N 倍 → 強度只剩 <b>1/N²</b>。距離加倍 → 只剩 <b>¼</b>；距離 ×4 → 只剩 <b>1/16</b>。</p>
     </div>
     <div class="svgbox">
-      <svg viewBox="0 0 640 230" role="img" aria-label="反平方律球面擴散示意圖">
+      <svg class="svg-m" viewBox="0 0 340 350" role="img" aria-label="反平方律（手機直式版）">
+        <circle cx="60" cy="46" r="20" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+        <text x="60" y="52" font-size="15" text-anchor="middle" fill="#7c2d12" font-weight="700">AP</text>
+        <line x1="60" y1="66" x2="60" y2="318" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+        <circle cx="60" cy="110" r="8" fill="#2563eb"/>
+        <text x="88" y="106" font-size="17" fill="#1e293b" font-weight="700">r = 2 m</text>
+        <text x="88" y="130" font-size="21" fill="#2563eb" font-weight="800">80 mW</text>
+        <circle cx="60" cy="200" r="8" fill="#7c3aed"/>
+        <text x="88" y="196" font-size="17" fill="#1e293b" font-weight="700">r = 4 m（距離 ×2）</text>
+        <text x="88" y="220" font-size="21" fill="#7c3aed" font-weight="800">20 mW　÷4</text>
+        <circle cx="60" cy="290" r="8" fill="#0891b2"/>
+        <text x="88" y="286" font-size="17" fill="#1e293b" font-weight="700">r = 8 m（距離 ×4）</text>
+        <text x="88" y="310" font-size="21" fill="#0891b2" font-weight="800">5 mW　÷16</text>
+        <text x="170" y="340" font-size="13.5" text-anchor="middle" fill="#64748b">距離 ×N → 強度 ÷N²</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 230" role="img" aria-label="反平方律球面擴散示意圖">
         <defs>
           <radialGradient id="src" cx="0%" cy="50%" r="100%">
             <stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#f59e0b"/>
@@ -480,7 +498,23 @@ footer{background:#172033}
       <li>🔥 <mark>在 WLAN 頻段是「最嚴重」的傳播問題（most serious at WLAN frequencies）</mark> → 這也是為何法規要求用展頻。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 250" role="img" aria-label="多路徑干擾示意圖">
+      <svg class="svg-m" viewBox="0 0 340 300" role="img" aria-label="多路徑干擾（手機直式版）">
+        <rect x="8" y="62" width="56" height="38" rx="6" fill="#1e293b"/><text x="36" y="86" font-size="14" fill="#7dd3fc" text-anchor="middle">TX</text>
+        <rect x="276" y="62" width="56" height="38" rx="6" fill="#1e293b"/><text x="304" y="86" font-size="14" fill="#86efac" text-anchor="middle">RX</text>
+        <rect x="160" y="8" width="28" height="34" fill="#94a3b8"/><text x="174" y="56" font-size="12" fill="#64748b" text-anchor="middle">牆</text>
+        <line x1="64" y1="82" x2="276" y2="82" stroke="#16a34a" stroke-width="3"/>
+        <text x="170" y="76" font-size="13" fill="#16a34a" text-anchor="middle" font-weight="700">直接波</text>
+        <polyline points="64,82 174,42 276,82" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <text x="96" y="36" font-size="13" fill="#dc2626" font-weight="700">反射波(延遲)</text>
+        <text x="170" y="148" font-size="15" text-anchor="middle" fill="#1e293b" font-weight="700">兩波反相 → 互相抵消</text>
+        <path d="M30 188 q18 -26 36 0 t36 0 t36 0" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+        <text x="250" y="192" font-size="13" fill="#16a34a" font-weight="700">直接</text>
+        <path d="M30 228 q18 26 36 0 t36 0 t36 0" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+        <text x="250" y="232" font-size="13" fill="#dc2626" font-weight="700">反相</text>
+        <text x="170" y="272" font-size="15" text-anchor="middle" fill="#dc2626" font-weight="800">= 收不到訊號 (dead spot)</text>
+        <text x="170" y="292" font-size="12" text-anchor="middle" fill="#64748b">WLAN 最嚴重的傳播問題</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 250" role="img" aria-label="多路徑干擾示意圖">
         <!-- transmitter / receiver -->
         <rect x="20" y="105" width="60" height="40" rx="6" fill="#1e293b"/><text x="50" y="130" font-size="12" fill="#7dd3fc" text-anchor="middle">TX</text>
         <rect x="560" y="105" width="60" height="40" rx="6" fill="#1e293b"/><text x="590" y="130" font-size="12" fill="#86efac" text-anchor="middle">RX</text>
@@ -551,7 +585,24 @@ footer{background:#172033}
       <li>附近 AP 用同通道會 <span class="term">co-channel interference（同頻干擾）</span>；除非很小的網路，否則很難讓鄰近 AP 都用不同通道。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 200" role="img" aria-label="2.4GHz 通道重疊與 1/6/11 非重疊示意">
+      <svg class="svg-m" viewBox="0 0 340 195" role="img" aria-label="2.4GHz 1/6/11 通道（手機直式版）">
+        <g opacity=".22" fill="#94a3b8">
+          <ellipse cx="70" cy="118" rx="34" ry="34"/><ellipse cx="104" cy="118" rx="34" ry="34"/>
+          <ellipse cx="138" cy="118" rx="34" ry="34"/><ellipse cx="172" cy="118" rx="34" ry="34"/>
+          <ellipse cx="206" cy="118" rx="34" ry="34"/><ellipse cx="240" cy="118" rx="34" ry="34"/>
+          <ellipse cx="274" cy="118" rx="34" ry="34"/>
+        </g>
+        <path d="M30 118 q40 -70 80 0 z" fill="#2563eb" opacity=".82"/>
+        <path d="M150 118 q40 -70 80 0 z" fill="#7c3aed" opacity=".82"/>
+        <path d="M250 118 q40 -70 80 0 z" fill="#0891b2" opacity=".82"/>
+        <text x="70" y="98" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">Ch1</text>
+        <text x="190" y="98" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">Ch6</text>
+        <text x="290" y="98" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">Ch11</text>
+        <line x1="14" y1="118" x2="330" y2="118" stroke="#475569" stroke-width="2"/>
+        <text x="170" y="148" font-size="14.5" text-anchor="middle" fill="#1e293b" font-weight="700">只有 1 / 6 / 11 互不重疊</text>
+        <text x="170" y="172" font-size="12.5" text-anchor="middle" fill="#64748b">灰色＝彼此重疊會干擾的通道</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 200" role="img" aria-label="2.4GHz 通道重疊與 1/6/11 非重疊示意">
         <!-- overlapping bell channels 1..11 faint -->
         <g opacity=".25" fill="#94a3b8">
           <ellipse cx="120" cy="120" rx="55" ry="55"/><ellipse cx="175" cy="120" rx="55" ry="55"/>
@@ -674,7 +725,25 @@ footer{background:#172033}
     <h3>🎧 <span class="en">CSMA/CA + ACK</span>　載波偵測多重存取＋碰撞避免＋確認<span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
     <p class="lead"><span class="term">Carrier Sense Multiple Access with Collision Avoidance and Acknowledgement</span>，是 802.11 的 <mark>強制（mandatory）</mark> MAC 方法。</p>
     <div class="svgbox">
-      <svg viewBox="0 0 640 200" role="img" aria-label="CSMA/CA + ACK 時序圖">
+      <svg class="svg-m" viewBox="0 0 340 318" role="img" aria-label="CSMA/CA + ACK 時序（手機直式版）">
+        <rect x="24" y="12" width="292" height="46" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+        <text x="170" y="34" text-anchor="middle" font-size="15" fill="#1d4ed8" font-weight="700">① 偵測通道是否閒置</text>
+        <text x="170" y="51" text-anchor="middle" font-size="11.5" fill="#64748b">Carrier Sense (CS)</text>
+        <text x="170" y="74" text-anchor="middle" font-size="16" fill="#94a3b8">▼</text>
+        <rect x="24" y="84" width="292" height="46" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+        <text x="170" y="106" text-anchor="middle" font-size="15" fill="#6d28d9" font-weight="700">② 等待隨機退避時間</text>
+        <text x="170" y="123" text-anchor="middle" font-size="11.5" fill="#64748b">Collision Avoidance (CA)</text>
+        <text x="170" y="146" text-anchor="middle" font-size="16" fill="#94a3b8">▼</text>
+        <rect x="24" y="156" width="292" height="46" rx="10" fill="#ecfeff" stroke="#0891b2" stroke-width="1.5"/>
+        <text x="170" y="178" text-anchor="middle" font-size="15" fill="#0e7490" font-weight="700">③ 傳送資料 frame</text>
+        <text x="170" y="195" text-anchor="middle" font-size="11.5" fill="#64748b">送出後等待確認</text>
+        <text x="170" y="218" text-anchor="middle" font-size="16" fill="#94a3b8">▼</text>
+        <rect x="24" y="228" width="292" height="50" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+        <text x="170" y="251" text-anchor="middle" font-size="15" fill="#15803d" font-weight="800">④ 收到 ACK 確認</text>
+        <text x="170" y="269" text-anchor="middle" font-size="11.5" fill="#64748b">沒收到 ACK 就重送</text>
+        <text x="170" y="302" text-anchor="middle" font-size="13" fill="#64748b">無線必有 ACK：CS → CA → 送 → ACK</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 200" role="img" aria-label="CSMA/CA + ACK 時序圖">
         <line x1="20" y1="160" x2="620" y2="160" stroke="#475569" stroke-width="2"/>
         <text x="320" y="190" font-size="12" fill="#64748b" text-anchor="middle">時間 →</text>
         <!-- listen -->
@@ -726,7 +795,18 @@ footer{background:#172033}
       <li>當兩台以上的 client 站台「彼此聽不到（hidden node）」時，RTS/CTS 很有用：先 RTS、AP 回 CTS，<mark>讓聽到 CTS 的站台都先暫停</mark>，避免它們同時傳送。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 200" role="img" aria-label="隱藏節點與 RTS/CTS 示意圖">
+      <svg class="svg-m" viewBox="0 0 340 235" role="img" aria-label="隱藏節點與 RTS/CTS（手機直式版）">
+        <circle cx="48" cy="58" r="23" fill="#2563eb"/><text x="48" y="64" font-size="16" fill="#fff" text-anchor="middle" font-weight="700">A</text>
+        <circle cx="292" cy="58" r="23" fill="#0891b2"/><text x="292" y="64" font-size="16" fill="#fff" text-anchor="middle" font-weight="700">C</text>
+        <rect x="146" y="38" width="48" height="40" rx="8" fill="#1e293b"/><text x="170" y="63" font-size="13" fill="#7dd3fc" text-anchor="middle">AP</text>
+        <line x1="71" y1="58" x2="146" y2="58" stroke="#16a34a" stroke-width="2.5"/>
+        <line x1="194" y1="58" x2="269" y2="58" stroke="#16a34a" stroke-width="2.5"/>
+        <path d="M68 78 Q170 152 272 78" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="170" y="132" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="700">A、C 互相聽不到</text>
+        <text x="170" y="182" font-size="14.5" text-anchor="middle" fill="#1e293b" font-weight="700">→ 同時送，在 AP 碰撞</text>
+        <text x="170" y="210" font-size="14" text-anchor="middle" fill="#16a34a" font-weight="800">解法：RTS / CTS 先預約通道</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 200" role="img" aria-label="隱藏節點與 RTS/CTS 示意圖">
         <!-- AP center -->
         <circle cx="320" cy="100" r="26" fill="#2563eb"/><text x="320" y="105" font-size="12" fill="#fff" text-anchor="middle">AP</text>
         <!-- A left, C right -->
@@ -778,7 +858,20 @@ footer{background:#172033}
       <li><b>MIMO 兩大好處</b>：① <mark>更高速度</mark>（一個通道送更多資訊）；② <mark>更長傳播距離</mark>。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 180" role="img" aria-label="MIMO 多天線空間流示意圖">
+      <svg class="svg-m" viewBox="0 0 340 205" role="img" aria-label="MIMO 多天線空間流（手機直式版）">
+        <text x="56" y="22" font-size="14" fill="#1e293b" text-anchor="middle" font-weight="700">發送端</text>
+        <line x1="42" y1="48" x2="42" y2="78" stroke="#1e293b" stroke-width="3"/><circle cx="42" cy="44" r="6" fill="#2563eb"/>
+        <line x1="72" y1="48" x2="72" y2="78" stroke="#1e293b" stroke-width="3"/><circle cx="72" cy="44" r="6" fill="#2563eb"/>
+        <text x="286" y="22" font-size="14" fill="#1e293b" text-anchor="middle" font-weight="700">接收端</text>
+        <line x1="270" y1="48" x2="270" y2="78" stroke="#1e293b" stroke-width="3"/><circle cx="270" cy="44" r="6" fill="#0891b2"/>
+        <line x1="300" y1="48" x2="300" y2="78" stroke="#1e293b" stroke-width="3"/><circle cx="300" cy="44" r="6" fill="#0891b2"/>
+        <line x1="58" y1="70" x2="284" y2="70" stroke="#16a34a" stroke-width="2.5"/>
+        <line x1="58" y1="92" x2="284" y2="116" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <text x="170" y="150" font-size="14" text-anchor="middle" fill="#1e293b" font-weight="700">多支天線 → 多條空間流並行</text>
+        <text x="170" y="176" font-size="13.5" text-anchor="middle" fill="#16a34a" font-weight="800">同時送更多資料 → 速度倍增</text>
+        <text x="170" y="198" font-size="12" text-anchor="middle" fill="#64748b">利用多路徑反而增加平行通道</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 180" role="img" aria-label="MIMO 多天線空間流示意圖">
         <rect x="40" y="55" width="90" height="70" rx="8" fill="#2563eb"/><text x="85" y="95" font-size="13" fill="#fff" text-anchor="middle">AP</text>
         <rect x="510" y="55" width="90" height="70" rx="8" fill="#1e293b"/><text x="555" y="95" font-size="12" fill="#7dd3fc" text-anchor="middle">Client</text>
         <!-- antennas lines (3 spatial streams) -->

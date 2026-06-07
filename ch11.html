@@ -230,19 +230,21 @@ footer{background:#172033}
 }
 </style>
 <style>
-/* ===== 手機／平板 圖表與排版適配（responsive patch）===== */
+/* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
+.svg-m{display:none}
 @media(max-width:600px){
-  .svgbox{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;padding:14px 12px}
-  .svgbox svg{min-width:560px;width:100%;max-width:none;height:auto;display:block}
-  .svgbox::before{content:"← 左右滑動看完整圖表 →";display:block;position:sticky;left:0;
-    font-size:.7rem;font-weight:600;color:#94a3b8;text-align:center;margin-bottom:8px}
-  .svgbox .cap{position:sticky;left:0}
+  .flow{flex-direction:column;gap:6px}
+  .flow .arr{font-size:0;margin:-2px 0}
+  .flow .arr::after{content:"▼";font-size:1.15rem;color:#2563eb}
+  .svgbox{padding:14px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:center}
+  .svgbox .svg-w{display:none}
+  .svgbox svg.svg-m{display:block;width:100%;max-width:430px;height:auto;margin:0 auto}
+  .svgbox svg:not(.svg-m):not(.svg-w){min-width:520px;width:100%;height:auto}
   .bitcalc,.code,pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 @media(min-width:601px) and (max-width:1024px){
   .freq-grid{grid-template-columns:1fr 1fr}
   .kgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-  .svgbox svg{max-width:100%}
 }
 </style>
 </head>
@@ -466,7 +468,23 @@ SELECT * FROM Users WHERE (UserName='' <span class="r">OR '1'='1'</span>) AND (P
       <li>信令建立連線後，<b>RTP 語音直接在主叫與被叫端之間傳送</b>（不經 proxy）。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 150" role="img" aria-label="SIP 經兩台 proxy">
+      <svg class="svg-m" viewBox="0 0 340 298" role="img" aria-label="SIP 經兩台 proxy（手機直式版）">
+        <defs><marker id="bm" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
+        <rect x="70" y="14" width="120" height="40" rx="8" fill="#1e293b"/><text x="130" y="39" font-size="12" fill="#7dd3fc" text-anchor="middle">主叫端</text>
+        <line x1="130" y1="54" x2="130" y2="76" stroke="#2563eb" stroke-width="2" marker-end="url(#bm)"/>
+        <rect x="70" y="78" width="120" height="38" rx="8" fill="#7c3aed"/><text x="130" y="102" font-size="12" fill="#fff" text-anchor="middle">Proxy 1</text>
+        <line x1="130" y1="116" x2="130" y2="138" stroke="#2563eb" stroke-width="2" marker-end="url(#bm)"/>
+        <rect x="70" y="140" width="120" height="38" rx="8" fill="#7c3aed"/><text x="130" y="164" font-size="12" fill="#fff" text-anchor="middle">Proxy 2</text>
+        <line x1="130" y1="178" x2="130" y2="200" stroke="#2563eb" stroke-width="2" marker-end="url(#bm)"/>
+        <rect x="70" y="202" width="120" height="40" rx="8" fill="#1e293b"/><text x="130" y="227" font-size="12" fill="#7dd3fc" text-anchor="middle">被叫端</text>
+        <text x="250" y="116" font-size="11" fill="#2563eb" text-anchor="middle">SIP 信令</text>
+        <text x="250" y="132" font-size="11" fill="#2563eb" text-anchor="middle">經兩 proxy</text>
+        <path d="M210 34 Q318 130 210 222" fill="none" stroke="#16a34a" stroke-width="3" marker-end="url(#bm)"/>
+        <text x="296" y="172" font-size="11" fill="#16a34a" text-anchor="middle" font-weight="700">RTP</text>
+        <text x="170" y="270" font-size="12" fill="#16a34a" text-anchor="middle" font-weight="700">建立後 RTP 語音點對點，不經 proxy</text>
+        <text x="170" y="289" font-size="11" fill="#64748b" text-anchor="middle">RTP over UDP（即時優先）</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 150" role="img" aria-label="SIP 經兩台 proxy">
         <rect x="20" y="55" width="90" height="40" rx="8" fill="#1e293b"/><text x="65" y="80" font-size="11" fill="#7dd3fc" text-anchor="middle">主叫端</text>
         <rect x="170" y="55" width="90" height="40" rx="8" fill="#7c3aed"/><text x="215" y="78" font-size="10" fill="#fff" text-anchor="middle">Proxy 1</text>
         <rect x="370" y="55" width="90" height="40" rx="8" fill="#7c3aed"/><text x="415" y="78" font-size="10" fill="#fff" text-anchor="middle">Proxy 2</text>
@@ -554,7 +572,20 @@ Content-type: text/plain[CRLF]
       <li>P2P 中，clients 互相提供服務；伺服器只做次要工作（如 tracker 幫忙找對方）。</li>
     </ul>
     <div class="svgbox">
-      <svg viewBox="0 0 640 160" role="img" aria-label="BitTorrent tracker 與 swarm">
+      <svg class="svg-m" viewBox="0 0 340 224" role="img" aria-label="BitTorrent tracker 與 swarm（手機直式版）">
+        <rect x="110" y="14" width="120" height="38" rx="8" fill="#dc2626"/><text x="170" y="38" font-size="12" fill="#fff" text-anchor="middle">Tracker</text>
+        <ellipse cx="170" cy="140" rx="150" ry="56" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="5 4"/>
+        <circle cx="80" cy="140" r="24" fill="#1e293b"/><text x="80" y="144" font-size="10" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <circle cx="170" cy="148" r="24" fill="#1e293b"/><text x="170" y="152" font-size="10" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <circle cx="260" cy="140" r="24" fill="#1e293b"/><text x="260" y="144" font-size="10" fill="#7dd3fc" text-anchor="middle">Peer</text>
+        <line x1="150" y1="52" x2="92" y2="118" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="170" y1="52" x2="170" y2="124" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="190" y1="52" x2="248" y2="118" stroke="#94a3b8" stroke-dasharray="3 3"/>
+        <line x1="104" y1="142" x2="146" y2="146" stroke="#16a34a" stroke-width="2"/>
+        <line x1="194" y1="146" x2="236" y2="142" stroke="#16a34a" stroke-width="2"/>
+        <text x="170" y="212" font-size="11" fill="#16a34a" text-anchor="middle">Swarm：分享同檔的所有 peer（綠線交換片段）</text>
+      </svg>
+      <svg class="svg-w" viewBox="0 0 640 160" role="img" aria-label="BitTorrent tracker 與 swarm">
         <rect x="260" y="15" width="120" height="36" rx="8" fill="#dc2626"/><text x="320" y="38" font-size="11" fill="#fff" text-anchor="middle">Tracker</text>
         <ellipse cx="320" cy="110" rx="150" ry="42" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="5 4"/>
         <text x="320" y="155" font-size="10" fill="#16a34a" text-anchor="middle">Swarm（共享同檔的所有 peer）</text>
