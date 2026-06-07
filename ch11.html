@@ -229,6 +229,22 @@ footer{background:#172033}
   .backtop{right:14px;bottom:14px;width:42px;height:42px;font-size:1.15rem}
 }
 </style>
+<style>
+/* ===== 手機／平板 圖表與排版適配（responsive patch）===== */
+@media(max-width:600px){
+  .svgbox{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;padding:14px 12px}
+  .svgbox svg{min-width:560px;width:100%;max-width:none;height:auto;display:block}
+  .svgbox::before{content:"← 左右滑動看完整圖表 →";display:block;position:sticky;left:0;
+    font-size:.7rem;font-weight:600;color:#94a3b8;text-align:center;margin-bottom:8px}
+  .svgbox .cap{position:sticky;left:0}
+  .bitcalc,.code,pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+@media(min-width:601px) and (max-width:1024px){
+  .freq-grid{grid-template-columns:1fr 1fr}
+  .kgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .svgbox svg{max-width:100%}
+}
+</style>
 </head>
 <body>
 <div id="prog"></div>

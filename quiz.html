@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考古題選擇題練習 | 企業資訊通訊與網路 Ch6–11</title>
+<style>
+:root{--ink:#1e2733;--muted:#55606e;--brand:#2563eb;--brand2:#1d4ed8;--line:#e1e6ec;--soft:#f1f4f8;
+  --ok:#16a34a;--bad:#dc2626;--warm:#b45309;--bg:#f4f6f9}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;color:var(--ink);
+  background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased}
+#prog{position:fixed;top:0;left:0;height:4px;width:0;background:var(--brand);z-index:80;transition:width .2s}
+header{background:#172033;color:#fff;padding:50px 20px 42px;text-align:center}
+header .tag{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+  color:#cbd5e1;padding:5px 16px;border-radius:999px;font-size:.8rem;letter-spacing:2px;margin-bottom:16px}
+header h1{font-size:2rem;font-weight:800;line-height:1.25}
+header h1 small{display:block;font-size:.92rem;font-weight:500;color:#cbd5e1;margin-top:10px;letter-spacing:.5px}
+.container{max-width:760px;margin:0 auto;padding:0 18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 22px;margin:26px auto;
+  box-shadow:0 8px 26px rgba(15,23,42,.06)}
+.panel h2{font-size:1.2rem;margin-bottom:6px}
+.panel .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.label{font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:1px;margin:18px 0 9px;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{cursor:pointer;user-select:none;border:1.5px solid var(--line);background:var(--soft);color:var(--ink);
+  border-radius:999px;padding:8px 16px;font-size:.9rem;font-weight:600;transition:.15s;font-family:inherit}
+.chip:hover{border-color:var(--brand)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.chip .n{opacity:.7;font-size:.78rem;font-weight:500;margin-left:4px}
+.toggle{display:flex;align-items:center;gap:10px;margin-top:6px;cursor:pointer;font-size:.92rem}
+.toggle input{width:42px;height:24px;appearance:none;background:#cbd5e1;border-radius:999px;position:relative;
+  cursor:pointer;transition:.2s;flex:none}
+.toggle input:checked{background:var(--brand)}
+.toggle input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;
+  border-radius:50%;transition:.2s}
+.toggle input:checked::after{left:21px}
+.btn{display:inline-block;background:var(--brand);color:#fff;border:none;border-radius:11px;padding:13px 26px;
+  font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;text-decoration:none}
+.btn:hover{background:var(--brand2)}
+.btn:disabled{background:#cbd5e1;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--brand);background:var(--soft)}
+.btn.block{display:block;width:100%;text-align:center}
+.btnrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btnrow .btn{flex:1;min-width:130px}
+/* quiz */
+.qbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.qbar .meta{font-size:.86rem;color:var(--muted);font-weight:600}
+.qbar .ch{display:inline-block;background:var(--soft);border:1px solid var(--line);color:var(--brand);
+  border-radius:999px;padding:3px 12px;font-size:.78rem;font-weight:700}
+.qbar .sc{font-size:.86rem;font-weight:700;color:var(--ok)}
+.track{height:7px;background:var(--soft);border-radius:999px;overflow:hidden;margin-bottom:20px}
+.track i{display:block;height:100%;background:var(--brand);border-radius:999px;transition:width .25s}
+.q{font-size:1.12rem;font-weight:700;line-height:1.5;margin-bottom:18px}
+.opts{display:flex;flex-direction:column;gap:11px}
+.opt{display:flex;align-items:flex-start;gap:11px;text-align:left;background:var(--soft);color:var(--ink);
+  border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;font-size:.97rem;cursor:pointer;
+  transition:.13s;font-family:inherit;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--brand);background:#eaf1ff}
+.opt .k{flex:none;width:25px;height:25px;border-radius:7px;background:#fff;border:1px solid var(--line);
+  display:grid;place-items:center;font-weight:800;font-size:.86rem;color:var(--muted)}
+.opt.right{background:#ecfdf5;border-color:var(--ok)}
+.opt.right .k{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.wrong{background:#fef2f2;border-color:var(--bad)}
+.opt.wrong .k{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.exp{margin-top:16px;padding:13px 16px;background:#eff6ff;border-left:4px solid var(--brand);border-radius:9px;
+  font-size:.93rem;display:none}
+.exp.show{display:block}
+.exp b{color:var(--brand2)}
+.next{margin-top:20px;text-align:right}
+/* result */
+.result{text-align:center}
+.scoreBig{font-size:3.4rem;font-weight:800;line-height:1;margin:8px 0}
+.scoreBig small{font-size:1.2rem;color:var(--muted);font-weight:600}
+.grade{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.bd{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:20px 0;text-align:left}
+.bd .bc{background:var(--soft);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.bd .bc b{display:block;font-size:.86rem;color:var(--brand)}
+.bd .bc span{font-size:.8rem;color:var(--muted)}
+.bd .bc .ratio{font-size:1.05rem;font-weight:800;color:var(--ink)}
+.bd .bc .barwrap{height:7px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:7px}
+.bd .bc .barwrap i{display:block;height:100%;border-radius:999px;transition:width .4s}
+.bestbadge{display:inline-flex;align-items:center;gap:7px;background:#fffbeb;border:1px solid #fcd34d;
+  color:#92400e;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:700;margin-top:14px}
+.hero-svg{display:block;max-width:230px;width:60%;height:auto;margin:18px auto 0}
+.kbd-hint{margin-top:14px;font-size:.8rem;color:var(--muted);text-align:center}
+.kbd-hint kbd{background:var(--soft);border:1px solid var(--line);border-radius:5px;
+  padding:1px 7px;font-family:inherit;font-size:.78rem;color:var(--ink);font-weight:700}
+.review{text-align:left;margin-top:10px}
+.review h3{font-size:1rem;margin:18px 0 10px;color:var(--bad)}
+.rv{background:#fff;border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:10px;
+  padding:13px 15px;margin:10px 0;font-size:.92rem}
+.rv .rq{font-weight:700;margin-bottom:7px}
+.rv .ra{color:var(--ok);font-weight:600}
+.rv .rx{color:var(--muted);margin-top:5px;font-size:.88rem}
+.rv .chtag{font-size:.72rem;background:var(--soft);color:var(--brand);border-radius:6px;padding:1px 7px;font-weight:700;margin-left:6px}
+.hidden{display:none}
+.homebtn{position:fixed;left:16px;bottom:18px;z-index:60;background:#fff;color:var(--brand);
+  border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:.86rem;font-weight:700;
+  text-decoration:none;box-shadow:0 8px 20px rgba(15,23,42,.16)}
+.homebtn:hover{background:var(--brand);color:#fff}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:30px 20px;font-size:.86rem;margin-top:46px}
+footer b{color:#e2e8f0}
+@media(max-width:600px){
+  header{padding:40px 16px 32px}
+  header h1{font-size:1.5rem}
+  header h1 small{font-size:.84rem}
+  .container{padding:0 13px}
+  .panel{padding:19px 15px;border-radius:13px;margin:20px auto}
+  .q{font-size:1.04rem}
+  .opt{font-size:.93rem;padding:12px 13px}
+  .scoreBig{font-size:2.8rem}
+  .btnrow .btn{min-width:0;flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="tag">PAST-EXAM PRACTICE · 考古題練習</div>
+  <h1>考古題選擇題練習
+    <small>Ch6–Ch11 · 依五份期末考古題高頻考點命題 · 即時對答＋詳解</small></h1>
+  <svg class="hero-svg" viewBox="0 0 240 120" role="img" aria-label="瞄準考點標靶插圖">
+    <!-- 標靶 -->
+    <circle cx="92" cy="60" r="46" fill="none" stroke="#3b82f6" stroke-width="3" opacity=".55"/>
+    <circle cx="92" cy="60" r="32" fill="none" stroke="#60a5fa" stroke-width="3" opacity=".7"/>
+    <circle cx="92" cy="60" r="18" fill="none" stroke="#93c5fd" stroke-width="3"/>
+    <circle cx="92" cy="60" r="6" fill="#22d3ee"/>
+    <!-- 命中的箭 -->
+    <line x1="150" y1="18" x2="98" y2="56" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+    <path d="M150 18 l-9 1 l4 8 z" fill="#fbbf24"/>
+    <path d="M97 53 l8 0 l-1 9 z" fill="#fbbf24"/>
+    <!-- 答對勾 -->
+    <circle cx="186" cy="86" r="17" fill="#16a34a"/>
+    <path d="M178 86 l6 6 l10 -13" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 命中星點 -->
+    <circle cx="40" cy="26" r="2.5" fill="#cbd5e1" opacity=".8"/>
+    <circle cx="58" cy="98" r="2" fill="#cbd5e1" opacity=".6"/>
+    <circle cx="210" cy="34" r="2.2" fill="#cbd5e1" opacity=".6"/>
+  </svg>
+</header>
+
+<main class="container">
+
+  <!-- ===== 設定畫面 ===== -->
+  <section id="setup" class="panel">
+    <h2>🎯 選擇練習範圍</h2>
+    <p class="sub">挑選想練的章節（可複選），按開始即逐題作答、立即顯示正解與詳解。</p>
+
+    <div class="label">章節範圍</div>
+    <div class="chips" id="chChips"></div>
+
+    <div class="label">出題方式</div>
+    <label class="toggle"><input type="checkbox" id="shuffleTog" checked> 隨機打亂題目順序</label>
+
+    <div class="btnrow">
+      <button class="btn block" id="startBtn">開始練習 →</button>
+    </div>
+    <p id="setupCount" style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:12px"></p>
+    <p class="kbd-hint">💡 電腦可用鍵盤作答：<kbd>A</kbd>–<kbd>D</kbd> 或 <kbd>1</kbd>–<kbd>4</kbd> 選答、<kbd>Enter</kbd> 換下一題</p>
+    <div style="text-align:center"><span class="bestbadge" id="bestBadge" style="display:none"></span></div>
+  </section>
+
+  <!-- ===== 作答畫面 ===== -->
+  <section id="quiz" class="panel hidden">
+    <div class="qbar">
+      <span class="meta">第 <b id="qNow">1</b> / <span id="qTotal">0</span> 題</span>
+      <span class="ch" id="qCh">Ch6</span>
+      <span class="sc">✔ <span id="qScore">0</span> 答對</span>
+    </div>
+    <div class="track"><i id="qTrack"></i></div>
+    <div class="q" id="qText"></div>
+    <div class="opts" id="qOpts"></div>
+    <div class="exp" id="qExp"></div>
+    <div class="next">
+      <button class="btn hidden" id="nextBtn">下一題 →</button>
+    </div>
+  </section>
+
+  <!-- ===== 結算畫面 ===== -->
+  <section id="result" class="panel result hidden">
+    <h2>🏁 練習結束</h2>
+    <div class="scoreBig"><span id="rScore">0</span><small> / <span id="rTotal">0</span></small></div>
+    <div class="grade" id="rGrade"></div>
+    <div class="bd" id="rBreak"></div>
+    <div class="btnrow">
+      <button class="btn ghost" id="retryWrong">只練錯題</button>
+      <button class="btn ghost" id="retryAll">再練一次</button>
+      <button class="btn" id="backSetup">回設定</button>
+    </div>
+    <div class="review" id="rReview"></div>
+  </section>
+
+</main>
+
+<a class="homebtn" href="index.html">🏠 總目錄</a>
+<footer>
+  <b>考古題選擇題練習</b>　|　依課本投影片 Ch6–11 ＋ 五份期末考古題（109-1 / 2020 / 卷三 / 2023 / 2025）高頻考點命題<br>
+  Panko &amp; Panko, <i>Business Data Networks and Security</i>, 10th Ed.
+</footer>
+
+<script>
+/* ===== 題庫：依考古題高頻考點命題 a=正解索引(0起) ===== */
+const BANK=[
+/* ---------- Ch6 無線訊號傳播 ---------- */
+{ch:"Ch6",q:"依反平方律，無線訊號在距 AP 1 公尺處量到 80 mW，距離拉到 4 公尺時功率約為？",
+ o:["20 mW","40 mW","5 mW","10 mW"],a:2,
+ e:"反平方律：功率 ∝ 1/距離²。距離變 4 倍 → 功率變 1/4²=1/16。80÷16=<b>5 mW</b>。"},
+{ch:"Ch6",q:"2.4 GHz 頻段中，互不重疊（non-overlapping）可同時使用的三個通道是？",
+ o:["1、5、9","1、6、11","2、7、12","3、6、9"],a:1,
+ e:"2.4 GHz 只有 <b>1、6、11</b> 三個通道彼此不重疊，故相鄰 AP 常以此分配避免干擾。"},
+{ch:"Ch6",q:"802.11 無線網路用什麼機制確認資料「確實被對方收到」？",
+ o:["傳送端收到接收端回的 ACK","CRC 檢查碼","RTS 訊框","Beacon 訊框"],a:0,
+ e:"無線易出錯，故採 CSMA/CA + <b>ACK</b>：接收端正確收到後回傳 ACK，傳送端沒收到 ACK 就重送。"},
+{ch:"Ch6",q:"相較 2.4 GHz，5 GHz 頻段的主要特性是？",
+ o:["傳輸距離較遠、穿牆較好","可用通道較多、干擾較少，但傳輸距離較短","只能用於戶外","不支援 MIMO"],a:1,
+ e:"5 GHz <b>通道多、干擾少、速度高</b>，但波長短、衰減快，<b>傳輸距離較短、穿透力較差</b>。"},
+{ch:"Ch6",q:"MIMO（多入多出）提升無線吞吐量的原理是？",
+ o:["提高發射功率","使用多支天線建立多條空間資料流並行傳輸","壓縮資料","切換到更低頻段"],a:1,
+ e:"MIMO 用<b>多支天線</b>同時送出多條<b>空間流（spatial streams）</b>，利用多路徑反而增加平行通道、提高速率。"},
+{ch:"Ch6",q:"無線傳播問題中，兩台用戶端彼此聽不到、卻同時對 AP 傳送而碰撞，稱為？",
+ o:["多路徑干擾","隱藏節點問題（hidden node）","電磁干擾","衰減"],a:1,
+ e:"<b>隱藏節點</b>：兩端互相收不到訊號故同時傳送在 AP 處碰撞，解法是 <b>RTS/CTS</b> 先預約通道。"},
+{ch:"Ch6",q:"展頻（spread spectrum）在 WLAN 中的主要作用是？",
+ o:["加密無線資料","降低傳播問題（尤其多路徑干擾）","增加可用 IP 位址","延長電池壽命"],a:1,
+ e:"WLAN 的展頻是為了<b>對抗傳播問題、尤其多路徑干擾</b>，並非為了加密（這是常見陷阱）。"},
+{ch:"Ch6",q:"關於「服務頻段（service band）」與「通道（channel）」的關係，正確的是？",
+ o:["兩者是同義詞","一個服務頻段被切分成多個通道","通道比頻段更寬","頻段只能有一個通道"],a:1,
+ e:"一個<b>服務頻段</b>（如 2.4 GHz）被切成多個<b>通道</b>，各通道分給不同 AP 使用以減少干擾。"},
+
+/* ---------- Ch7 無線 LAN 安全 ---------- */
+{ch:"Ch7",q:"大型企業 WLAN 應採用哪種 802.11i 認證方式，較 PSK 安全且便於管理？",
+ o:["WEP","PSK（預共享金鑰）","802.1X（每人帳號＋中央認證伺服器）","完全不加密"],a:2,
+ e:"<b>802.1X</b> 用每人帳密＋RADIUS 中央認證，適合企業；<b>PSK</b> 全員共用一把金鑰，僅適合家庭/小辦公室。"},
+{ch:"Ch7",q:"攻擊者架設一台冒充合法 AP、相同 SSID 來誘騙使用者連線，這種攻擊稱為？",
+ o:["Evil Twin（假冒雙生 AP）","SQL Injection","DDoS","ARP 表溢位"],a:0,
+ e:"<b>Evil Twin</b> 假冒合法 AP 騙使用者連入以竊取資料；有效防禦是連線後使用 <b>VPN</b> 加密。"},
+{ch:"Ch7",q:"802.11i（WPA2）採用哪種加密來保護無線資料？",
+ o:["WEP 的 RC4","AES（CCMP）","明文不加密","僅 MAC 過濾"],a:1,
+ e:"<b>WPA2 = 802.11i</b> 採用 <b>AES-CCMP</b>，安全性遠高於已被破解的 WEP（RC4）。"},
+{ch:"Ch7",q:"訊號增益 10 dB 代表功率變成原來的幾倍？",
+ o:["2 倍","10 倍","100 倍","1000 倍"],a:1,
+ e:"分貝：每 +10 dB＝×10。故 10 dB＝<b>10 倍</b>；+3 dB≈×2、+20 dB＝×100。"},
+{ch:"Ch7",q:"關於 Bluetooth piconet（微網），下列何者正確？",
+ o:["可有多個 master 同時運作","1 個 master 最多同時連接 7 個 active slave","slave 之間可直接通訊","不需配對即可傳檔"],a:1,
+ e:"piconet 為 <b>1 主（master）對最多 7 個活動從（active slaves）</b>的星狀結構，由 master 統一排程。"},
+{ch:"Ch7",q:"WPA3 用什麼機制取代 WPA2-PSK 易被離線破解的四向交握？",
+ o:["WEP","SAE（對等同時驗證）","TKIP","WPS"],a:1,
+ e:"WPA3 個人版用 <b>SAE（Dragonfly）</b>取代 PSK 交握，可抵抗離線字典攻擊並提供前向保密。"},
+{ch:"Ch7",q:"員工未經許可私自接到公司網路上的無線基地台，稱為？",
+ o:["Evil Twin","Rogue AP（流氓 AP）","Ad-hoc","Repeater"],a:1,
+ e:"<b>Rogue AP</b> 是內部人員私接的未授權 AP，形成安全破口；Evil Twin 則是外部攻擊者冒充合法 AP。"},
+
+/* ---------- Ch8 TCP/IP ---------- */
+{ch:"Ch8",q:"主機判斷目的地是否在同網段時，會把 IP 與遮罩做 bitwise-AND。十進位 65 AND 240 = ？",
+ o:["64","65","240","0"],a:0,
+ e:"65=0100 0001、240=1111 0000，逐位元 AND＝0100 0000＝<b>64</b>。AND 出的結果就是網路位址部分。"},
+{ch:"Ch8",q:"路由器查路由表時，若多筆都符合目的地，依什麼規則選擇？",
+ o:["選 metric 最小者","選最先列出的","最長前綴匹配（longest prefix match）","隨機挑一筆"],a:2,
+ e:"先取<b>最長前綴匹配</b>（遮罩最長＝最精確）；若前綴長度相同再比 <b>metric</b>（速度取大、成本取小）。"},
+{ch:"Ch8",q:"IPv4 標頭中 TTL（IPv6 為 Hop Limit）欄位的作用是？",
+ o:["紀錄封包大小","每經過一台路由器減 1，歸零即丟棄，避免無限繞圈","指定加密金鑰","標示優先權"],a:1,
+ e:"<b>TTL/Hop Limit</b> 每過一台路由器 −1，到 0 就丟棄並回 ICMP，防止封包在迴圈中永遠繞行。"},
+{ch:"Ch8",q:"TCP 連線建立的「三次交握」順序為？",
+ o:["SYN → SYN+ACK → ACK","ACK → SYN → FIN","SYN → FIN → ACK","SYN+ACK → SYN → ACK"],a:0,
+ e:"三次交握：用戶端送 <b>SYN</b> → 伺服器回 <b>SYN+ACK</b> → 用戶端回 <b>ACK</b>，雙方序號同步後才開始傳資料。"},
+{ch:"Ch8",q:"ARP（位址解析協定）的功能是？",
+ o:["由網域名稱查 IP","由已知 IP 查出對方的 MAC 位址","加密封包","分配 IP 位址"],a:1,
+ e:"<b>ARP</b> 在同一區網內用<b>已知 IP 廣播詢問、取得對方 MAC</b>，才能組出第二層訊框送出。"},
+{ch:"Ch8",q:"IPv4 標頭長度欄位（IHL）值為 5，代表標頭實際長度為？",
+ o:["5 bytes","20 bytes","32 bytes","40 bytes"],a:1,
+ e:"IHL 以 4-byte 為單位，5×4＝<b>20 bytes</b>（無選項時的標準 IPv4 標頭長度）。"},
+{ch:"Ch8",q:"IPv6 位址中「::」符號代表什麼？",
+ o:["分隔網路與主機","一段或多段連續為 0 的區段，且一個位址只能用一次","廣播位址","結尾符號"],a:1,
+ e:"「::」代表<b>一段或多段連續的 16-bit 全 0 區段</b>，可縮短書寫，但<b>一個位址只能使用一次</b>以免無法還原。"},
+{ch:"Ch8",q:"TCP 連線正常關閉採用幾次交握？",
+ o:["二次（SYN/ACK）","三次","四次（FIN/ACK，FIN/ACK）","不需交握"],a:2,
+ e:"關閉採<b>四次揮手</b>：各方各送一次 FIN、各回一次 ACK，因雙向需分別關閉。"},
+
+/* ---------- Ch9 管理與保護 ---------- */
+{ch:"Ch9",q:"某子網要容納至少 50 台主機，主機部分（host bits）至少需要幾位元？",
+ o:["5 bits","6 bits","7 bits","8 bits"],a:1,
+ e:"可用主機數＝2ᴺ−2。5 bits→2⁵−2=30 不足；<b>6 bits→2⁶−2=62≥50</b>，故需 6 個主機位元。"},
+{ch:"Ch9",q:"NAT（網路位址轉換）最主要的用途是？",
+ o:["加密封包內容","讓多台私有 IP 主機共用少量公有 IP 上網，並隱藏內網","加快路由查詢","分配網域名稱"],a:1,
+ e:"<b>NAT</b> 把內部<b>私有 IP</b>轉成對外<b>公有 IP</b>，節省公有位址並隱藏內部結構。"},
+{ch:"Ch9",q:"下列哪一個是私有（private）IP 位址？",
+ o:["8.8.8.8","172.20.5.1","11.0.0.1","209.85.1.1"],a:1,
+ e:"私有範圍：10.0.0.0/8、<b>172.16–172.31.x</b>、192.168.x。172.20.5.1 落在 172.16–31 內，屬私有。"},
+{ch:"Ch9",q:"IPsec 的 Tunnel（通道）模式與 Transport（傳輸）模式差異是？",
+ o:["Tunnel 只加密 payload","Tunnel 把整個原始 IP 封包加密並加上新標頭（常用於閘道對閘道 VPN）","兩者完全相同","Transport 一定更安全"],a:1,
+ e:"<b>Tunnel 模式</b>把<b>整個原 IP 封包</b>加密再封新標頭，適合 <b>gateway 對 gateway 的 VPN</b>；Transport 只加密 payload，用於端對端。"},
+{ch:"Ch9",q:"DNS 的核心功能是？",
+ o:["將網域名稱解析成 IP 位址","分配動態 IP","加密網頁流量","偵測病毒"],a:0,
+ e:"<b>DNS</b> 把人類可讀的<b>網域名稱（如 www.x.com）轉換成 IP 位址</b>，是上網的第一步。"},
+{ch:"Ch9",q:"關於動態路由協定的分類，下列何者正確？",
+ o:["OSPF 是外部協定、BGP 是內部協定","OSPF 是內部協定（IGP）、BGP 是外部協定（EGP）","兩者都是內部協定","兩者都是外部協定"],a:1,
+ e:"<b>OSPF＝內部（IGP）</b>用於單一自治系統內；<b>BGP＝外部（EGP）</b>用於不同自治系統（ISP）之間。"},
+{ch:"Ch9",q:"ping 指令用來測試連通性，它使用哪個協定？",
+ o:["TCP","UDP","ICMP","ARP"],a:2,
+ e:"ping 送 <b>ICMP</b> Echo Request、等對方回 Echo Reply，用來檢測可達性與往返延遲。"},
+{ch:"Ch9",q:"標準 IPv6 位址中，Interface ID（介面識別碼）通常占多少位元？",
+ o:["32 bits","48 bits","64 bits","128 bits"],a:2,
+ e:"IPv6 共 128 bits，前 64 bits 為網路前綴，後 <b>64 bits 為 Interface ID</b>（常由 MAC 衍生）。"},
+
+/* ---------- Ch10 廣域網路 WAN ---------- */
+{ch:"Ch10",q:"下列傳輸速度由慢到快排序，何者正確？",
+ o:["802.11g < T3 < ADSL < T1","T1 < ADSL < T3 < 802.11g","T3 < T1 < 802.11g < ADSL","ADSL < T1 < 802.11g < T3"],a:1,
+ e:"T1≈1.544 Mbps < ADSL（數 Mbps）< T3≈45 Mbps < 802.11g＝54 Mbps，故 <b>T1 < ADSL < T3 < 802.11g</b>。"},
+{ch:"Ch10",q:"行動電話系統中，當使用者移動、通話從一個基地台切換到另一個基地台，稱為？",
+ o:["roaming","handoff（換手）","channel reuse","paging"],a:1,
+ e:"<b>handoff（換手）</b>由 MTSO 控制，在使用者跨越 cell 邊界時把通話無縫轉到新 cell site。"},
+{ch:"Ch10",q:"MPLS 的標籤（label）被加在封包的哪個位置？",
+ o:["IP 標頭之內","訊框標頭與 IP 標頭之間","應用層資料中","TCP 標頭之後"],a:1,
+ e:"MPLS label 介於<b>第二層訊框標頭與第三層 IP 標頭之間</b>（俗稱 2.5 層），路由器依標籤快速轉送。"},
+{ch:"Ch10",q:"ADSL 之所以稱為「非對稱」，是因為？",
+ o:["上傳與下載速度不同（下載較快）","只能單向傳輸","使用兩條線路","無法同時上網與通話"],a:0,
+ e:"<b>A</b>DSL＝Asymmetric：<b>下載速度高於上傳</b>，符合一般家庭瀏覽下載多於上傳的使用型態。"},
+{ch:"Ch10",q:"企業向電信業者承租、頻寬固定獨享的點對點線路稱為？",
+ o:["撥接線路","專線（leased line）","公用網際網路","Wi-Fi"],a:1,
+ e:"<b>專線（leased line，如 T1/T3）</b>是固定獨享頻寬的點對點連線，常用於連接分公司或接 ISP 的 POP。"},
+{ch:"Ch10",q:"行動電話用相隔夠遠的 cell 重複使用相同頻率，以擴大容量，稱為？",
+ o:["handoff","channel reuse（頻率再用）","roaming","multiplexing"],a:1,
+ e:"<b>channel reuse</b>：不相鄰的 cell 可重用相同頻率（彼此距離夠遠不干擾），大幅提升整體系統容量。"},
+
+/* ---------- Ch11 網路應用 ---------- */
+{ch:"Ch11",q:"SMTP 中，寄件方用哪個指令告知「收件人信箱」？",
+ o:["MAIL FROM","RCPT TO","DATA","HELO"],a:1,
+ e:"流程：HELO → <b>MAIL FROM（寄件人）</b> → <b>RCPT TO（收件人）</b> → DATA（內文，以單獨一行「.」結束）。"},
+{ch:"Ch11",q:"關於電子郵件協定，下列何者正確？",
+ o:["SMTP 用於收信、POP 用於寄信","SMTP 用於寄送，POP/IMAP 用於收信，且 IMAP 郵件留在伺服器","三者都只用於寄信","IMAP 會把信全部刪除"],a:1,
+ e:"<b>SMTP＝寄送</b>；收信用 POP（下載後常從伺服器刪除）或 <b>IMAP（郵件留在伺服器、可多裝置同步）</b>。"},
+{ch:"Ch11",q:"VoIP 中，實際承載即時語音封包的協定與傳輸層搭配是？",
+ o:["SIP over TCP","RTP over UDP","HTTP over TCP","FTP over UDP"],a:1,
+ e:"<b>SIP</b> 負責建立/結束通話（信令），實際語音以 <b>RTP over UDP</b> 傳送——即時性優先、不重傳延遲封包。"},
+{ch:"Ch11",q:"網頁表單未過濾使用者輸入，導致攻擊者插入惡意資料庫指令竊取資料，屬於？",
+ o:["XSS","SQL Injection","CSRF","DDoS"],a:1,
+ e:"<b>SQL Injection</b> 透過未驗證輸入注入 SQL 指令；防禦用參數化查詢／輸入驗證。XSS 則是注入惡意腳本到網頁。"},
+{ch:"Ch11",q:"在 BitTorrent 之類 P2P 檔案分享中，協調哪些 peer 擁有檔案片段的伺服器稱為？",
+ o:["tracker","swarm","seed","proxy"],a:0,
+ e:"<b>tracker</b> 協調並回報哪些 peer 在線、各持有哪些片段；正在交換同一檔的所有 peer 合稱 <b>swarm</b>。"},
+{ch:"Ch11",q:"使用者透過瀏覽器使用雲端上的應用軟體（如 Gmail、Office 365），屬於哪種雲端服務模式？",
+ o:["IaaS","PaaS","SaaS","DaaS"],a:2,
+ e:"<b>SaaS（軟體即服務）</b>：直接使用雲端供應商提供的完整應用程式，免自行安裝維護。"},
+{ch:"Ch11",q:"瀏覽器向網站要一個網頁時，送出的 HTTP 請求最常用的方法是？",
+ o:["GET","PUT","DELETE","TRACE"],a:0,
+ e:"取得資源用 <b>GET</b>（參數附在 URL）；送出表單資料常用 POST（資料放在訊息主體）。"}
+];
+
+/* ===== 章節清單 ===== */
+const CHS=["Ch6","Ch7","Ch8","Ch9","Ch10","Ch11"];
+const CHNAME={Ch6:"無線傳播",Ch7:"無線安全",Ch8:"TCP/IP",Ch9:"管理保護",Ch10:"廣域網路 WAN",Ch11:"網路應用"};
+
+/* ===== 狀態 ===== */
+let selected=new Set(CHS);  // 預設全選
+let queue=[],idx=0,score=0,wrongList=[],curAns=0;
+
+/* ===== 元件 ===== */
+const $=id=>document.getElementById(id);
+const setup=$("setup"),quiz=$("quiz"),result=$("result");
+
+/* 章節 chips（含「全部」）*/
+function renderChips(){
+  const wrap=$("chChips");wrap.innerHTML="";
+  const all=document.createElement("button");
+  all.className="chip"+(selected.size===CHS.length?" on":"");
+  all.innerHTML='全部 <span class="n">('+BANK.length+')</span>';
+  all.onclick=()=>{selected=new Set(CHS);renderChips();updateCount();};
+  wrap.appendChild(all);
+  CHS.forEach(c=>{
+    const n=BANK.filter(b=>b.ch===c).length;
+    const b=document.createElement("button");
+    b.className="chip"+(selected.has(c)&&selected.size!==CHS.length?" on":"");
+    b.innerHTML=c+'·'+CHNAME[c]+' <span class="n">('+n+')</span>';
+    b.onclick=()=>{
+      if(selected.size===CHS.length){selected=new Set([c]);}      // 從全選改成單選
+      else if(selected.has(c)){selected.delete(c);if(selected.size===0)selected=new Set(CHS);}
+      else selected.add(c);
+      renderChips();updateCount();
+    };
+    wrap.appendChild(b);
+  });
+}
+function pool(){return BANK.filter(b=>selected.has(b.ch));}
+function updateCount(){
+  $("setupCount").textContent="目前範圍共 "+pool().length+" 題";
+}
+
+/* 開始練習 */
+function start(list){
+  queue=list.slice();
+  if($("shuffleTog").checked) shuffle(queue);
+  idx=0;score=0;wrongList=[];
+  setup.classList.add("hidden");result.classList.add("hidden");quiz.classList.remove("hidden");
+  $("qTotal").textContent=queue.length;
+  renderQ();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+/* 顯示一題 */
+function renderQ(){
+  const item=queue[idx];
+  $("qNow").textContent=idx+1;
+  $("qCh").textContent=item.ch+"·"+CHNAME[item.ch];
+  $("qScore").textContent=score;
+  $("qTrack").style.width=(idx/queue.length*100)+"%";
+  $("qText").textContent=item.q;
+  const opts=$("qOpts");opts.innerHTML="";
+  const KEYS=["A","B","C","D","E"];
+  // 選項順序隨機洗牌，避免背答案位置
+  const order=item.o.map((_,i)=>i);shuffle(order);
+  curAns=order.indexOf(item.a);
+  order.forEach((origIdx,pos)=>{
+    const btn=document.createElement("button");
+    btn.className="opt";
+    btn.innerHTML='<span class="k">'+KEYS[pos]+'</span><span>'+item.o[origIdx]+'</span>';
+    btn.onclick=()=>choose(pos,btn);
+    opts.appendChild(btn);
+  });
+  const exp=$("qExp");exp.className="exp";exp.innerHTML="";
+  $("nextBtn").classList.add("hidden");
+}
+
+/* 作答 */
+function choose(pos,btn){
+  const btns=$("qOpts").querySelectorAll("button");
+  if(btns.length&&btns[0].disabled)return;          // 已作答則忽略
+  const item=queue[idx];
+  btns.forEach(b=>b.disabled=true);
+  if(pos===curAns){btn.classList.add("right");score++;}
+  else{btn.classList.add("wrong");btns[curAns].classList.add("right");wrongList.push(item);}
+  $("qScore").textContent=score;
+  const exp=$("qExp");
+  exp.innerHTML="💡 "+item.e;exp.classList.add("show");
+  const nb=$("nextBtn");
+  nb.textContent=(idx===queue.length-1)?"看結果 →":"下一題 →";
+  nb.classList.remove("hidden");
+}
+$("nextBtn").onclick=()=>{
+  if(idx<queue.length-1){idx++;renderQ();window.scrollTo({top:0,behavior:"smooth"});}
+  else finish();
+};
+
+/* 結算 */
+function finish(){
+  quiz.classList.add("hidden");result.classList.remove("hidden");
+  const total=queue.length,pct=Math.round(score/total*100);
+  $("rScore").textContent=score;$("rTotal").textContent=total;
+  $("qTrack").style.width="100%";
+  // 歷史最佳（localStorage）
+  if(pct>(+(localStorage.getItem("qz_best")||0)))localStorage.setItem("qz_best",pct);
+  let g,col;
+  if(pct>=90){g="🏆 神乎其技！考點掌握度極高";col="#16a34a";}
+  else if(pct>=75){g="💪 表現很好，再鞏固錯題就穩了";col="#2563eb";}
+  else if(pct>=60){g="📈 及格邊緣，建議重練錯題＋看章節詳解";col="#b45309";}
+  else{g="🔥 還要再加油，先把錯題搞懂！";col="#dc2626";}
+  const gr=$("rGrade");gr.textContent=g+"（"+pct+"分）";gr.style.color=col;
+  // 各章正確率
+  const bk={};queue.forEach(it=>{bk[it.ch]=bk[it.ch]||{c:0,t:0};bk[it.ch].t++;});
+  queue.forEach(it=>{if(!wrongList.includes(it))bk[it.ch].c++;});
+  const bd=$("rBreak");bd.innerHTML="";
+  CHS.filter(c=>bk[c]).forEach(c=>{
+    const o=bk[c];const r=o.c/o.t;
+    const col=r>=0.8?"#16a34a":(r>=0.5?"#2563eb":"#dc2626");
+    const d=document.createElement("div");d.className="bc";
+    d.innerHTML='<b>'+c+'·'+CHNAME[c]+'</b><span class="ratio">'+o.c+'/'+o.t+'</span> <span>答對</span>'+
+      '<div class="barwrap"><i style="width:'+Math.round(r*100)+'%;background:'+col+'"></i></div>';
+    bd.appendChild(d);
+  });
+  // 錯題回顧
+  const rv=$("rReview");
+  if(wrongList.length===0){rv.innerHTML='<h3 style="color:#16a34a">✅ 全部答對，完美！</h3>';}
+  else{
+    let html='<h3>❌ 錯題回顧（'+wrongList.length+' 題）</h3>';
+    wrongList.forEach(it=>{
+      html+='<div class="rv"><div class="rq">'+it.q+'<span class="chtag">'+it.ch+'</span></div>'+
+            '<div class="ra">✔ 正解：'+it.o[it.a]+'</div>'+
+            '<div class="rx">'+it.e+'</div></div>';
+    });
+    rv.innerHTML=html;
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* 按鈕 */
+$("startBtn").onclick=()=>{const p=pool();if(p.length)start(p);};
+$("retryAll").onclick=()=>start(queue);
+$("retryWrong").onclick=()=>{if(wrongList.length)start(wrongList.slice());else start(queue);};
+$("backSetup").onclick=()=>{
+  result.classList.add("hidden");quiz.classList.add("hidden");setup.classList.remove("hidden");
+  renderBest();window.scrollTo({top:0,behavior:"smooth"});
+};
+
+/* 歷史最佳成績 */
+function renderBest(){
+  const best=+(localStorage.getItem("qz_best")||0);
+  const el=$("bestBadge");
+  if(best>0){el.textContent="🏅 歷史最佳　"+best+" 分";el.style.display="inline-flex";}
+  else el.style.display="none";
+}
+
+/* 鍵盤作答：A–D / 1–4 選答，Enter / → 換下一題 */
+addEventListener("keydown",e=>{
+  if(!quiz.classList.contains("hidden")){
+    const nb=$("nextBtn");
+    if(!nb.classList.contains("hidden")&&(e.key==="Enter"||e.key==="ArrowRight"||e.key===" ")){e.preventDefault();nb.click();return;}
+    const btns=$("qOpts").querySelectorAll("button");
+    if(!btns.length||btns[0].disabled)return;
+    let k=-1;
+    if(e.key>="1"&&e.key<="9")k=+e.key-1;
+    else{const u=e.key.toUpperCase();if(u>="A"&&u<="E")k=u.charCodeAt(0)-65;}
+    if(k>=0&&k<btns.length){e.preventDefault();btns[k].click();}
+  }
+});
+
+/* 頂部進度條 */
+addEventListener("scroll",()=>{
+  const h=document.documentElement;
+  $("prog").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";
+});
+
+/* init */
+renderChips();updateCount();renderBest();
+</script>
+</body>
+</html>
