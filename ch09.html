@@ -233,6 +233,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -306,6 +316,23 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>子網</b><span class="full">Subnet</span><span class="exp">把一個大網路再切成多個小網路，方便管理與分配。</span></div>
+    <div class="gt"><b>2ᴺ−2</b><span class="full">可用主機數公式</span><span class="exp">一個子網能用的主機數＝2^(主機位元數)−2（扣掉網路位址與廣播位址）。</span></div>
+    <div class="gt"><b>NAT</b><span class="full">Network Address Translation</span><span class="exp">私有 IP ↔ 公有 IP 互換，讓很多內部主機共用少量公有 IP 上網。</span></div>
+    <div class="gt"><b>私有 IP</b><span class="full">Private IP</span><span class="exp">內部專用、不上公網：10.x、172.16–31.x、192.168.x。</span></div>
+    <div class="gt"><b>DNS</b><span class="full">Domain Name System</span><span class="exp">把網域名稱（www.x.com）翻譯成 IP 位址。</span></div>
+    <div class="gt"><b>IPsec</b><span class="full">IP Security</span><span class="exp">在「IP 層」加密的 VPN 技術，有 Transport / Tunnel 兩種模式。</span></div>
+    <div class="gt"><b>SSL / TLS</b><span class="full">Transport Layer Security</span><span class="exp">在「傳輸層」加密，就是 https 網址那把鎖。</span></div>
+    <div class="gt"><b>OSPF / BGP</b><span class="full">內部 / 外部 路由協定</span><span class="exp">OSPF 用在同一機構內(IGP)；BGP 用在不同 ISP 之間(EGP)。</span></div>
+    <div class="gt"><b>ICMP</b><span class="full">Internet Control Message Protocol</span><span class="exp">ping 用來測「對方通不通、要多久」的診斷協定。</span></div>
+    <div class="gt"><b>動態路由</b><span class="full">Dynamic Routing</span><span class="exp">路由器之間自動交換路徑資訊，線路變動會自己更新。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">

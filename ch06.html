@@ -246,6 +246,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   /* CSS 流程/節點圖：改直式堆疊，箭頭朝下 */
   .flow{flex-direction:column;gap:6px}
@@ -321,6 +331,23 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>AP</b><span class="full">Access Point 存取點</span><span class="exp">把無線裝置接進有線網路的「基地台」，手機/筆電都先連到它。</span></div>
+    <div class="gt"><b>DS</b><span class="full">Distribution System 分送系統</span><span class="exp">AP 背後那段「有線 Ethernet 網路」，伺服器和對外路由器都在上面。</span></div>
+    <div class="gt"><b>反平方律</b><span class="full">Inverse-Square Law</span><span class="exp">距離拉遠，訊號強度以「距離的平方」變弱（距離 ×2 → 強度 ÷4）。</span></div>
+    <div class="gt"><b>頻段 / 通道</b><span class="full">Band / Channel</span><span class="exp">頻段是一段頻率範圍，再切成多個通道給不同 AP（馬路 vs 車道）。</span></div>
+    <div class="gt"><b>CSMA/CA</b><span class="full">Carrier Sense Multiple Access / Collision Avoidance</span><span class="exp">無線「傳前先聽、再隨機等一下」以避免同時送出碰撞的規則。</span></div>
+    <div class="gt"><b>ACK</b><span class="full">Acknowledgement 確認</span><span class="exp">接收端收到資料後回的「我收到了」；傳送端沒收到就重送。</span></div>
+    <div class="gt"><b>MIMO</b><span class="full">Multiple-In Multiple-Out</span><span class="exp">用多支天線同時開「多條資料流」並行傳輸，速度倍增。</span></div>
+    <div class="gt"><b>展頻</b><span class="full">Spread Spectrum</span><span class="exp">把訊號攤在比所需更寬的頻率上以抗干擾（尤其多路徑）。</span></div>
+    <div class="gt"><b>多路徑干擾</b><span class="full">Multipath Interference</span><span class="exp">直接波與反射波不同時間到達互相抵消，WLAN 最嚴重的傳播問題。</span></div>
+    <div class="gt"><b>RTS / CTS</b><span class="full">Request / Clear To Send</span><span class="exp">傳前先「舉手預約」通道，解決互相聽不到的隱藏節點碰撞。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">

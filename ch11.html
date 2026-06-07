@@ -232,6 +232,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -301,6 +311,22 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>SMTP / POP / IMAP</b><span class="full">郵件協定</span><span class="exp">SMTP 負責「寄信」；POP（下載後刪）與 IMAP（留在伺服器）負責「收信」。</span></div>
+    <div class="gt"><b>HTTP</b><span class="full">HyperText Transfer Protocol</span><span class="exp">瀏覽器抓網頁用的協定（GET 取資料、POST 送表單）。</span></div>
+    <div class="gt"><b>VoIP</b><span class="full">Voice over IP</span><span class="exp">用網際網路打電話（如 Line 通話、網路市話）。</span></div>
+    <div class="gt"><b>SIP / RTP</b><span class="full">通話信令 / 語音承載</span><span class="exp">SIP 負責「建立/結束通話」；RTP（over UDP）負責「實際傳語音」。</span></div>
+    <div class="gt"><b>SQL Injection</b><span class="full">資料庫注入攻擊</span><span class="exp">透過未過濾的輸入框注入惡意 SQL 指令，竊取或竄改資料庫。</span></div>
+    <div class="gt"><b>XSS</b><span class="full">Cross-Site Scripting 跨站腳本</span><span class="exp">把惡意腳本注入網頁，在其他使用者的瀏覽器中執行。</span></div>
+    <div class="gt"><b>P2P / tracker / swarm</b><span class="full">點對點分享</span><span class="exp">peer 彼此互傳；tracker 協調誰有哪些片段；swarm＝分享同檔的所有 peer。</span></div>
+    <div class="gt"><b>SaaS / PaaS / IaaS</b><span class="full">雲端服務三層</span><span class="exp">分別是「軟體 / 平台 / 基礎設施」即服務（如 Gmail＝SaaS）。</span></div>
+    <div class="gt"><b>URL</b><span class="full">Uniform Resource Locator</span><span class="exp">網址，指出資源在哪台主機的哪個路徑。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">

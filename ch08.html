@@ -233,6 +233,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -308,6 +318,23 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>TCP/IP</b><span class="full">網際網路核心協定組</span><span class="exp">IP 負責「定址、找路」，TCP 負責「可靠傳輸、不漏不亂序」。</span></div>
+    <div class="gt"><b>IP 位址 / 遮罩</b><span class="full">IP Address / Mask</span><span class="exp">位址識別主機；遮罩用來切出「網路部分」與「主機部分」。</span></div>
+    <div class="gt"><b>bitwise-AND</b><span class="full">逐位元 AND</span><span class="exp">把 IP 與遮罩逐位元 AND，算出「網路位址」，判斷是否同網段。</span></div>
+    <div class="gt"><b>路由表</b><span class="full">Routing Table</span><span class="exp">路由器查「這個目的地要往哪個出口送」的對照表。</span></div>
+    <div class="gt"><b>最長前綴匹配</b><span class="full">Longest Prefix Match</span><span class="exp">多筆路由都符合時，挑「遮罩最長＝最精確」那一筆。</span></div>
+    <div class="gt"><b>ARP</b><span class="full">Address Resolution Protocol</span><span class="exp">由已知的 IP 位址查出對方的 MAC（實體）位址。</span></div>
+    <div class="gt"><b>TTL / Hop Limit</b><span class="full">Time To Live</span><span class="exp">每經一台路由器減 1，歸零就丟棄，防止封包無限繞圈。</span></div>
+    <div class="gt"><b>MAC 位址</b><span class="full">Media Access Control Address</span><span class="exp">網卡的硬體實體位址（第 2 層），同網段內靠它送訊框。</span></div>
+    <div class="gt"><b>IPv4 / IPv6</b><span class="full">32 位元 / 128 位元 位址</span><span class="exp">IPv4 位址快用完，IPv6 位址長很多（縮寫用「::」表示一段 0）。</span></div>
+    <div class="gt"><b>三次握手</b><span class="full">TCP Three-way Handshake</span><span class="exp">連線前用 SYN → SYN+ACK → ACK 同步雙方序號，才開始傳資料。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">

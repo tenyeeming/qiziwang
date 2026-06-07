@@ -221,6 +221,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -292,6 +302,24 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>WEP / WPA / WPA2 / WPA3</b><span class="full">無線加密標準演進</span><span class="exp">越後面越安全；WPA2＝802.11i（用 AES），WEP 早已被破絕不要用。</span></div>
+    <div class="gt"><b>AES</b><span class="full">Advanced Encryption Standard</span><span class="exp">現代強加密演算法，WPA2 採用。</span></div>
+    <div class="gt"><b>PSK</b><span class="full">Pre-Shared Key 預共享金鑰</span><span class="exp">大家共用「同一把密碼」，適合家用 / 單一 AP 的小環境。</span></div>
+    <div class="gt"><b>802.1X</b><span class="full">Port-Based Authentication</span><span class="exp">每人各自帳密、由中央認證伺服器(RADIUS)驗證，適合多 AP 企業。</span></div>
+    <div class="gt"><b>SAE</b><span class="full">Simultaneous Authentication of Equals</span><span class="exp">WPA3 用的更安全握手，可抵抗離線字典破解。</span></div>
+    <div class="gt"><b>Evil Twin</b><span class="full">惡意雙生 AP</span><span class="exp">攻擊者用高功率假冒合法 AP，誘騙你連上做中間人偷看。</span></div>
+    <div class="gt"><b>Rogue AP</b><span class="full">流氓 AP</span><span class="exp">內部員工私接、未授權的 AP，形成安全破口（與 Evil Twin 不同）。</span></div>
+    <div class="gt"><b>VPN</b><span class="full">Virtual Private Network</span><span class="exp">在現有網路上再「包一層加密通道」，即使被攔也讀不到內容。</span></div>
+    <div class="gt"><b>dB / dBm</b><span class="full">分貝</span><span class="exp">表示訊號強弱的對數單位（+3dB≈×2、+10dB＝×10）。</span></div>
+    <div class="gt"><b>Bluetooth / piconet</b><span class="full">藍牙 / 微網</span><span class="exp">近距離個人網路；一個 piconet＝1 主最多 7 個活動從。</span></div>
+    <div class="gt"><b>NFC / RFID</b><span class="full">近場通訊 / 無線射頻識別</span><span class="exp">超近距離的感應識別（感應卡、行動支付）。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">

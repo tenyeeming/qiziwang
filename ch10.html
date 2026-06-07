@@ -226,6 +226,16 @@ footer{background:#172033}
 <style>
 /* ===== 手機／平板 圖表適配 v2：流程圖直式重排 + SVG 桌機/手機切換 ===== */
 .svg-m{display:none}
+/* 專有名詞先修站 */
+.primer{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #c7d2fe;border-radius:16px;padding:20px 22px;margin:22px 0}
+.primer h3{font-size:1.12rem;margin-bottom:3px;color:#3730a3;display:flex;align-items:center;gap:8px}
+.primer .psub{font-size:.84rem;color:#6366f1;margin-bottom:14px}
+.primer .gg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primer .gt{background:#fff;border:1px solid #e0e7ff;border-radius:11px;padding:10px 13px}
+.primer .gt b{color:#4f46e5;font-size:.96rem}
+.primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
+.primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
+@media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -295,6 +305,22 @@ footer{background:#172033}
 </div>
 
 <!-- ============ NEW EXAMS 2023/2025 ============ -->
+<div class="primer">
+  <h3>🔤 專有名詞先修站</h3>
+  <p class="psub">進入內文前，先把本章會反覆出現的縮寫／術語用一句白話搞懂，讀起來就不卡。</p>
+  <div class="gg">
+    <div class="gt"><b>LAN / MAN / WAN</b><span class="full">區域 / 都會 / 廣域 網路</span><span class="exp">涵蓋範圍由小到大：一棟樓 → 一座城市 → 跨城市跨國。</span></div>
+    <div class="gt"><b>ADSL</b><span class="full">Asymmetric DSL</span><span class="exp">非對稱數位用戶線，「下載比上傳快」，走既有電話線。</span></div>
+    <div class="gt"><b>專線</b><span class="full">Leased Line（T1 / T3）</span><span class="exp">向電信租的「固定獨享頻寬」點對點線路（T1≈1.5M、T3≈45M）。</span></div>
+    <div class="gt"><b>POP</b><span class="full">Point of Presence 接取點</span><span class="exp">電信業者讓你「接進」其網路的當地接入點。</span></div>
+    <div class="gt"><b>cell / cellsite / MTSO</b><span class="full">蜂巢 / 基地台 / 行動交換中心</span><span class="exp">行動電話把地區切成蜂巢，每格一座基地台，MTSO 統籌控制。</span></div>
+    <div class="gt"><b>handoff</b><span class="full">換手</span><span class="exp">移動中通話從一個 cell「無縫切換」到下一個 cell。</span></div>
+    <div class="gt"><b>channel reuse</b><span class="full">頻率再用</span><span class="exp">相隔夠遠的 cell 重複使用相同頻率，不互相干擾，擴大容量。</span></div>
+    <div class="gt"><b>MPLS</b><span class="full">Multiprotocol Label Switching</span><span class="exp">用「標籤」快速轉送的 WAN 技術；label 夾在訊框與 IP 標頭之間。</span></div>
+    <div class="gt"><b>Carrier Ethernet / PSDN</b><span class="full">電信級乙太網 / 公用資料網路</span><span class="exp">電信提供的多站互連服務，比兩兩拉專線省錢又有 QoS。</span></div>
+  </div>
+</div>
+
 <section id="new">
   <div class="sec-head"><div class="num">🆕</div><h2>2023 / 2025 新卷考點重點<span>New Exams — 重複考點＋新增考點講解</span></h2></div>
   <div class="card">
