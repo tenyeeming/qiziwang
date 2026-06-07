@@ -256,6 +256,19 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 白話開場：先講情境/動機，再帶出術語（避免一上來就拋知識點）*/
+.why{background:linear-gradient(135deg,#f0fdfa,#ecfeff);border:1px solid #99f6e4;border-left:5px solid #0d9488;border-radius:14px;padding:16px 20px;margin:16px 0 18px}
+.why .t{font-weight:800;color:#0f766e;margin-bottom:7px;display:flex;align-items:center;gap:8px;font-size:1.05rem}
+.why p{margin:7px 0;font-size:.97rem;line-height:1.85;color:#134e4a}
+.why p b{color:#0f766e}
+.why .pose{background:#fff;border:1px dashed #5eead4;border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.94rem;color:#115e59}
+.why .pose b{color:#0d9488}
+.why .sofar{margin-top:10px;padding:9px 13px;background:#fff7ed;border-left:3px solid #f59e0b;border-radius:8px;font-size:.9rem;color:#92400e}
+.why .sofar b{color:#b45309}
+.why .chain{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.why .chain span{background:#fff;border:1px solid #99f6e4;border-radius:999px;padding:4px 13px;font-size:.84rem;color:#0f766e;font-weight:600}
+.why .chain span.arr{border:none;background:none;color:#0d9488;padding:4px 2px}
+@media(max-width:600px){.why{padding:14px 15px}.why p{font-size:.93rem}}
 /* 深入解說方框 */
 .deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
 .deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
@@ -390,6 +403,12 @@ footer{background:#172033}
 <section id="s1">
   <div class="sec-head"><div class="num">1</div><h2>導論<span>Introduction — 無線 LAN 的定位與生態</span></h2></div>
 
+  <div class="why">
+    <div class="t">💬 先想清楚：這一章到底在解決什麼？</div>
+    <p>你每天用手機、筆電連 Wi-Fi 上網，背後其實藏了一堆麻煩：<b>看不見的無線電波在空氣裡飛，會衰減、會被牆擋、會自己干擾自己</b>；而且空中只有有限的「通道」，一群裝置要怎麼<b>輪流講話又不互相蓋台</b>？這一章就是在回答：無線網路<b>怎麼把資料從你的裝置送到 AP、再接進有線網路</b>，以及沿路會遇到哪些物理難題、業界又用什麼招數解決。</p>
+    <div class="pose"><b>讀的時候抓三條主線：</b>① 無線在哪一層、誰負責（定位）→ ② 電波在空氣中的 5 個敵人（傳播問題）→ ③ 怎麼分頻道、怎麼避免碰撞、怎麼越跑越快（運作與演進）。後面每一節，其實都是在補完這三件事。</div>
+  </div>
+
   <div class="card">
     <h3>📡 <span class="en">Where do WLANs fit?</span>　無線 LAN 在哪一層？</h3>
     <ul class="facts">
@@ -434,6 +453,13 @@ footer{background:#172033}
 <!-- ============ 2 PROPAGATION ============ -->
 <section id="s2">
   <div class="sec-head"><div class="num">2</div><h2>無線訊號傳播<span>Radio Signal Propagation — 五大傳播問題</span></h2></div>
+
+  <div class="why">
+    <div class="t">💬 為什麼要先搞懂「傳播問題」？</div>
+    <p>有線網路把訊號鎖在銅線或光纖裡，乾乾淨淨。<b>無線卻是把訊號丟進開放的空氣中</b>，立刻要面對現實世界的各種干擾——這就是為什麼 Wi-Fi 會「離遠就變慢、隔一道牆就斷、站著有訊號蹲下卻沒了」。工程師必須先認識這些<b>物理層的敵人</b>，後面所有設計（展頻、通道規劃、MIMO）才知道在對抗什麼。</p>
+    <div class="pose">這節要認識 <b>5 個傳播問題</b>。考試最愛問三件事：<b>哪兩個會隨頻率升高變嚴重</b>、<b>哪個在 WLAN 頻段最嚴重</b>、以及<b>反平方律的計算</b>。看下面時把每個問題對到「它讓訊號出什麼狀況」就好記了。</div>
+    <div class="chain"><span>是什麼</span><span class="arr">→</span><span>為什麼會發生</span><span class="arr">→</span><span>對 Wi-Fi 造成什麼後果</span><span class="arr">→</span><span>怎麼考</span></div>
+  </div>
 
   <div class="card">
     <h3>🌐 <span class="en">Frequencies &amp; Antennas</span>　頻率與天線</h3>
@@ -518,6 +544,7 @@ footer{background:#172033}
 
   <div class="card">
     <h3>💨 <span class="en">② Absorptive Attenuation</span>　吸收衰減</h3>
+    <p class="lead">前一個「反平方律」是訊號<b>擴散</b>變弱；這一個不一樣——是訊號穿過<b>空氣、水氣、牆壁</b>時，能量被一點一點「吃掉」而變弱。下大雨手機訊號變差，就是水氣吸收的效果。</p>
     <ul class="facts">
       <li>訊號能量被 <span class="zh">空氣與水（air and water）</span> 吸收而變弱。</li>
       <li>⚠️ 衰減有「兩種」：<b>反平方律衰減</b> 與 <b>吸收衰減</b>（注意這跟「死區 shadow zones」不同）。</li>
@@ -527,6 +554,7 @@ footer{background:#172033}
 
   <div class="card">
     <h3>🚧 <span class="en">③ Shadow Zones (Dead Spots)</span>　死區 / 陰影區</h3>
+    <p class="lead">你站到大樓或電梯背面，訊號突然掉光——因為訊號被<b>實體障礙物擋住、繞不過去</b>，那塊收不到的區域就叫死區。重點：這是「被擋住」，跟下面多路徑那種「自己干擾自己」是兩回事。</p>
     <ul class="facts">
       <li>因為路徑上有 <span class="zh">障礙物（obstacles）</span> 擋住，訊號無法穿透而到不了的地方。</li>
       <li>又稱 <span class="term">dead spots</span>，且 <mark>隨頻率升高而變嚴重</mark>。</li>
@@ -589,7 +617,8 @@ footer{background:#172033}
 
   <div class="card">
     <h3>⚡ <span class="en">⑤ Electromagnetic Interference (EMI)</span>　電磁干擾</h3>
-    <p class="lead">來自其他裝置、<mark>相同頻率</mark> 的「不想要的功率（unwanted power at the same frequency）」。</p>
+    <p class="lead">微波爐、藍牙裝置、隔壁的 AP，都可能在<b>同一個頻率</b>上發出雜訊，蓋過你的訊號——這種「別人送來、剛好同頻」的雜訊就是 EMI。簡單說：前四個是訊號自己變弱/相消，EMI 是<mark>外人來插嘴</mark>。</p>
+    <p class="lead" style="margin-top:0">正式定義：來自其他裝置、<mark>相同頻率</mark> 的「不想要的功率（unwanted power at the same frequency）」。</p>
     <div class="box exam"><div class="t">🎯 考點整理：五大傳播問題<span class="exam-badge warm">考過2次</span></div>
       <b>EMI、Dead/Shadow zones、Inverse square law、Absorptive attenuation、Multipath interference</b><br>
       ・隨「頻率升高」變嚴重的「兩個」：<span class="hl">Shadow zones</span> 與 <span class="hl">Absorptive attenuation</span><br>
@@ -608,6 +637,12 @@ footer{background:#172033}
 <!-- ============ 3 BANDS & BANDWIDTH ============ -->
 <section id="s3">
   <div class="sec-head"><div class="num">3</div><h2>頻段與頻寬<span>Radio Bands &amp; Bandwidth — 通道、2.4G vs 5G</span></h2></div>
+
+  <div class="why">
+    <div class="t">💬 為什麼要把頻段切成一個個「通道」？</div>
+    <p>空氣是大家共用的。如果附近每台 AP 都用同一段頻率大聲廣播，就像整間教室所有人同時用同一個頻道喊話——全部糊在一起誰也聽不清。所以要把一大段<b>頻段（band）</b>切成多個<b>通道（channel）</b>，讓鄰近的 AP 各用不同通道、互不干擾。而每個通道開得<b>多寬</b>，又直接決定了能跑<b>多快</b>。</p>
+    <div class="pose">核心就兩件事：<b>頻寬 ↔ 速度</b>（通道越寬、速度越高，Shannon 說頻寬加倍速度可加倍）、以及 <b>2.4 GHz 與 5 GHz 的取捨</b>（一個傳得遠、一個通道多）。這兩點都是必考。</div>
+  </div>
 
   <div class="card">
     <h3>📏 <span class="en">Channel Bandwidth &amp; Speed</span>　通道頻寬與速度</h3>
@@ -727,6 +762,13 @@ footer{background:#172033}
 <!-- ============ 4 SPREAD SPECTRUM ============ -->
 <section id="s4">
   <div class="sec-head"><div class="num">4</div><h2>展頻傳輸<span>Spread Spectrum Transmission</span></h2></div>
+
+  <div class="why">
+    <div class="t">💬 為什麼要「故意」把頻寬攤寬來浪費？</div>
+    <p>直覺上，頻寬很珍貴、能省則省。但在 2.4/5 GHz 這種<b>多路徑干擾最嚴重</b>的頻段，如果把訊號擠在剛好夠用的窄頻寬裡，一遇到干擾整個訊號就毀了。於是反其道而行：把訊號<b>攤散到比實際需要更寬的頻寬</b>，干擾就很難一次打掉全部——這就是<b>展頻（spread spectrum）</b>。它「雖然浪費頻寬，卻是必要的」，所以法規甚至<b>強制</b>在這兩個頻段使用。</p>
+    <div class="sofar"><b>常見陷阱：</b>WLAN 用展頻是為了「對抗傳播問題」，<b>不是</b>為了加密／資安（軍事用途才強調抗竊聽）。</div>
+  </div>
+
   <div class="card">
     <h3>🌈 <span class="en">Spread Spectrum</span>　展頻<span class="exam-badge warm">考過2次</span></h3>
     <ul class="facts">
@@ -746,6 +788,12 @@ footer{background:#172033}
 <!-- ============ 5 802.11 OPERATION ============ -->
 <section id="s5">
   <div class="sec-head"><div class="num">5</div><h2>802.11 WLAN 運作<span>WLAN Operation — 框架轉換、BSS/ESS、CSMA/CA</span></h2></div>
+
+  <div class="why">
+    <div class="t">💬 訊號能傳了，接下來的問題是「怎麼一起用」</div>
+    <p>前面幾節解決的是「電波到底能不能順利傳到」。但現實是<b>一個 AP 底下有一大群裝置</b>，空中又只有一條通道，大家同時開口一定撞成一團。這節談 802.11 實際怎麼運作：AP 怎麼把無線訊框「翻譯」成有線訊框送進有線網路、一群裝置怎麼<b>輪流講話不打架</b>、以及網路怎麼命名與漫遊（BSS / SSID / ESS）。</p>
+    <div class="pose">全章<b>最常考</b>的就在這裡——<b>CSMA/CA + ACK</b>：為什麼無線要「<b>避免</b>」碰撞而不是有線那種「<b>偵測</b>」碰撞、CA 到底靠什麼避免（隨機退避）、無線又怎麼確認對方收到（ACK）。</div>
+  </div>
 
   <div class="card">
     <h3>🔄 <span class="en">Frame Conversion at the AP</span>　AP 的框架轉換<span class="exam-badge warm">易考觀念</span></h3>
@@ -902,6 +950,11 @@ footer{background:#172033}
 <section id="s6">
   <div class="sec-head"><div class="num">6</div><h2>802.11 傳輸標準<span>Transmission Standards — g/a/n/ac、MIMO</span></h2></div>
 
+  <div class="why">
+    <div class="t">💬 為什麼 Wi-Fi 一代比一代快？</div>
+    <p>從 802.11g 的 54 Mbps，到 n、ac 的數百 Mbps 甚至破 Gbps，速度暴漲不是靠魔法。除了把<b>通道開更寬</b>，最大的功臣是 <b>MIMO（多天線）</b>——它做了一件很聰明的事：把前面提到、原本是大麻煩的「多路徑」反過來<b>利用</b>，用<b>多支天線同時開好幾條資料流</b>並行傳輸。這節就是看各代標準的差異與這些加速手段。</p>
+  </div>
+
   <div class="card">
     <h3>📚 <span class="en">802.11 g / a / n / ac</span></h3>
     <table>
@@ -971,6 +1024,11 @@ footer{background:#172033}
 <!-- ============ 7 MESH ============ -->
 <section id="s7">
   <div class="sec-head"><div class="num">7</div><h2>無線網狀網路<span>Wireless Mesh Networking</span></h2></div>
+
+  <div class="why">
+    <div class="t">💬 如果 AP 不方便拉網路線呢？</div>
+    <p>到目前為止，每台 AP 都得拉一條有線回交換器。但在大型戶外、臨時活動場地、或老建築布線困難的地方，<b>拉線又貴又麻煩</b>。<b>無線網狀網路（mesh）</b>的點子是：讓 AP 之間「<b>用無線互相接力</b>」把資料一站一站轉回去，只要少數幾個節點接到有線就好，大幅省下布線成本，也容易擴充。</p>
+  </div>
   <div class="card">
     <h3>🕸️ <span class="en">Mesh</span></h3>
     <ul class="facts">
