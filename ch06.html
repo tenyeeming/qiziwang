@@ -256,6 +256,16 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 深入解說方框 */
+.deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
+.deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
+.deep p{margin:7px 0;font-size:.93rem;line-height:1.78}
+.deep b{color:#9a3412}
+.deep ul{margin:6px 0}
+.deep li{margin:4px 0;font-size:.92rem;line-height:1.7;list-style:none;padding-left:18px;position:relative}
+.deep li::before{content:"▸";position:absolute;left:0;color:#ea580c;font-weight:700}
+.deep .mis{margin-top:10px;padding:9px 12px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:7px;font-size:.88rem;color:#7f1d1d}
+.deep .mis b{color:#dc2626}
 @media(max-width:600px){
   /* CSS 流程/節點圖：改直式堆疊，箭頭朝下 */
   .flow{flex-direction:column;gap:6px}
@@ -488,6 +498,12 @@ footer{background:#172033}
       </svg>
       <div class="cap">反平方律：球面波前面積隨 r² 增大，故功率密度 ∝ 1/r²</div>
     </div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼是「平方」反比，不是普通反比？</div>
+      <p>把 AP 想成燈泡，它把固定的能量「往四面八方」均勻送出。這些能量在任何一刻都攤在一個<b>球面</b>上，而球面表面積＝<b>4πr²</b>。距離 r 變 2 倍，球面積變 <b>2²＝4 倍</b>，同樣的能量攤在 4 倍大的面上，<b>每單位面積（你天線收到的強度）就只剩 1/4</b>。這就是「強度 ∝ 1/r²」的物理來源。</p>
+      <p>所以解題只要抓「距離比」：S₂ = S₁ ×（r₁/r₂)²。距離 ×4 → 功率 ÷16；距離 ×3 → ÷9。三份考卷都用「距離變 4 倍」，所以答案恆為原功率 ÷16。</p>
+      <div class="mis"><b>常見誤解：</b>不是「距離 ×2、強度就 ÷2」，而是 ÷4（忘了平方）。另外這是「擴散造成的衰減」，和「被空氣/障礙物吸收」的吸收衰減是兩種不同的衰減。</div>
+    </div>
     <h4>📝 三份考卷的考法（數字換湯不換藥，答案都是 5 mW）</h4>
     <table>
       <tr><th>考卷</th><th>題目</th><th>計算</th><th>答案</th></tr>
@@ -524,6 +540,12 @@ footer{background:#172033}
       <li>若兩波 <span class="term">out of phase（反相，相位差 180°）</span>，波峰對波谷會互相抵消 → 收到「沒有訊號（dead spot）」。</li>
       <li>🔥 <mark>在 WLAN 頻段是「最嚴重」的傳播問題（most serious at WLAN frequencies）</mark> → 這也是為何法規要求用展頻。</li>
     </ul>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼多路徑在 WLAN「最嚴重」？</div>
+      <p>同一個訊號會走兩條路到你的天線：一條是<b>直接波</b>，一條是<b>碰到牆面/金屬反射</b>後較長的反射波。兩者距離不同 → <b>到達時間有落差（相位差）</b>。若剛好差半個波長（反相 180°），直接波的波峰對上反射波的波谷，<b>互相抵消，你就收到「幾乎沒有訊號」</b>的死點。</p>
+      <p>WLAN 用 2.4/5 GHz、<b>波長只有數公分</b>，所以<b>位置只要移動幾公分，相位關係就大變</b>，干擾又強又難預測——這就是它在 WLAN 頻段最嚴重、也是法規<b>強制使用展頻</b>來對抗它的原因。</p>
+      <div class="mis"><b>常見誤解：</b>多路徑「干擾」不是被障礙物擋住（那是 shadow zone 死區），而是「自己的反射波回來干擾自己」。</div>
+    </div>
     <div class="svgbox">
       <svg class="svg-m" viewBox="0 0 340 300" role="img" aria-label="多路徑干擾（手機直式版）">
         <rect x="8" y="62" width="56" height="38" rx="6" fill="#1e293b"/><text x="36" y="86" font-size="14" fill="#7dd3fc" text-anchor="middle">TX</text>
@@ -664,6 +686,12 @@ footer{background:#172033}
       <tr><td>傳播 propagation</td><td><span class="hl">較好</span>（距離遠、穿透佳）</td><td>較差（頻率高）</td></tr>
       <tr><td>主要優點</td><td>傳播佳、涵蓋遠</td><td>通道多、干擾少、速度高</td></tr>
     </table>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼 2.4G 傳得遠、5G 通道多？</div>
+      <p>關鍵在頻率高低的物理特性：<b>頻率越高、波長越短，衰減與被吸收越快、穿牆越差</b>，所以 5 GHz 傳得近、穿透差；2.4 GHz 頻率較低，傳播較遠、穿牆較好。</p>
+      <p>但 5 GHz 那一段<b>總頻寬比 2.4 GHz 大很多</b>，能切出的 20 MHz 通道也就多（11–24 個非重疊），鄰近 AP 容易各用不同通道、干擾少、還能用更寬通道跑更高速。2.4 GHz 只有 1/6/11 三個非重疊通道，AP 一多就容易同頻干擾。</p>
+      <div class="mis"><b>一句話記：</b>2.4G＝要「涵蓋遠、穿牆」；5G＝要「速度快、少干擾」。注意新標準把通道變寬反而會「減少」可用通道數（wider → fewer）。</div>
+    </div>
     <div class="box exam"><div class="t">🎯 考古直球（一句話版）</div>
       Q：2.4G 主要優點？→ <b>傳播較好（涵蓋距離遠、穿透佳）</b>。　Q：5G 主要優點？→ <b>非重疊通道多、干擾少、速度高</b>。<br>
       Q：哪個頻段非重疊通道較多？→ <b>5 GHz</b>。　Q：哪個頻段傳播較差？→ <b>5 GHz</b>。</div>
@@ -751,6 +779,16 @@ footer{background:#172033}
   <div class="card">
     <h3>🎧 <span class="en">CSMA/CA + ACK</span>　載波偵測多重存取＋碰撞避免＋確認<span class="exam-badge hot">🔥 必考 · 考過3次</span></h3>
     <p class="lead"><span class="term">Carrier Sense Multiple Access with Collision Avoidance and Acknowledgement</span>，是 802.11 的 <mark>強制（mandatory）</mark> MAC 方法。</p>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼無線用「CA 避免」而不是有線的「CD 偵測」？</div>
+      <p>有線乙太網用 CSMA/<b>CD</b>（Collision Detection）：邊送邊聽，撞到馬上停。但無線做不到——<b>自己發射的功率遠大於收到別人的微弱訊號</b>，根本「聽不見」碰撞發生。既然無法「偵測」碰撞，只能事先「避免」，所以改用 CSMA/<b>CA</b>。</p>
+      <ul>
+        <li><b>CS（先聽）</b>：傳送前先偵測通道是否閒置；忙線就等。</li>
+        <li><b>CA（隨機退避）</b>：就算聽到閒置也不馬上送，而是<b>再隨機等一小段時間</b>。否則大家一聽到閒置就同時送，必撞；隨機等讓各站錯開。</li>
+        <li><b>ACK（確認）</b>：因為送端聽不到碰撞，只能靠收端回 ACK 來確認成功；<b>沒收到 ACK 就視為失敗、重送</b>。</li>
+      </ul>
+      <div class="mis"><b>常見考點：</b>CA「如何避免碰撞」＝靠<b>隨機退避（random backoff）</b>；無線「如何確認收到」＝靠<b>ACK</b>。這兩點常被分開問。</div>
+    </div>
     <div class="svgbox">
       <svg class="svg-m" viewBox="0 0 340 318" role="img" aria-label="CSMA/CA + ACK 時序（手機直式版）">
         <rect x="24" y="12" width="292" height="46" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>

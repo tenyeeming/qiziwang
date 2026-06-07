@@ -242,6 +242,16 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 深入解說方框 */
+.deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
+.deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
+.deep p{margin:7px 0;font-size:.93rem;line-height:1.78}
+.deep b{color:#9a3412}
+.deep ul{margin:6px 0}
+.deep li{margin:4px 0;font-size:.92rem;line-height:1.7;list-style:none;padding-left:18px;position:relative}
+.deep li::before{content:"▸";position:absolute;left:0;color:#ea580c;font-weight:700}
+.deep .mis{margin-top:10px;padding:9px 12px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:7px;font-size:.88rem;color:#7f1d1d}
+.deep .mis b{color:#dc2626}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -363,6 +373,15 @@ footer{background:#172033}
     </table>
     <div class="box note"><div class="t">🔑 傳遞 vs 文件</div>
       SMTP、POP、IMAP 是「<b>傳遞標準</b>」；RFC 822/2822、HTML 是「<b>文件格式標準</b>」。送得到 + 看得懂，缺一不可。</div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：寄信收信為什麼要分 SMTP 與 POP/IMAP？</div>
+      <p>寄信和收信是「<b>方向相反</b>」的兩件事，所以用不同協定：</p>
+      <ul>
+        <li><b>SMTP＝寄／遞送</b>：把信從你的郵件伺服器一路<b>「推」到收件人的郵件伺服器</b>（伺服器之間也用 SMTP 接力）。流程：HELO → MAIL FROM: → RCPT TO: → DATA →（內文）→ <b>單獨一行「.」結束</b> → QUIT。</li>
+        <li><b>POP / IMAP＝收／取信</b>：收件人從自己的伺服器把信<b>「拉」下來看</b>。<b>POP</b> 下載到本機（通常收完從伺服器刪）；<b>IMAP</b> 把信<b>留在伺服器</b>、多裝置同步。</li>
+      </ul>
+      <div class="mis"><b>易混：</b>SMTP/POP/IMAP 是「<b>傳遞標準</b>」（怎麼送到）；RFC 822/2822、HTML 是「<b>文件格式標準</b>」（內容長怎樣）。</div>
+    </div>
     <div class="examq">
       <div class="qline">📄 <span>【2023 B6】Explain SMTP, POP/IMAP, and RFC 822/2822.<span class="src">2023</span></span></div>
       <details><summary>▶ 看答案</summary><div class="ans">SMTP：伺服器間寄送郵件。POP/IMAP：收件者收信——IMAP 同步電腦與主機、POP 下載到本機。RFC 822/2822：規定郵件格式的文件標準。</div></details>
@@ -404,6 +423,11 @@ SELECT * FROM Users WHERE (UserName=<span class="g">'fredchen'</span>) AND (Pass
 <span class="c">// 注入 ' OR '1'='1 後</span>
 SELECT * FROM Users WHERE (UserName='' <span class="r">OR '1'='1'</span>) AND (PassWord='' <span class="r">OR '1'='1'</span>);
 <span class="c">// → 條件恆真，繞過驗證</span>
+    </div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：SQL Injection 怎麼運作？又該怎麼防？</div>
+      <p>網站常把使用者輸入<b>直接「字串拼接」</b>進 SQL 查詢。攻擊者在帳號/密碼欄填入 <b>' OR '1'='1</b>，拼進去後 WHERE 條件變成 <b>… OR '1'='1'</b>——而 '1'='1' <b>永遠為真</b>，整個條件恆真，於是<b>不用正確密碼就能登入</b>，甚至撈出整張資料表。根源是：<b>程式把「使用者資料」當成「SQL 指令」執行了</b>。</p>
+      <div class="mis"><b>防禦：</b>① <b>參數化查詢 / 預備語句</b>——讓輸入永遠只當「資料」、不被當指令；② 輸入驗證／轉義；③ 資料庫帳號最小權限。<br><b>對照 XSS：</b>SQL Injection 打「<b>後端資料庫</b>」；XSS 是注入<b>腳本</b>、在「<b>別人的瀏覽器</b>」執行。</div>
     </div>
   </div>
   <div class="card">
@@ -524,6 +548,15 @@ SELECT * FROM Users WHERE (UserName='' <span class="r">OR '1'='1'</span>) AND (P
         <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569"/></marker></defs>
       </svg>
       <div class="cap">信令(藍)經兩台 proxy 建立；建立後語音(綠 RTP)直接在兩端之間傳</div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼通話要分 SIP 和 RTP？RTP 為何用 UDP？</div>
+      <p>VoIP 把「<b>聯絡接通</b>」和「<b>實際講話</b>」拆成兩個協定：</p>
+      <ul>
+        <li><b>SIP（信令）</b>：負責「找到對方、響鈴、接通、掛斷」。INVITE 等訊息<b>會經過 proxy 伺服器</b>幫忙定位對方（課本例子經兩台 proxy）。</li>
+        <li><b>RTP（媒體）</b>：通話接通後，<b>語音封包直接在兩端之間傳</b>、不再繞 proxy，延遲最低。</li>
+      </ul>
+      <p>RTP 為何跑在 <b>UDP</b> 而非 TCP？因為即時語音<b>「準時」比「不漏」重要</b>：TCP 會為了重傳遺失封包而卡頓，但一段晚到的語音重送回來也沒用（你早講下一句了）。UDP 不重傳、不等待，<b>寧可漏一點點也要維持即時流暢</b>。</p>
+    </div>
     </div>
   </div>
   <div class="card">

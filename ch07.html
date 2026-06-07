@@ -231,6 +231,16 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 深入解說方框 */
+.deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
+.deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
+.deep p{margin:7px 0;font-size:.93rem;line-height:1.78}
+.deep b{color:#9a3412}
+.deep ul{margin:6px 0}
+.deep li{margin:4px 0;font-size:.92rem;line-height:1.7;list-style:none;padding-left:18px;position:relative}
+.deep li::before{content:"▸";position:absolute;left:0;color:#ea580c;font-weight:700}
+.deep .mis{margin-top:10px;padding:9px 12px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:7px;font-size:.88rem;color:#7f1d1d}
+.deep .mis b{color:#dc2626}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -461,6 +471,16 @@ footer{background:#172033}
       <tr><td>技術安全性</td><td>Strong（強）</td><td>Very Strong（非常強）</td></tr>
       <tr><td>人為安全性</td><td><span class="hl">Vulnerable（脆弱，金鑰會被亂傳）</span></td><td>Very Strong</td></tr>
     </table>
+    <div class="deep">
+      <div class="t">🔍 深入解說：PSK 與 802.1X 差在哪？為什麼企業要用 802.1X？</div>
+      <p>兩者都是 802.11i（WPA2）的「認證方式」，加密一樣強（AES）。差別在<b>「怎麼證明你是誰」</b>：</p>
+      <ul>
+        <li><b>PSK（預共享金鑰）</b>：AP 與所有人設<b>同一把密碼</b>，知道密碼就能進。設定簡單、不用伺服器，適合家庭/單一 AP。</li>
+        <li><b>802.1X</b>：每人有<b>自己的帳密/憑證</b>，由背後的<b>中央認證伺服器（RADIUS）</b>逐一驗證；可單獨停用某人、可稽核誰連線，適合多 AP 企業。</li>
+      </ul>
+      <p>為什麼企業不用 PSK？因為它的弱點是<b>「人」</b>而非技術——一把共用密碼員工會隨手分享、離職也難換（要全公司重設），「它看起來不像機密」。802.1X 把認證綁到「個人」，才能規模化管理。</p>
+      <div class="mis"><b>易混觀念：</b>「PSK 共用、session key 不共用」＝大家用同一把 PSK <b>認證</b>，但每台連線後各自推導出<b>不同的 session key</b> 來實際加密，所以站台之間的加密金鑰其實都不一樣。</div>
+    </div>
     <div class="box note"><div class="t">🔑 一句話記</div>
       <b>家用/單一 AP → PSK；企業/多 AP → 802.1X（要中央認證伺服器）</b>。802.1X 較安全但較貴。</div>
   </div>
@@ -592,6 +612,12 @@ footer{background:#172033}
         <text x="320" y="200" font-size="12" fill="#2563eb" text-anchor="middle" font-weight="700">有 VPN：Client 先用 VPN 金鑰加密 → ET 解開 K1 後仍是 VPN 密文，讀不到原文 ✔</text>
       </svg>
       <div class="cap">VPN 防禦：在 802.11i 之上再包一層 VPN 加密，Evil Twin 解開外層也看不到內容</div>
+    </div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：VPN 為什麼能擋住 Evil Twin？</div>
+      <p>Evil Twin 騙你連上後就當中間人：用「它跟你之間的金鑰 K1」跟你通訊、再用「它跟真 AP 的金鑰 K2」轉送。只靠 Wi-Fi 加密的話，<b>Evil Twin 兩把鑰匙都有，自然能把內容解開看光光</b>。</p>
+      <p>VPN 的關鍵是<b>「多包一層」</b>：你的資料先用<b>只有你和公司 VPN 伺服器才有的金鑰</b>加密，再交給 Wi-Fi 傳。Evil Twin 解開外層 Wi-Fi 加密後，<b>裡面仍是一團 VPN 密文</b>，它沒有 VPN 金鑰，所以讀不到原文。</p>
+      <div class="mis"><b>重點：</b>VPN 不是「取代」Wi-Fi 加密，而是在它<b>之上再加一層端到端加密</b>；中間人就算控制了無線這段，也偷不到內容。</div>
     </div>
     <div class="box note"><div class="t">🛡️ VPN 為何有效（課本步驟）</div>
       Client 先用 VPN 金鑰加密、再用與 ET 共享的金鑰加密；ET 用它與 Client 的金鑰解開外層後，<b>裡面仍是 VPN 密文</b> → ET 讀不到原始訊息。</div>

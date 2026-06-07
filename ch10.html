@@ -236,6 +236,16 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 深入解說方框 */
+.deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
+.deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
+.deep p{margin:7px 0;font-size:.93rem;line-height:1.78}
+.deep b{color:#9a3412}
+.deep ul{margin:6px 0}
+.deep li{margin:4px 0;font-size:.92rem;line-height:1.7;list-style:none;padding-left:18px;position:relative}
+.deep li::before{content:"▸";position:absolute;left:0;color:#ea580c;font-weight:700}
+.deep .mis{margin-top:10px;padding:9px 12px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:7px;font-size:.88rem;color:#7f1d1d}
+.deep .mis b{color:#dc2626}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -393,6 +403,12 @@ footer{background:#172033}
       <li><span class="term">Asymmetric（非對稱）</span>：<b>下行（downstream）高、上行（upstream）受限</b>。</li>
       <li>機房端設備：<span class="term">DSLAM（DSL Access Multiplexer）</span>。</li>
     </ul>
+    <div class="deep">
+      <div class="t">🔍 深入解說：ADSL 為什麼是「非對稱」？為什麼便宜？</div>
+      <p><b>便宜</b>：每戶本來就有一對語音級電話線（local loop）拉到家，ADSL 直接讓資料跑在這條<b>既有線路</b>上、不必重拉新線，成本低。</p>
+      <p><b>非對稱</b>：一般家庭<b>下載遠多於上傳</b>，所以 ADSL 刻意把大部分頻寬分給「下行」、少部分給「上行」，更符合實際使用，也較好克服這條老電話線的物理限制——A 就是 Asymmetric（不對稱）。</p>
+      <div class="mis"><b>對照：</b>機房端設備叫 <b>DSLAM</b>；考古常考填充「用一對語音級 UTP、下行高上行低的住宅上網＝？」→ <b>ADSL</b>。</div>
+    </div>
     <div class="examq">
       <div class="qline">📄 <span>【109-1 A10】____ provides residential Internet access over one-pair voice-grade UTPs, high downstream, limited upstream.<span class="src">109-1</span></span></div>
       <details><summary>▶ 看答案</summary><div class="ans"><b>ADSL</b>（Asymmetric DSL；利用既有 1-pair VG UTP，下行高上行低）。</div></details>
@@ -414,6 +430,12 @@ footer{background:#172033}
   <div class="sec-head"><div class="num">3</div><h2>行動電話系統<span>Cellular Telephone Service</span></h2></div>
   <div class="card">
     <h3>📱 <span class="en">Cell, Cellsite, Channel Reuse, Handoff</span>　五個關鍵詞<span class="exam-badge warm">考過 (handoff)</span></h3>
+    <div class="deep">
+      <div class="t">🔍 深入解說：channel reuse 為何能放大容量？handoff 又是什麼？</div>
+      <p>頻率（通道）有限。行動電話把地區切成一格格 <b>cell（蜂巢）</b>，每格一座 <b>cellsite（基地台）</b>。聰明之處是 <b>channel reuse（頻率再用）</b>：<b>只要兩個 cell 相隔夠遠、訊號不互相干擾，就能重複使用相同頻率</b>。於是同一批頻率在整個城市被一用再用，<b>總容量＝頻率數 ×（重用次數）</b>，大幅放大。</p>
+      <p><b>handoff（換手）</b>：邊移動邊講電話，跨過 cell 邊界時通話會<b>無縫交接</b>到下一個 cellsite；統籌這一切（連各 cellsite、接 PSTN、分配通道、執行換手）的是 <b>MTSO（行動電話交換局）</b>。</p>
+      <div class="mis"><b>易混：</b>cell＝「地理區域」；cellsite＝「放設備的那棟建築/天線」。別搞反。</div>
+    </div>
     <ul class="facts">
       <li><span class="term">Cell（細胞）</span>＝一塊<b>地理區域</b>；<span class="term">Cellsite（基地台）</span>＝一棟<b>放行動設備的建築</b>。兩者別搞混。</li>
       <li><span class="term">Channel Reuse（頻道重用）</span>：同一頻道可在<b>不同 cell 重複使用</b> → 一個頻道能服務多個客戶。
@@ -552,6 +574,11 @@ footer{background:#172033}
         <rect x="360" y="20" width="200" height="38" rx="6" fill="#2563eb"/><text x="460" y="44" font-size="12" fill="#fff" text-anchor="middle">IP Packet Header</text>
       </svg>
       <div class="cap">MPLS Label 夾在 Frame Header 與 IP Packet Header 之間</div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：MPLS 為什麼比一般 IP 轉送快？</div>
+      <p>傳統路由器每收到一個封包，都要拿目的 IP 去路由表做「<b>最長前綴匹配</b>」搜尋，較花時間。MPLS 改成<b>進網時貼一個短「標籤(label)」</b>，之後沿途路由器<b>只看標籤就查表轉送</b>（標籤固定長度、可直接對應出口），<b>不必每跳都重算最長前綴</b>，所以更快、也更容易做 QoS 與流量工程。</p>
+      <p>標籤被放在<b>第二層訊框標頭與第三層 IP 標頭「之間」</b>（俗稱「2.5 層」）。這也是最常考的填充：MPLS Label 夾在 <b>Frame Header 與 IP Packet Header 之間</b>。</p>
+    </div>
     </div>
     <div class="examq">
       <div class="qline">📄 <span>【109-1 A9】____ is a routing mechanism. It inserts a label in front of the IP header.<span class="src">109-1</span></span></div>

@@ -243,6 +243,16 @@ footer{background:#172033}
 .primer .gt .full{color:#64748b;font-size:.8rem;margin-left:5px}
 .primer .gt .exp{display:block;color:#1e293b;font-size:.88rem;margin-top:4px;line-height:1.55}
 @media(max-width:600px){.primer .gg{grid-template-columns:1fr}.primer{padding:16px 15px}}
+/* 深入解說方框 */
+.deep{background:#fffaf0;border:1px solid #fcd9a8;border-left:5px solid #ea580c;border-radius:12px;padding:15px 18px;margin:14px 0}
+.deep .t{font-weight:800;color:#c2410c;margin-bottom:8px;display:flex;align-items:center;gap:7px;font-size:1rem}
+.deep p{margin:7px 0;font-size:.93rem;line-height:1.78}
+.deep b{color:#9a3412}
+.deep ul{margin:6px 0}
+.deep li{margin:4px 0;font-size:.92rem;line-height:1.7;list-style:none;padding-left:18px;position:relative}
+.deep li::before{content:"▸";position:absolute;left:0;color:#ea580c;font-weight:700}
+.deep .mis{margin-top:10px;padding:9px 12px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:7px;font-size:.88rem;color:#7f1d1d}
+.deep .mis b{color:#dc2626}
 @media(max-width:600px){
   .flow{flex-direction:column;gap:6px}
   .flow .arr{font-size:0;margin:-2px 0}
@@ -400,6 +410,16 @@ footer{background:#172033}
     </div>
     <div class="box note"><div class="t">💡 解題順序</div>
       ① 先用 2ᴺ−2 ≥ 需求，找最小的 subnet 位元；② host 位元 = (32 − network) − subnet；③ 再套 2ᴺ−2 算主機數。</div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：為什麼要「−2」？被扣掉的兩個是誰？</div>
+      <p>N 個位元能排出 2ᴺ 種組合，但其中<b>有兩種不能當主機位址</b>，所以可用主機數是 <b>2ᴺ − 2</b>：</p>
+      <ul>
+        <li><b>全 0</b>（主機位元全 0）＝這個子網的「<b>網路位址</b>」本身，代表整個網段，不能指定給某台機器。</li>
+        <li><b>全 1</b>（主機位元全 1）＝「<b>廣播位址</b>」，送到這＝送給網段內所有人，也不能當單一主機。</li>
+      </ul>
+      <p>例：要容納 ≥50 台 → 2⁶−2=62 夠、2⁵−2=30 不夠 → 取 <b>6 個主機位元</b>。</p>
+      <div class="mis"><b>注意：</b>「<b>每個子網的主機數</b>」一定要 −2；「子網數」是否扣 2 視題目是否允許全 0/全 1 子網而定（考卷多半兩者都用 2ᴺ−2）。</div>
+    </div>
     <div class="examq">
       <div class="qline">📄 <span>【109-1 B2】10.x.x.x，(1) ≥50 子網要幾 bits？(2) 每子網幾台主機？<span class="src">109-1</span></span></div>
       <details><summary>▶ 看答案</summary><div class="ans">(1) <b>6 bits</b>（2⁶−2=62≥50；5 bits 只有 30 不夠）。<br>(2) /8 剩 24 bits，扣 6 → host=18 bits → <b>2¹⁸−2 = 262,142 台</b>。</div></details>
@@ -473,6 +493,12 @@ footer{background:#172033}
     </div>
   </div>
   <div class="card">
+    <div class="deep">
+      <div class="t">🔍 深入解說：NAT 的「轉換表」怎麼讓多人共用一個公有 IP？</div>
+      <p>內部主機用私有 IP（如 10.0.0.5），這種位址不能直接上公網。NAT 防火牆在封包出去時，把<b>來源「私有 IP + 連接埠」改寫成「公有 IP + 一個對外埠號」</b>，並在<b>轉換表</b>記下這組對應。</p>
+      <p>回應封包回來時，NAT 依目的埠號<b>反查轉換表</b>，把公有位址還原成原本的私有 IP:port，再送回正確那台內部主機。因為靠「<b>埠號</b>」區分，<b>很多台內部主機能共用同一個公有 IP</b>（也叫 PAT / NAT overload）。</p>
+      <div class="mis"><b>兩大好處：</b>① 節省公有 IP（一個對外 IP 撐起整個內網）；② 隱藏內部結構（外界只看得到那個公有 IP，看不到內部誰是誰）。</div>
+    </div>
     <h3>🎯 <span class="en">Why NAT?</span>　NAT 的兩大用途</h3>
     <ul class="facts">
       <li><b>① 安全</b>：外部嗅探者只看得到「對外的假 IP」，<mark>查不到內部主機真實位址</mark>，無法直接攻擊內部。</li>
@@ -596,6 +622,15 @@ footer{background:#172033}
         <line x1="140" y1="190" x2="270" y2="190" stroke="#d97706" stroke-width="4"/><text x="205" y="200" font-size="8" fill="#d97706" text-anchor="middle">🔒 只有兩端 GW 加密（只要 GW 憑證；站內不保護）</text>
       </svg>
       <div class="cap">Transport：每台主機都要憑證、全程保護、貴；Tunnel：只有 gateway 要憑證、只護 Internet、便宜</div>
+    </div>
+    <div class="deep">
+      <div class="t">🔍 深入解說：Transport 與 Tunnel「包」的範圍差在哪？</div>
+      <p>關鍵在「加密／封裝多少東西」：</p>
+      <ul>
+        <li><b>Transport 模式</b>：只加密原封包的<b>資料(payload)</b>，原 IP 標頭保留。用於<b>主機到主機</b>端到端保護，所以<b>每台主機都要裝憑證、設定 IPsec</b>，全程（含站內）加密，但成本高。</li>
+        <li><b>Tunnel 模式</b>：把<b>整個原始 IP 封包（含標頭）整包加密</b>，外面再<b>套一個新 IP 標頭</b>（兩端 gateway 的位址）。所以只需<b>兩端 gateway 有憑證</b>，常用於<b>站對站 VPN</b>；只保護 Internet 那段、站內不保護，成本低。</li>
+      </ul>
+      <div class="mis"><b>最常考填充：</b>「只有兩端 gateway 需要數位憑證、站內不保護」＝<b>Tunnel</b> 模式。結論：安全 Transport 勝、成本 Tunnel 省。</div>
     </div>
     <div class="box note"><div class="t">🔑 一句話結論</div>
       <b>安全：Transport 勝；成本：Tunnel 省。</b>Tunnel「只有兩端 gateway 需憑證」是最常考的填充。</div>
